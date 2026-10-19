@@ -625,7 +625,7 @@ var backFn=null;function back(fn){if(!inTg||!tg.BackButton)return;if(backFn)tg.B
 var sp=(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.start_param)||new URLSearchParams(location.search).get('startapp')||'';
 var parts=sp.split('__'),sp0=parts[0]||'';
 /* в ссылке только число bh_user_id (Telegram не пропускает точку), номер BotHelp = 9usu.<число>. Метки: g подарок прослушан, k купила */
-var cuid=/^\d+$/.test(sp0)?'9usu.'+sp0:sp0;
+var cuid=/^\d+$/.test(sp0)?'9usu.'+sp0:(/^9usu\./.test(sp0)?sp0:'');
 var flags=parts.slice(1);
 var PAY='https://kaemma144.getcourse.ru/tainstva?utm_source=bot_app&utm_medium=telegram_app&utm_campaign=tri_tainstva'+(cuid?'&utm_content='+encodeURIComponent(cuid):'')+'#s10';
 var CABINET='https://kaemma144.getcourse.ru/teach/control/stream/view/id/935923232';
