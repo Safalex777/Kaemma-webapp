@@ -48,7 +48,8 @@ img,video{display:block}
 .enter{width:100%;height:56px;border-radius:18px;margin-top:26px;background:linear-gradient(180deg,#C99A48,#9C702E);color:#fff;font:600 17px var(--sans);box-shadow:0 12px 30px rgba(156,112,46,.45);text-align:center}
 
 /* экраны */
-.screen{display:none;padding:calc(56px + var(--safe)) 0 140px;min-height:100vh}
+.screen{display:none;padding:calc(16px + var(--safe)) 0 140px;min-height:100vh}
+#home.screen{padding-top:0}
 .screen.on{display:block;animation:fade .4s var(--ease)}
 .bar{display:flex;justify-content:space-between;align-items:center;padding:0 20px}
 .brand{font:italic 400 25px R,serif;color:var(--gold-d)}
@@ -56,11 +57,58 @@ img,video{display:block}
 .me img{width:100%;height:100%;object-fit:cover}
 .hi{padding:14px 20px 0;font:italic 400 38px/1.05 R,serif}
 .hi small{display:block;font:400 15px var(--sans);font-style:normal;color:var(--muted);margin-top:8px}
-.h2{display:flex;justify-content:space-between;align-items:baseline;padding:28px 20px 12px;gap:10px}
-.h2 b{font:italic 400 26px/1.05 R,serif}
+.h2{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:baseline;padding:28px 20px 12px;gap:10px}
+.h2 b{font:700 21px/1.2 var(--sans);letter-spacing:-.01em}
 .h2 a{font:500 15px var(--sans);color:var(--gold);cursor:pointer;white-space:nowrap}
-.h1{padding:0 20px;font:italic 400 42px/1 R,serif}
+.h1{padding:0 20px;font:700 32px/1.1 var(--sans);letter-spacing:-.02em}
 .lead{padding:8px 20px 0;color:var(--muted)}
+
+/* шапка главной: спираль ДНК */
+.hero{position:relative;height:410px;overflow:hidden;color:#fff}
+.hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,30,32,.35) 0%,rgba(10,30,32,0) 28%,rgba(10,30,32,.05) 55%,rgba(246,241,232,.6) 86%,var(--bg) 100%)}
+.hero .tp2{position:absolute;left:20px;right:20px;top:calc(14px + var(--safe));z-index:2;display:flex;justify-content:space-between;align-items:center}
+.hero .tp2 .brand{color:#fff;text-shadow:0 1px 12px rgba(0,0,0,.3)}
+.hero .gr{position:absolute;left:20px;right:20px;top:calc(76px + var(--safe));z-index:2}
+.hero .gr .d{font:600 12px var(--sans);letter-spacing:.12em;text-transform:uppercase;opacity:.92;text-shadow:0 1px 10px rgba(0,0,0,.3)}
+.hero .gr h1{font:italic 400 40px/1.02 R,serif;margin-top:8px;text-shadow:0 2px 20px rgba(0,0,0,.3)}
+.wish{margin:-104px 14px 0;position:relative;z-index:3;padding:18px 18px 16px;border-radius:24px;display:flex;gap:14px;align-items:flex-start}
+.wish img{width:44px;height:44px;border-radius:50%;object-fit:cover;object-position:center 20%;flex:none;box-shadow:0 0 0 2px #fff}
+.wish q{display:block;font:italic 400 19px/1.3 R,serif;color:#3a3125;quotes:"«" "»"}
+.wish span{display:block;font:500 13px var(--sans);color:var(--muted);margin-top:6px}
+.backbtn{display:inline-flex;align-items:center;gap:4px;margin:0 14px 10px;height:36px;padding:0 14px 0 8px;border-radius:18px;background:#fff;box-shadow:0 0 0 1px var(--line) inset;font:600 15px var(--sans);color:var(--gold-d)}
+.backbtn .i{width:18px;height:18px;transform:rotate(180deg)}
+/* окно покупки */
+.pop{position:fixed;inset:0;z-index:80;display:none}
+.pop.on{display:block}
+.pop .ov{position:absolute;inset:0;background:rgba(10,20,20,.45);animation:fade .3s}
+.pop .sh{position:absolute;left:0;right:0;bottom:0;max-width:480px;margin:0 auto;background:var(--bg);border-radius:28px 28px 0 0;padding:10px 18px calc(24px + env(safe-area-inset-bottom,0px));animation:upp .4s var(--ease)}
+@keyframes upp{from{transform:translateY(100%)}to{transform:none}}
+.pop .gb{width:40px;height:5px;border-radius:3px;background:#D8CDB8;margin:0 auto 14px}
+.pop .im{height:170px;border-radius:20px;overflow:hidden;position:relative}
+.pop .im img{width:100%;height:100%;object-fit:cover}
+.pop .im u{position:absolute;left:12px;top:12px;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:rgba(0,0,0,.4);color:#fff}
+.pop .im u .i{width:18px;height:18px}
+.pop .k{font:600 12px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-top:14px}
+.pop h3{font:700 22px/1.2 var(--sans);margin:6px 0 6px}
+.pop p{color:var(--ink2);font-size:15.5px}
+.pop .pr{display:flex;align-items:center;gap:10px;margin-top:12px;font:600 15px var(--sans);font-variant-numeric:tabular-nums}
+.pop .pr b{font:italic 400 28px R,serif;color:var(--gold-d)}
+.pop .cta{margin-top:14px;box-shadow:none}
+.pop .ghost{width:100%;height:48px;border-radius:14px;margin-top:8px;font:600 15.5px var(--sans);color:var(--gold-d);text-align:center}
+/* отклик на подарок */
+.halls{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.hl{padding:10px 14px;border-radius:14px;background:rgba(255,255,255,.12);box-shadow:0 0 0 1px rgba(255,255,255,.2) inset;font:600 14.5px var(--sans);color:#fff}
+.hl.on{background:#fff;color:var(--ink)}
+.hans{display:none;margin-top:14px;padding:14px;border-radius:16px;background:rgba(255,255,255,.1);font:italic 400 18px/1.35 R,serif}
+.hans.on{display:block;animation:fade .4s}
+.hans small{display:block;margin-top:8px;font:500 13px var(--sans);font-style:normal;color:var(--gold-l)}
+.why{display:flex;gap:12px;margin-top:12px}
+.why .ic{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.14);color:var(--gold-l);flex:none}
+.why .ic .i{width:18px;height:18px}
+.why b{display:block;font:600 15px var(--sans)}
+.why span{font-size:14.5px;opacity:.85}
+.mini3 div{cursor:pointer}
 
 /* путь */
 .path{display:flex;align-items:flex-start;padding:22px 16px 0}
@@ -79,7 +127,7 @@ img,video{display:block}
 .step:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,15,15,.25) 0%,rgba(5,15,15,.05) 30%,rgba(5,15,15,.5) 55%,rgba(5,15,15,.92) 100%)}
 .step .bd{position:absolute;left:18px;right:18px;bottom:18px;z-index:2}
 .step .k{font:600 12px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-l)}
-.step h2{font:italic 400 36px/1.02 R,serif;margin:8px 0 8px;text-shadow:0 2px 14px rgba(0,0,0,.3)}
+.step h2{font:italic 400 32px/1.04 R,serif;margin:8px 0 8px;text-shadow:0 2px 14px rgba(0,0,0,.3)}
 .step p{font-size:15.5px;opacity:.92;text-shadow:0 1px 10px rgba(0,0,0,.3)}
 .cta{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:52px;border-radius:16px;margin-top:14px;background:#fff;color:var(--ink);font:600 16.5px var(--sans);box-shadow:0 10px 24px rgba(0,0,0,.2)}
 .cta .i{width:20px;height:20px}
@@ -114,7 +162,7 @@ img,video{display:block}
 .nd img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
 .nd:active img{transform:scale(1.05)}
 .nd:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 35%,rgba(8,20,20,.75))}
-.nd b{position:absolute;left:14px;right:12px;bottom:28px;z-index:2;font:italic 400 21px/1.05 R,serif}
+.nd b{position:absolute;left:14px;right:12px;bottom:28px;z-index:2;font:700 16.5px/1.2 var(--sans)}
 .nd span{position:absolute;left:14px;bottom:11px;z-index:2;font:500 12px var(--sans);opacity:.85}
 .nd .new{position:absolute;left:auto;bottom:auto;right:10px;top:10px;z-index:2;font:700 10.5px var(--sans);letter-spacing:.06em;padding:4px 7px;border-radius:6px;background:#fff;color:var(--gold-d);opacity:1}
 
@@ -136,7 +184,7 @@ img,video{display:block}
 .vc .tt{font:500 15px/1.28 var(--sans);margin-top:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .vc .ss{font:400 13px var(--sans);color:var(--muted);margin-top:3px}
 .shelf-h{display:flex;justify-content:space-between;align-items:center;padding:26px 20px 12px}
-.shelf-h b{font:italic 400 24px/1 R,serif}
+.shelf-h b{font:700 19px/1.2 var(--sans)}
 .shelf-h a{font:500 15px var(--sans);color:var(--gold);cursor:pointer}
 .list{margin:14px 14px 0;overflow:hidden}
 .row{display:flex;gap:14px;align-items:center;padding:12px 16px;width:100%;position:relative}
@@ -164,7 +212,7 @@ img,video{display:block}
 .dr .n{position:absolute;left:14px;top:14px;z-index:2;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font:italic 400 22px R,serif;color:var(--gold-d);background:radial-gradient(circle at 30% 25%,#fff,#F3E8D2);box-shadow:0 8px 20px rgba(60,45,15,.25)}
 .dr .b{padding:16px 18px 18px}
 .dr .k{font:600 11.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
-.dr h3{font:italic 400 25px/1.08 R,serif;margin:6px 0 8px}
+.dr h3{font:700 19px/1.2 var(--sans);margin:6px 0 8px}
 .dr p{color:var(--ink2);font-size:15.5px}
 .dr .watch{display:flex;align-items:center;gap:8px;margin-top:12px;font:600 15px var(--sans);color:var(--gold-d)}
 .dr .watch .i{width:18px;height:18px}
@@ -209,11 +257,11 @@ img,video{display:block}
 .avw svg{position:absolute;inset:0;transform:rotate(-90deg)}
 .avw svg circle{fill:none;stroke-width:3.5}
 .ava{position:absolute;inset:7px;width:62px;height:62px;border-radius:50%;object-fit:cover;background:linear-gradient(145deg,#C99A48,#8A6326);display:grid;place-items:center;color:#fff;font:italic 400 28px R,serif}
-.prof b{display:block;font:italic 400 28px/1.05 R,serif}
+.prof b{display:block;font:700 21px/1.2 var(--sans)}
 .prof span{font-size:14.5px;color:var(--muted)}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 14px 0}
 .sti{padding:16px 8px;text-align:center}
-.sti b{display:block;font:italic 400 34px/1 R,serif;color:var(--gold-d)}
+.sti b{display:block;font:700 28px/1 var(--sans);color:var(--gold-d);letter-spacing:-.02em}
 .sti span{display:block;font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.25}
 .mlist{margin:0 14px;overflow:hidden}
 .mi{display:flex;gap:14px;align-items:center;padding:13px 16px;width:100%;position:relative}
@@ -246,8 +294,9 @@ body.sheet-open .tabbar{transform:translate(-50%,160%)}
 @keyframes up{from{transform:translateY(6%);opacity:0}to{transform:none;opacity:1}}
 .sheet .bgv{position:fixed;inset:0;width:100%;height:100%;object-fit:cover}
 .sheet .shade{position:fixed;inset:0;background:linear-gradient(180deg,rgba(5,15,15,.35) 0%,rgba(5,15,15,0) 25%,rgba(5,15,15,.25) 48%,rgba(5,15,15,.92) 80%)}
-.x{position:fixed;right:16px;top:calc(14px + var(--safe));z-index:65;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:#fff}
-.x .i{width:20px;height:20px}
+.x{position:fixed;left:14px;top:calc(12px + var(--safe));z-index:65;height:38px;padding:0 14px 0 8px;border-radius:19px;display:flex;align-items:center;gap:4px;color:#fff;font:600 15px var(--sans)}
+.x .i{transform:rotate(180deg)}
+.x .i{width:18px;height:18px}
 #player{overflow-y:auto;-webkit-overflow-scrolling:touch}
 .pscreen{position:relative;z-index:3;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 24px calc(26px + env(safe-area-inset-bottom,0px));max-width:480px;margin:0 auto}
 .voice{display:flex;align-items:center;gap:10px;font:500 15px var(--sans)}
@@ -271,7 +320,7 @@ body.sheet-open .tabbar{transform:translate(-50%,160%)}
 .pmore{position:relative;z-index:3;padding:10px 16px calc(40px + env(safe-area-inset-bottom,0px));max-width:480px;margin:0 auto;background:linear-gradient(180deg,rgba(8,20,20,0),rgba(8,20,20,.88) 12%)}
 .pm{border-radius:24px;padding:18px;margin-top:12px;background:rgba(255,255,255,.08);box-shadow:0 0 0 1px rgba(255,255,255,.14) inset}
 .pm .lb{font:600 12px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--gold-l)}
-.pm h3{font:italic 400 26px/1.1 R,serif;margin:8px 0 8px}
+.pm h3{font:700 20px/1.25 var(--sans);margin:8px 0 8px}
 .pm p{font-size:15.5px;opacity:.88}
 .mini3{display:flex;gap:8px;margin-top:14px}
 .mini3 div{flex:1;border-radius:16px;overflow:hidden;position:relative;height:110px}
@@ -287,7 +336,7 @@ body.sheet-open .tabbar{transform:translate(-50%,160%)}
 .vframe{position:absolute;left:0;right:0;top:50%;transform:translateY(-62%);aspect-ratio:16/9;background:#000}
 .vframe iframe,.vframe video{width:100%;height:100%;border:0}
 .vt{position:absolute;left:20px;right:20px;bottom:calc(36px + env(safe-area-inset-bottom,0px))}
-.vt h3{font:italic 400 26px/1.1 R,serif}
+.vt h3{font:700 20px/1.25 var(--sans)}
 .vt small{display:block;margin-top:8px;font-size:14px;opacity:.7}
 .fav{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:10px 14px;border-radius:14px;font:600 15px var(--sans);color:#fff}
 .fav .i{width:18px;height:18px}
@@ -333,14 +382,15 @@ body.sheet-open .fb{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
 
 <!-- ГЛАВНАЯ -->
 <section class="screen on" id="home">
- <div class="bar"><div class="brand">Миры Рая</div><button class="me" data-tab="me" id="meava">Р</button></div>
- <div class="hi" id="hello">Добрый день<small id="date"></small></div>
- <div class="path" id="path"></div>
+ <div class="hero"><video src="v/hero-v.mp4" poster="v/hero-v.jpg" muted loop playsinline autoplay></video>
+  <div class="tp2"><div class="brand">Миры Рая</div><button class="me" data-tab="me" id="meava">Р</button></div>
+  <div class="gr"><div class="d" id="date"></div><h1 id="hello">Добрый день</h1></div></div>
+ <div class="wish glass" id="wish"></div>
+ <div class="h2"><b>Твой путь</b></div>
+ <div class="path" id="path" style="padding-top:2px"></div>
  <div class="step rise" id="step"></div>
  <div id="livewrap"><div class="h2"><b>Ближайший эфир</b><a data-act="sched">Расписание</a></div>
  <div class="live card" id="live"></div></div>
- <div class="h2"><b>Практика на сегодня</b><a data-act="topic:utro">Ещё</a></div>
- <button class="rowc card" id="pday"></button>
  <div id="contwrap"><div class="h2"><b>Продолжить</b></div><div id="cont"></div></div>
  <div class="h2"><b>Что тебе сейчас нужно?</b></div>
  <div class="needs" id="needs"></div>
@@ -348,6 +398,7 @@ body.sheet-open .fb{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
 
 <!-- БИБЛИОТЕКА -->
 <section class="screen" id="lib">
+ <button class="backbtn" data-tab="home"><svg class="i"><use href="#p-caret-right"/></svg>Главная</button>
  <div class="h1">Библиотека</div>
  <div class="lead">Видео Каэммы по твоему запросу. Новые сверху.</div>
  <label class="search"><svg class="i"><use href="#p-magnifying-glass"/></svg><input id="q" type="search" placeholder="Найти видео" autocomplete="off"></label>
@@ -357,6 +408,7 @@ body.sheet-open .fb{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
 
 <!-- ТАИНСТВА / МОИ ТАИНСТВА -->
 <section class="screen" id="tainstva">
+ <button class="backbtn" data-tab="home"><svg class="i"><use href="#p-caret-right"/></svg>Главная</button>
  <div class="h1" id="ttitle">Три Таинства</div>
  <div class="thero"><video src="v/home-v.mp4" poster="v/home-v.jpg" muted loop playsinline autoplay></video>
   <div class="in"><div class="k" id="tk">В записи · доступ 3 месяца</div><h2 id="th">Три двери из мира иллюзий в Миры Рая</h2><span class="pill dglass" id="tpill"></span></div></div>
@@ -397,6 +449,7 @@ body.sheet-open .fb{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
 
 <!-- КАБИНЕТ -->
 <section class="screen" id="me">
+ <button class="backbtn" data-tab="home"><svg class="i"><use href="#p-caret-right"/></svg>Главная</button>
  <div class="h1">Кабинет</div>
  <div class="prof card" id="prof"></div>
  <div class="stats" id="stats"></div>
@@ -429,7 +482,7 @@ body.sheet-open .fb{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
 <!-- ПЛЕЕР ПОДАРКА -->
 <div class="sheet" id="player">
  <video class="bgv" src="v/gift-lotus.mp4" poster="v/gift-lotus.jpg" muted loop playsinline></video><div class="shade"></div>
- <button class="x dglass" data-act="close"><svg class="i"><use href="#p-x"/></svg></button>
+ <button class="x dglass" data-act="close"><svg class="i"><use href="#p-caret-right"/></svg>Назад</button>
  <div class="pscreen">
   <div class="voice"><img src="v/k.jpg" alt="">Голос Каэммы · подарок</div>
   <h2>Первая Инициация</h2>
@@ -446,10 +499,22 @@ body.sheet-open .fb{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
  </div>
  <div class="pmore">
   <div class="pm">
+   <div class="lb">Для чего она</div>
+   <p style="margin-top:8px">В ней мы собираем тебя целой: девочку, которая когда-то испугалась, внутреннего мужчину, тело, которое так долго всё держало.</p>
+   <div class="why"><span class="ic"><svg class="i"><use href="#p-headphones"/></svg></span><div><b>Как слушать</b><span>В наушниках, можно прилечь. Ничего не нужно понимать умом: я держу поток.</span></div></div>
+   <div class="why"><span class="ic"><svg class="i"><use href="#p-clock"/></svg></span><div><b>Около часа</b><span>Можно остановиться и продолжить потом, место сохранится.</span></div></div>
+  </div>
+  <div class="pm" id="fbk">
+   <div class="lb">Когда прослушаешь</div>
+   <h3>Какой зал храма отозвался в тебе сильнее всего?</h3>
+   <div class="halls" id="halls"></div>
+   <div class="hans" id="hans"></div>
+  </div>
+  <div class="pm">
    <div class="lb">Это первая из трёх</div>
    <h3>Две другие Инициации ждут тебя за дверями Таинств</h3>
    <p>В подарке мы собираем тебя целой. Дальше ты живёшь так, как хочешь ты, и перестаёшь верить отражениям.</p>
-   <div class="mini3"><div><img src="v/t1.jpg" alt=""><u class="ok"><svg class="i"><use href="#p-check"/></svg></u><em>I · твой подарок</em></div><div><img src="v/t2.jpg" alt=""><u><svg class="i"><use href="#p-lock-simple"/></svg></u><em>II · Жить, как хочешь ты</em></div><div><img src="v/t3.jpg" alt=""><u><svg class="i"><use href="#p-lock-simple"/></svg></u><em>III · Двойник</em></div></div>
+   <div class="mini3"><div><img src="v/t1.jpg" alt=""><u class="ok"><svg class="i"><use href="#p-check"/></svg></u><em>I · твой подарок</em></div><div data-lock="1"><img src="v/t2.jpg" alt=""><u><svg class="i"><use href="#p-lock-simple"/></svg></u><em>II · Жить, как хочешь ты</em></div><div data-lock="2"><img src="v/t3.jpg" alt=""><u><svg class="i"><use href="#p-lock-simple"/></svg></u><em>III · Двойник</em></div></div>
    <button class="cta gold" data-act="tab:tainstva" id="pmcta">Посмотреть Три Таинства</button>
   </div>
   <div class="pm"><div class="lb">Если ничего не почувствовала</div><p style="margin-top:8px">Родная, так бывает, и это тоже ответ. Поток всё равно прошёл. Очень часто он возвращается потом, снами и картинками в течение дня.</p></div>
@@ -460,14 +525,14 @@ body.sheet-open .fb{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
 
 <!-- ВИДЕО -->
 <div class="sheet" id="vsheet">
- <button class="x dglass" data-act="close"><svg class="i"><use href="#p-x"/></svg></button>
+ <button class="x dglass" data-act="close"><svg class="i"><use href="#p-caret-right"/></svg>Назад</button>
  <div class="vframe" id="vframe"></div>
  <div class="vt" id="vt"></div>
 </div>
 
 <!-- РАСПИСАНИЕ -->
 <div class="sheet" id="sched">
- <button class="x" data-act="close"><svg class="i"><use href="#p-x"/></svg></button>
+ <button class="x" data-act="close"><svg class="i"><use href="#p-caret-right"/></svg>Назад</button>
  <div class="sc">
   <div class="h1">Расписание</div>
   <div class="lead">Встречи с Каэммой. Время московское.</div>
@@ -480,6 +545,7 @@ body.sheet-open .fb{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
  </div>
 </div>
 
+<div class="pop" id="pop"><div class="ov" data-act="popclose"></div><div class="sh"><div class="gb"></div><div id="popc"></div></div></div>
 <button class="fb" id="fb"></button>
 <div class="toast glass" id="toast"></div>
 
@@ -527,6 +593,9 @@ var T=[
 var BYKEY={};T.forEach(function(t){t.v.forEach(function(v){BYKEY[v.k+':'+v.id]=v})});
 var PDAY=STREAMS.concat(GYM);
 var DOORS=[{n:'I',v:'v/t1.mp4',p:'v/t1.jpg',k:'Таинство I · Первичный Код',h:'Забрать свою силу обратно',t:'Ты увидишь пирамиду, в которой живёт ум, и заберёшь свои части домой: «Сила моя ко мне. Деньги мои ко мне. Любовь моя ко мне».'},{n:'II',v:'v/t2.mp4',p:'v/t2.jpg',k:'Таинство II · Выкуп Жизни',h:'Жить так, как хочешь ты',t:'Красота, новизна и один вопрос «а как бы я хотела?». Ничего придумывать не надо, этот вопрос и есть тот мир.'},{n:'III',v:'v/t3.mp4',p:'v/t3.jpg',k:'Таинство III · Совершенный Двойник',h:'Перестать верить отражениям',t:'Вокруг около пятидесяти зеркал. Здесь ты получишь выбор и простой алгоритм на момент, когда сжалось.'}];
+var REMIND='https://t.me/KaemmaBot?start=dl-1792409259577';
+var Q=['Это всего лишь кадр, и он никак не решает за всю мою остальную жизнь','Сила моя ко мне. Деньги мои ко мне. Любовь моя ко мне','А как бы я хотела?','Вдох: я вспомнила себя. Выдох: я никуда не спешу','Женщина женщине - Дом','Тебе осталось сделать всего один шаг, и я с нетерпением жду тебя за первой дверью'];
+var HALLS=[['Девочка','Девочка… Та, которая так долго следила за лицами взрослых, чтобы всех спасти. Сегодня за ней наконец пришли. Ей больше не нужно держать всё своим страхом, ей можно просто жить и удивляться. Будь с ней сегодня помягче, родная.'],['Мужчина','Внутренний мужчина… Тот, кто сказал тебе: я выдержу твою силу и твой масштаб. С этого и начинаются отношения, родная. Когда внутри есть опора, рядом появляется мужчина, который может её выдержать.'],['Тело','Тело… Оно прошло с тобой всю жизнь и столько удерживало. Когда женщина впервые говорит ему спасибо, оно выдыхает. Положи сегодня руку на сердце и просто побудь с ним.'],['Чёрная комната','Чёрная комната… Место между той, кем ты была, и той, кем становишься. Страх неизвестности поднимается там у многих, и это нормально. Там как раз и рождается новая ты.'],['Возврат энергии','Возврат энергии… Тысячи нитей, которые годами уходили в ожидание, в прошлое, к чужим дверям, начали возвращаться к тебе. Послушай сегодня себя: внутри может стать тише, а в голове меньше суеты.'],['Ничего не почувствовала','Родная, так бывает, и это тоже ответ. Поток всё равно прошёл. Очень часто он возвращается потом, снами и картинками в течение дня.']];
 var REV=[['Как начинаю слушать занятия, у меня включается состояние, что я в сказке. Иду с работы, достаю наушники и включаю.','Галина'],['Надоело всё контролировать, переживать, прокручивать в голове. Хочу просто наслаждаться. Я та, которой можно больше спокойствия и наслаждения.','Елена'],['Весь день замечала красоту неба. Дома в зеркале: какая я красавица. И это искренне.','Участница'],['Почувствовала себя дома. Вернула силу и уверенность, что всё могу. Жизнь легко выстраивается, притягиваются нужные события и люди.','Светлана'],['Сегодня я поверила во всё. Подышала, собрала силу и спокойно сказала пациентке: расслабьтесь. И она расслабилась. Это всё работает.','Участница']];
 
 /* ---------- утилиты ---------- */
@@ -560,28 +629,27 @@ function renderHome(){
  var u=user(),name=u.first_name||'';
  if(u.photo_url)$('meava').innerHTML='<img src="'+esc(u.photo_url)+'" alt="">';else $('meava').textContent=(name||'Р').charAt(0);
  var h=new Date().getHours(),g=h<5?'Доброй ночи':h<12?'Доброе утро':h<18?'Добрый день':'Добрый вечер';
- $('hello').innerHTML=esc(g)+(name?', '+esc(name):'')+'<small>'+(function(t){return t.charAt(0).toUpperCase()+t.slice(1)})(new Date().toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'}))+'</small>';
+ $('hello').innerHTML=esc(g)+(name?',<br>'+esc(name):'');
+ $('date').textContent=new Date().toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'});
+ $('wish').innerHTML='<img src="v/k.jpg" alt=""><div><q>'+esc(Q[doy%Q.length])+'</q><span>Каэмма · мысль дня</span></div>';
  var s=stage(),L=['Подарок','Эфир','Промо-урок','Таинства'],IC=['gift','calendar-blank','play','sparkle'];
  $('path').innerHTML=L.map(function(l,i){var c=i<s?'done':i===s?'now':'';return '<div class="ps '+c+'"><span class="c">'+I(i<s?'check':IC[i])+'</span>'+l+'</div>'}).join('');
- var lt=nextLive(),X;
- if(s===0){var pos=+ST.gift_pos||0;X={m:'<video src="v/gift-lotus.mp4" poster="v/gift-lotus.jpg" muted loop playsinline autoplay></video>',k:'Шаг 1 · Подарок',h:'Первая Инициация',p:'Около часа, моим голосом. В ней мы собираем тебя целой.',c:'<button class="cta" data-act="gift">'+I('play')+(pos>30?'Продолжить с '+fmt(pos):'Слушать подарок')+'</button>'+(pos>30?'<div class="pbar"><i style="width:'+Math.min(100,pos/GIFT_LEN*100)+'%"></i></div>':'')}}
- else if(s===1)X={m:'<img src="v/gym.jpg" alt="">',k:'Шаг 2 · Эфир с Каэммой',h:'Утренняя гимнастика в понедельник',p:new Date(lt).toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'})+' · 11:11 мск · '+liveTxt(lt),c:'<button class="cta" data-act="remind">'+I('bell')+'Добавить в календарь</button><button class="cta gold" style="margin-top:8px" data-v="'+key(STREAMS[0])+'">'+I('play')+'Посмотреть прошлый эфир</button>'};
+ var lt=nextLive(),X,rem=ST.remind==='1';
+ if(s===0){var pos=+ST.gift_pos||0;X={m:'<video src="v/gift-lotus.mp4" poster="v/gift-lotus.jpg" muted loop playsinline autoplay></video>',k:'Шаг 1 · Подарок для тебя',h:'Первая Инициация',p:'Около часа, моим голосом. В ней мы собираем тебя целой.',c:'<button class="cta" data-act="gift">'+I('play')+(pos>30?'Продолжить с '+fmt(pos):'Слушать подарок')+'</button>'+(pos>30?'<div class="pbar"><i style="width:'+Math.min(100,pos/GIFT_LEN*100)+'%"></i></div>':'')}}
+ else if(s===1)X={m:'<img src="v/gym.jpg" alt="">',k:'Шаг 2 · Встреча с Каэммой',h:'Утренняя гимнастика каждый понедельник',p:'11:11 по Москве, прямой эфир · '+liveTxt(lt),c:'<button class="cta" data-act="remind">'+I('bell')+(rem?'Напоминание включено':'Напомнить мне в боте')+'</button><button class="cta gold" style="margin-top:8px" data-v="'+key(STREAMS[0])+'">'+I('play')+'Посмотреть прошлый эфир</button>'};
  else if(s===2)X={m:'<img src="v/promo-cover.jpg" alt="">',k:'Шаг 3 · Промо-урок',h:'Что дальше после подарка',p:'5 минут. Моя история: как между самым дном и домом у моря оказалось всего четыре месяца.',c:'<button class="cta" data-act="promo">'+I('play')+'Смотреть промо-урок</button>'};
  else if(s===3){var l=left();X={m:'<video src="v/t1.mp4" poster="v/t1.jpg" muted loop playsinline autoplay></video>',k:'Шаг 4 · Три Таинства',h:'Три двери в Миры Рая',p:l>0?'Твоя цена 3 000 ₽ держится ещё <b id="stt">'+leftTxt(l)+'</b>':'Доступ 3 месяца · 5 000 ₽',c:'<button class="cta gold" data-tab="tainstva">'+I('sparkle')+'Посмотреть, что внутри</button>'}}
  else X={m:'<video src="v/me-lotus.mp4" poster="v/me-lotus.jpg" muted loop playsinline autoplay></video>',k:'Ты внутри',h:'Мои Таинства',p:'Три двери, три Инициации, группа. Доступ 3 месяца.',c:'<button class="cta gold" data-tab="tainstva">'+I('sparkle')+'Открыть Мои Таинства</button>'};
  $('step').innerHTML=X.m+'<div class="bd"><div class="k">'+X.k+'</div><h2>'+X.h+'</h2><p>'+X.p+'</p>'+X.c+'</div>';
  $('livewrap').style.display=s===1?'none':'';
  var d=new Date(lt+3*36e5);
- $('live').innerHTML='<div class="cal"><span>'+['вс','пн','вт','ср','чт','пт','сб'][d.getUTCDay()]+'</span><b>'+d.getUTCDate()+'</b></div><div><div class="tt">Утренняя гимнастика</div><div class="ss"><span class="dotlive"></span>11:11 мск · <span id="ltx">'+liveTxt(lt)+'</span></div></div><button class="rem" data-act="remind" aria-label="Напомнить">'+I('bell')+'</button>';
- var p=PDAY[doy%PDAY.length];
- $('pday').dataset.v=key(p);
- $('pday').innerHTML='<span class="im"><img src="'+p.img+'" alt=""></span><span><span class="tt" style="display:block">'+esc(p.t)+'</span><span class="ss" style="display:block">'+esc(p.m)+'</span></span><span class="pl">'+I('play')+'</span>';
- var cont='',pos=+ST.gift_pos||0;
- if(ST.gift!=='1'&&pos>30&&s!==0)cont+='<button class="rowc card" data-act="gift"><span class="im"><img src="v/gift-lotus.jpg" alt=""></span><span style="flex:1"><span class="tt" style="display:block">Первая Инициация</span><span class="ss" style="display:block">Осталось '+Math.max(1,Math.round((GIFT_LEN-pos)/60))+' мин</span><span class="mbar" style="display:block"><i style="width:'+Math.min(100,pos/GIFT_LEN*100)+'%"></i></span></span><span class="pl">'+I('play')+'</span></button>';
+ $('live').innerHTML='<div class="cal"><span>'+['вс','пн','вт','ср','чт','пт','сб'][d.getUTCDay()]+'</span><b>'+d.getUTCDate()+'</b></div><div><div class="tt">Утренняя гимнастика</div><div class="ss"><span class="dotlive"></span>11:11 мск · <span id="ltx">'+liveTxt(lt)+'</span></div></div><button class="rem'+(rem?' on':'')+'" data-act="remind" aria-label="Напомнить">'+I('bell')+'</button>';
+ var cont='',pos2=+ST.gift_pos||0;
+ if(ST.gift!=='1'&&pos2>30&&s!==0)cont+='<button class="rowc card" data-act="gift"><span class="im"><img src="v/gift-lotus.jpg" alt=""></span><span style="flex:1"><span class="tt" style="display:block">Первая Инициация</span><span class="ss" style="display:block">Осталось '+Math.max(1,Math.round((GIFT_LEN-pos2)/60))+' мин</span><span class="mbar" style="display:block"><i style="width:'+Math.min(100,pos2/GIFT_LEN*100)+'%"></i></span></span><span class="pl">'+I('play')+'</span></button>';
  var last=J('opened').map(function(k){return BYKEY[k]}).filter(Boolean)[0];
  if(last)cont+='<button class="rowc card" style="margin-top:10px" data-v="'+key(last)+'"><span class="im"><img src="'+last.img+'" alt=""></span><span><span class="tt" style="display:block">'+esc(last.t)+'</span><span class="ss" style="display:block">Ты смотрела недавно</span></span><span class="pl">'+I('play')+'</span></button>';
  $('contwrap').style.display=cont?'':'none';$('cont').innerHTML=cont;
- $('needs').innerHTML=T.map(function(t){var nw=t.v.some(function(v){return v.n});return '<button class="nd" data-topic="'+t.id+'"><img src="'+t.img+'" alt="" loading="lazy"><b>'+t.t+'</b><span>'+t.v.length+' '+plural(t.v.length,'видео','видео','видео')+'</span>'+(nw?'<span class="new">НОВОЕ</span>':'')+'</button>'}).join('');
+ $('needs').innerHTML=T.map(function(t){var nw=t.v.some(function(v){return v.n});return '<button class="nd" data-topic="'+t.id+'"><img src="'+t.img+'" alt="" loading="lazy"><b>'+t.t+'</b><span>'+t.v.length+' видео</span>'+(nw?'<span class="new">НОВОЕ</span>':'')+'</button>'}).join('');
 }
 function renderSched(){var lt=nextLive(),out='';for(var i=0;i<4;i++){var t=lt+i*7*864e5,d=new Date(t+3*36e5);out+='<div class="ev"><div class="day"><b>'+d.getUTCDate()+'</b><span>'+['вс','пн','вт','ср','чт','пт','сб'][d.getUTCDay()]+'</span></div><div><div class="tt">Утренняя омолаживающая гимнастика</div><div class="ss">11:11 · прямой эфир на YouTube · для всех</div></div></div>'}out+='<div class="ev"><div class="day"><b>·</b><span>скоро</span></div><div><div class="tt">Вечерний эфир <span class="soon">скоро</span></div><div class="ss">день и время объявим</div></div></div>';$('schedopen').innerHTML=out}
 
@@ -615,6 +683,11 @@ $('doors').addEventListener('scroll',function(){var d=$('doors'),w=d.firstElemen
 var io='IntersectionObserver' in window?new IntersectionObserver(function(es){es.forEach(function(e){var v=e.target;if(e.isIntersecting){if(!v.src&&v.dataset.src)v.src=v.dataset.src;v.play().catch(function(){})}else v.pause()})},{threshold:.35}):null;
 function observeDoors(){if(io)document.querySelectorAll('.dr video').forEach(function(v){io.observe(v)})}
 
+/* окно покупки для закрытой двери */
+function openPop(i){var d=DOORS[i],l=left();$('popc').innerHTML='<div class="im"><img src="'+d.p+'" alt=""><u>'+I('lock-simple')+'</u></div><div class="k">'+d.k+'</div><h3>'+d.h+'</h3><p>'+d.t+'</p><p style="margin-top:8px">Эта дверь откроется в Трёх Таинствах вместе с Инициацией.</p><div class="pr"><b>'+priceTxt()+' ₽</b>'+(l>0?'<span>· цена держится ещё '+leftTxt(l).replace(/:\d\d$/,'')+'</span>':'')+'</div><button class="cta gold" data-act="buy">'+I('sparkle')+'Войти в Три Таинства</button><button class="ghost" data-act="popmore">Посмотреть, что внутри</button>';$('pop').classList.add('on');hap()}
+function closePop(){$('pop').classList.remove('on')}
+function renderHalls(){var h=ST.hall;$('halls').innerHTML=HALLS.map(function(x,i){return '<button class="hl'+(h==String(i)?' on':'')+'" data-hall="'+i+'">'+x[0]+'</button>'}).join('');var a=$('hans');if(h!=null&&HALLS[+h]){a.innerHTML=esc(HALLS[+h][1])+'<small>Каэмма</small>';a.classList.add('on')}else a.classList.remove('on')}
+
 /* ---------- КАБИНЕТ ---------- */
 function renderMe(){
  var u=user(),nm=[u.first_name,u.last_name].filter(Boolean).join(' ')||'Родная',s=stage();
@@ -622,7 +695,8 @@ function renderMe(){
  $('prof').innerHTML='<div class="avw"><svg viewBox="0 0 76 76"><circle cx="38" cy="38" r="35" stroke="#EADFC9"/><circle cx="38" cy="38" r="35" stroke="#B0823A" stroke-linecap="round" stroke-dasharray="220" stroke-dashoffset="'+(220*(1-Math.min(s,4)/4))+'"/></svg>'+ava+'</div><div><b>'+esc(nm)+'</b><span>'+(s>=4?'Три Таинства открыты':'Шаг '+(s+1)+' из 4 · '+['Подарок','Эфир','Промо-урок','Таинства'][s])+'</span></div>';
  var days=Math.max(1,Math.floor((Date.now()-(+ST.first||Date.now()))/864e5)+1),op=J('opened').length,fv=J('fav').length;
  $('stats').innerHTML='<div class="sti card"><b>'+days+'</b><span>'+plural(days,'день','дня','дней')+'<br>в Мирах Рая</span></div><div class="sti card"><b>'+op+'</b><span>'+plural(op,'практика','практики','практик')+'<br>открыто</span></div><div class="sti card"><b>'+fv+'</b><span>сохранено</span></div>';
- $('minewrap').innerHTML=s>=4?'<div class="h2"><b>Мои Таинства</b></div><button class="rowc card" data-tab="tainstva"><span class="im"><img src="v/t2.jpg" alt=""></span><span><span class="tt" style="display:block">Три двери</span><span class="ss" style="display:block">Уроки, Инициации, группа</span></span><span class="pl">'+I('play')+'</span></button>':'<div class="h2"><b>Следующий шаг</b></div><button class="rowc card" data-tab="home"><span class="im"><img src="'+['v/gift-lotus.jpg','v/gym.jpg','v/promo-cover.jpg','v/t1.jpg'][s]+'" alt=""></span><span><span class="tt" style="display:block">'+['Первая Инициация','Гимнастика в понедельник','Промо-урок, 5 минут','Три Таинства'][s]+'</span><span class="ss" style="display:block">'+(s===3&&left()>0?'3 000 ₽ · ещё '+leftTxt(left()).replace(/:\d\d$/,''):'Шаг '+(s+1)+' из 4')+'</span></span><span class="pl">'+I('arrow-right')+'</span></button>';
+ var extra='<div class="h2"><b>Мои напоминания</b></div><div class="mlist card"><button class="mi" data-act="remind"><span class="ic g-gold">'+I('bell')+'</span><div><div class="tt">Гимнастика по понедельникам</div><div class="ss">'+(ST.remind==='1'?'Включено · бот напишет за час':'Нажми, и бот напомнит за час')+'</div></div><span class="ar">'+I('caret-right')+'</span></button></div>'+(ST.hall!=null&&HALLS[+ST.hall]?'<div class="h2"><b>Мой отклик на подарок</b></div><div class="card" style="margin:0 14px;padding:18px"><div style="font:600 12px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--gold)">'+HALLS[+ST.hall][0]+'</div><p style="margin-top:8px;font:italic 400 18px/1.35 R,serif;color:#3a3125">'+esc(HALLS[+ST.hall][1])+'</p></div>':'');
+ $('minewrap').innerHTML=extra+(s>=4?'<div class="h2"><b>Мои Таинства</b></div><button class="rowc card" data-tab="tainstva"><span class="im"><img src="v/t2.jpg" alt=""></span><span><span class="tt" style="display:block">Три двери</span><span class="ss" style="display:block">Уроки, Инициации, группа</span></span><span class="pl">'+I('play')+'</span></button>':'<div class="h2"><b>Следующий шаг</b></div><button class="rowc card" data-tab="home"><span class="im"><img src="'+['v/gift-lotus.jpg','v/gym.jpg','v/promo-cover.jpg','v/t1.jpg'][s]+'" alt=""></span><span><span class="tt" style="display:block">'+['Первая Инициация','Гимнастика в понедельник','Промо-урок, 5 минут','Три Таинства'][s]+'</span><span class="ss" style="display:block">'+(s===3&&left()>0?'3 000 ₽ · ещё '+leftTxt(left()).replace(/:\d\d$/,''):'Шаг '+(s+1)+' из 4')+'</span></span><span class="pl">'+I('arrow-right')+'</span></button>');
  var f=J('fav').map(function(k){return BYKEY[k]}).filter(Boolean);
  $('favsec').style.display=f.length?'':'none';$('favs').innerHTML=f.map(cardHTML).join('');
  var rc=J('opened').map(function(k){return BYKEY[k]}).filter(Boolean).slice(0,10);
@@ -635,7 +709,7 @@ function setMain(){
  if(document.body.classList.contains('sheet-open')||$('intro').classList.contains('on'))return;
  if(cur==='tainstva'&&ST.bought!=='1')mb('Войти в Три Таинства · '+priceTxt()+' ₽',pay);else mb('',null);
 }
-function show(t){if(!$(t))return;cur=t;document.querySelectorAll('.screen').forEach(function(s){s.classList.toggle('on',s.id===t)});document.querySelectorAll('.tb').forEach(function(b){b.classList.toggle('on',b.dataset.tab===t)});window.scrollTo(0,0);if(t==='home')renderHome();if(t==='lib'){renderTopics();renderList()}if(t==='tainstva')renderTainstva();if(t==='me')renderMe();setMain()}
+function show(t){if(!$(t))return;cur=t;document.querySelectorAll('.screen').forEach(function(s){s.classList.toggle('on',s.id===t)});document.querySelectorAll('.tb').forEach(function(b){b.classList.toggle('on',b.dataset.tab===t)});window.scrollTo(0,0);if(!document.body.classList.contains('sheet-open'))back(t==='home'?null:function(){show('home')});if(t==='home')renderHome();if(t==='lib'){renderTopics();renderList()}if(t==='tainstva')renderTainstva();if(t==='me')renderMe();setMain()}
 function pay(){hap('ok');mb('',null);location.href=PAY}
 setInterval(function(){var l=left(),t=leftTxt(l);if(l>0)[['tmr','Цена держится ещё '+t],['stt',t],['tpt','ещё '+t]].forEach(function(p){var e=$(p[0]);if(e)e.textContent=p[1]});var x=$('ltx');if(x)x.textContent=liveTxt(nextLive())},1000);
 
@@ -643,7 +717,7 @@ setInterval(function(){var l=left(),t=leftTxt(l);if(l>0)[['tmr','Цена дер
 function openSheet(id){document.body.classList.add('sheet-open');var s=$(id);s.classList.add('on');s.scrollTop=0;mb('',null);back(closeSheet);var bg=s.querySelector('video.bgv');if(bg)bg.play().catch(function(){})}
 function closeSheet(){document.querySelectorAll('.sheet.on').forEach(function(s){s.classList.remove('on');var bg=s.querySelector('video.bgv');if(bg)bg.pause()});document.body.classList.remove('sheet-open');$('vframe').innerHTML='';au.pause();back(null);show(cur)}
 var au=$('au'),seek=$('seek'),ring=$('ring');
-function openGift(){openSheet('player');track('gift');$('pmcta').textContent='Посмотреть Три Таинства · '+priceTxt()+' ₽';if(ST.gift_pos&&!au.currentTime){au.preload='auto';au.addEventListener('loadedmetadata',function f(){au.currentTime=+ST.gift_pos||0;au.removeEventListener('loadedmetadata',f)});au.load()}$('after').classList.toggle('on',ST.gift==='1');if('mediaSession' in navigator)try{navigator.mediaSession.metadata=new MediaMetadata({title:'Первая Инициация',artist:'Каэмма',album:'Миры Рая',artwork:[{src:'v/gift-lotus.jpg',sizes:'540x960',type:'image/jpeg'}]})}catch(e){}}
+function openGift(){openSheet('player');renderHalls();track('gift');$('pmcta').textContent='Посмотреть Три Таинства · '+priceTxt()+' ₽';if(ST.gift_pos&&!au.currentTime){au.preload='auto';au.addEventListener('loadedmetadata',function f(){au.currentTime=+ST.gift_pos||0;au.removeEventListener('loadedmetadata',f)});au.load()}$('after').classList.toggle('on',ST.gift==='1');if('mediaSession' in navigator)try{navigator.mediaSession.metadata=new MediaMetadata({title:'Первая Инициация',artist:'Каэмма',album:'Миры Рая',artwork:[{src:'v/gift-lotus.jpg',sizes:'540x960',type:'image/jpeg'}]})}catch(e){}}
 function upd(){var d=au.duration||GIFT_LEN,c=au.currentTime||0,p=c/d;seek.value=Math.round(p*1000);seek.style.setProperty('--p',(p*100)+'%');ring.style.strokeDashoffset=308*(1-p);$('cur').textContent=fmt(c);$('left').textContent='−'+fmt(d-c);if(p>.8)$('after').classList.add('on')}
 var lastSave=0;
 au.addEventListener('timeupdate',function(){upd();var t=Math.floor(au.currentTime);if(Math.abs(t-lastSave)>=5){lastSave=t;save('gift_pos',t)}});
@@ -664,11 +738,13 @@ function openVideo(k){
 
 /* ---------- клики ---------- */
 document.addEventListener('click',function(e){
- var b=e.target.closest('[data-tab],[data-act],[data-topic],[data-v],[data-fav],[data-url],[data-lesson],.fq');if(!b)return;
+ var b=e.target.closest('[data-tab],[data-act],[data-topic],[data-v],[data-fav],[data-url],[data-lesson],[data-lock],[data-hall],.fq');if(!b)return;
  if(b.classList.contains('fq')&&!b.dataset.act){hap('sel');b.classList.toggle('on');return}
  if(b.dataset.tab){hap('sel');if(document.body.classList.contains('sheet-open'))closeSheet();show(b.dataset.tab);return}
  if(b.dataset.topic){hap('sel');curT=b.dataset.topic;if(cur!=='lib')show('lib');else{renderTopics();renderList();window.scrollTo({top:0,behavior:'smooth'})}return}
  if(b.dataset.v){hap();if(document.body.classList.contains('sheet-open')&&b.closest('.sheet')===null)closeSheet();openVideo(b.dataset.v);return}
+ if(b.dataset.lock){openPop(+b.dataset.lock);return}
+ if(b.dataset.hall!=null){hap('ok');save('hall',b.dataset.hall);if(ST.gift!=='1')save('gift',1);renderHalls();return}
  if(b.dataset.url){hap();var u=b.dataset.url;if(u.indexOf('tg:')===0)openTg(u.slice(3));else openUrl(u);return}
  if(b.dataset.lesson!=null){hap();var L=LESSONS[+b.dataset.lesson];openUrl(L||CABINET);return}
  if(b.dataset.fav){var f=J('fav'),k=b.dataset.fav,i=f.indexOf(k);if(i>=0)f.splice(i,1);else f.unshift(k);save('fav',JSON.stringify(f.slice(0,40)));hap('ok');b.classList.toggle('on',i<0);b.innerHTML=I('bookmark-simple')+(i<0?'Сохранено в кабинете':'Сохранить в кабинет');return}
@@ -679,7 +755,10 @@ document.addEventListener('click',function(e){
  if(a==='gift')return openGift();
  if(a==='promo'){if(document.body.classList.contains('sheet-open'))closeSheet();return openVideo('promo')}
  if(a==='sched'){renderSched();return openSheet('sched')}
- if(a==='remind'){save('efir',1);openUrl(gcal(nextLive()));toast('Добавь эфир в календарь, он повторяется каждый понедельник');setTimeout(function(){if(cur==='home')renderHome()},600);return}
+ if(a==='remind'){save('remind',1);save('efir',1);openTg(REMIND);setTimeout(function(){show(cur)},600);return}
+ if(a==='popclose'){closePop();return}
+ if(a==='buy'){closePop();if(document.body.classList.contains('sheet-open'))closeSheet();pay();return}
+ if(a==='popmore'){closePop();if(document.body.classList.contains('sheet-open'))closeSheet();show('tainstva');return}
  if(a==='ask')return openTg('https://t.me/Kaemma_support');
  if(a==='reviews')return openTg('https://t.me/Kaemma144_otzyvy');
  if(a==='cabinet')return openUrl(CABINET);
@@ -701,7 +780,7 @@ function boot(){
  if(scr==='gift'||scr==='gift-more'){show('home');openGift();if(scr==='gift-more')setTimeout(function(){$('player').scrollTop=9999},300)}
  else if(scr==='lib'||scr==='praktiki')show('lib');else if(scr==='tainstva')show('tainstva');else if(scr==='me'||scr==='kabinet')show('me');else if(scr==='sched'){show('home');renderSched();openSheet('sched')}else if(scr==='intro'){$('intro').classList.add('on');show('home')}else show('home');
 }
-var KEYS=['gift','gift_pos','efir','promo','bought','tt_start','intro','fav','opened','first'];
+var KEYS=['gift','gift_pos','efir','promo','bought','tt_start','intro','fav','opened','first','remind','hall'];
 KEYS.forEach(function(k){var v=lsG(k);if(v!=null)ST[k]=v});
 if(cloud){try{tg.CloudStorage.getItems(KEYS,function(err,res){if(!err&&res)KEYS.forEach(function(k){if(res[k])ST[k]=res[k]});boot()})}catch(e){boot()}}else boot();
 </script>
