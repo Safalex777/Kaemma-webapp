@@ -627,7 +627,8 @@ var parts=sp.split('__'),sp0=parts[0]||'';
 /* в ссылке только число bh_user_id (Telegram не пропускает точку), номер BotHelp = 9usu.<число>. Метки: g подарок прослушан, k купила */
 var cuid=/^\d+$/.test(sp0)?'9usu.'+sp0:(/^9usu\./.test(sp0)?sp0:'');
 var flags=parts.slice(1);
-var PAY='https://kaemma144.getcourse.ru/tainstva?utm_source=bot_app&utm_medium=telegram_app&utm_campaign=tri_tainstva'+(cuid?'&utm_content='+encodeURIComponent(cuid):'')+'#s10';
+/* номер подписчицы запоминаем в хранилище Telegram: кнопка «Миры Рая» слева его не передаёт */
+function payUrl(c){return 'https://kaemma144.getcourse.ru/tainstva?utm_source=bot_app&utm_medium=telegram_app&utm_campaign=tri_tainstva'+(c?'&utm_content='+encodeURIComponent(c):'')+'#s10'}
 var CABINET='https://kaemma144.getcourse.ru/teach/control/stream/view/id/935923232';
 /* уроки Таинств в GetCourse: заполнить ссылками, когда Саша загрузит */
 var LESSONS=['','',''];
@@ -787,7 +788,7 @@ function setMain(){
 function show(t){if(!$(t))return;cur=t;document.querySelectorAll('.screen').forEach(function(s){s.classList.toggle('on',s.id===t)});document.querySelectorAll('.tb').forEach(function(b){b.classList.toggle('on',b.dataset.tab===t)});window.scrollTo(0,0);if(!document.body.classList.contains('sheet-open'))back(t==='home'?null:function(){show('home')});if(t==='home')renderHome();if(t==='lib'){renderTopics();renderList()}if(t==='tainstva')renderTainstva();if(t==='me')renderMe();setMain()}
 var OFFER='https://t.me/KaemmaBot?start=dl-1792356930396';
 /* без номера подписчицы (открыто кнопкой «Миры Рая») оплата идёт через предложение в боте: так бот и приложение узнают о покупке */
-function pay(){hap('ok');if(!cuid){toast('Открываю оплату в боте, там доступ придёт сразу');setTimeout(function(){openTg(OFFER)},700);return}mb('',null);location.href=PAY}
+function pay(){hap('ok');var c=cuid||ST.cuid||'';if(!c){toast('Открываю оплату в боте, там доступ придёт сразу');setTimeout(function(){openTg(OFFER)},700);return}mb('',null);location.href=payUrl(c)}
 setInterval(function(){var l=left(),t=leftTxt(l);if(l>0)[['tmr','Цена держится ещё '+t],['stt',t],['tpt','ещё '+t]].forEach(function(p){var e=$(p[0]);if(e)e.textContent=p[1]});var x=$('ltx');if(x)x.textContent=liveTxt(nextLive())},1000);
 
 /* ---------- шторки ---------- */
@@ -851,6 +852,7 @@ document.addEventListener('click',function(e){
 
 /* ---------- старт ---------- */
 function boot(){
+if(cuid&&ST.cuid!==cuid)save('cuid',cuid);
  if(flags.indexOf('k')>=0&&ST.bought!=='1')save('bought',1);
  if(flags.indexOf('g')>=0&&ST.gift!=='1')save('gift',1);
  if(!ST.first)save('first',Date.now());
@@ -859,7 +861,7 @@ function boot(){
  if(scr==='gift'||scr==='gift-more'){show('home');openGift();if(scr==='gift-more')setTimeout(function(){$('player').scrollTop=9999},300)}
  else if(scr==='lib'||scr==='praktiki')show('lib');else if(scr==='tainstva')show('tainstva');else if(scr==='me'||scr==='kabinet')show('me');else if(scr==='sched'){show('home');renderSched();openSheet('sched')}else if(scr==='intro'){$('intro').classList.add('on');show('home')}else show('home');
 }
-var KEYS=['gift','gift_pos','efir','promo','bought','tt_start','intro','fav','opened','first','remind','hall','peek','krugs'];
+var KEYS=['cuid','gift','gift_pos','efir','promo','bought','tt_start','intro','fav','opened','first','remind','hall','peek','krugs'];
 KEYS.forEach(function(k){var v=lsG(k);if(v!=null)ST[k]=v});
 if(cloud){try{tg.CloudStorage.getItems(KEYS,function(err,res){if(!err&&res)KEYS.forEach(function(k){if(res[k])ST[k]=res[k]});boot()})}catch(e){boot()}}else boot();
 </script>
