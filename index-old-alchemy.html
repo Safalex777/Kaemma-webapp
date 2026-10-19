@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#f7f2e8">
+<meta name="description" content="Каэмма · ДНК Код Красоты и Молодости — пространство женщины, которая выбирает Больше Жизни. Интенсив «Алхимия Времени», клуб ЭльЛита, библиотека практик.">
+<title>ДНК Код Красоты и Молодости · Каэмма</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bona+Nova:ital,wght@0,400;0,700;1,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════
+   ДНК КОД · Tokens (в стиле лендинга «Алхимия Времени»)
+   ═══════════════════════════════════════════════════════════ */
+:root{
+  --ivory:#f7f2e8; --ivory-soft:#fffcf6; --milk:#fffaf1;
+  --ink:#172522; --ink-soft:#40514d; --ink-mute:#7b8a86;
+  --gold:#b6842d; --gold-deep:#78551d; --gold-pale:#ecd8a5;
+  --aqua:#15958e; --aqua-deep:#0d625d; --aqua-pale:#c7e7e2;
+  --peach:#f0d4c1;
+  --line:rgba(77,75,62,.16);
+  --glass:rgba(255,252,246,.62);
+  --glass-hi:rgba(255,252,246,.82);
+  --shadow:0 18px 50px rgba(74,67,45,.10);
+  --shadow-sm:0 10px 26px -8px rgba(63,66,50,.14);
+  --display:"Bona Nova",Georgia,serif;
+  --sans:"Manrope",Arial,sans-serif;
+  --ease:cubic-bezier(.2,.72,.22,1);
+  --title-shine:linear-gradient(100deg,transparent 34%,rgba(255,255,255,.95) 47%,rgba(199,231,226,.92) 50%,rgba(255,255,255,.95) 53%,transparent 66%);
+  --r-xl:28px; --r-lg:22px; --r-md:16px; --r-sm:12px;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+[hidden]{display:none!important;}
+html,body{height:100%;overflow:hidden;background:var(--ivory);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;}
+button,a{font:inherit;color:inherit;}
+button{background:none;border:0;cursor:pointer;}
+a{text-decoration:none;}
+img,video{display:block;max-width:100%;}
+ul{list-style:none;}
+:focus-visible{outline:2px solid var(--aqua);outline-offset:3px;}
+
+/* ── Фон ─────────────────────────────────────────────────── */
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(255,255,255,.9) 0 10%,rgba(199,231,226,.30) 32%,transparent 58%),
+    radial-gradient(circle at 6% 22%,rgba(240,212,193,.36),transparent 40%),
+    radial-gradient(circle at 94% 78%,rgba(236,216,165,.34),transparent 40%),
+    var(--ivory);}
+.bg .ring{position:absolute;border-radius:50%;border:1px solid rgba(182,132,45,.12);filter:blur(1.5px);box-shadow:0 0 60px 60px rgba(182,132,45,.02),0 0 90px 120px rgba(21,149,142,.015);}
+.bg .r1{width:520px;height:520px;left:-300px;top:8%;}
+.bg .r2{width:440px;height:440px;right:-260px;bottom:4%;border-color:rgba(21,149,142,.14);}
+.bg .r3{width:260px;height:260px;left:50%;top:38%;transform:translateX(-50%);border-style:dashed;border-color:rgba(21,149,142,.10);animation:rotate 60s linear infinite;}
+#dna{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.55;}
+
+/* ── Каркас ──────────────────────────────────────────────── */
+#app{position:relative;z-index:1;display:flex;flex-direction:column;height:100vh;height:100dvh;max-width:480px;margin:0 auto;overflow:hidden;}
+
+.hdr{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:8px;margin:10px 12px 0;padding:8px 8px 8px 16px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.55);border-bottom-color:rgba(21,149,142,.22);background:rgba(255,252,246,.55);
+  box-shadow:0 10px 32px rgba(43,56,52,.09),inset 0 1px 0 rgba(255,255,255,.8);backdrop-filter:blur(22px) saturate(150%);-webkit-backdrop-filter:blur(22px) saturate(150%);}
+.brand{display:flex;align-items:center;gap:9px;min-width:0;}
+.brand-mark{width:10px;height:10px;flex:none;border-radius:50%;border:1px solid var(--gold);background:var(--aqua);box-shadow:inset 0 0 0 2px var(--ivory-soft),0 0 0 1px rgba(21,149,142,.22);}
+.brand-text{font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink);}
+.brand-text em{font-style:normal;color:var(--gold-deep);}
+
+/* Стеклянная кнопка (как на лендинге) */
+.gbtn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 20px;overflow:hidden;border-radius:999px;
+  border:1px solid rgba(255,255,255,.55);border-bottom-color:rgba(182,132,45,.38);color:var(--ink);background:rgba(255,255,255,.26);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.75),inset 0 -8px 18px rgba(182,132,45,.06),0 10px 28px rgba(57,74,69,.10);
+  backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);
+  font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-align:center;transition:transform .3s var(--ease),box-shadow .3s ease,border-color .3s ease;}
+.gbtn::before{content:"";position:absolute;inset:1px;border-radius:inherit;background:linear-gradient(120deg,rgba(255,255,255,.55) 0%,rgba(255,255,255,.04) 38%,rgba(255,255,255,.02) 60%,rgba(21,149,142,.10) 100%);opacity:.8;pointer-events:none;}
+.gbtn::after{content:"";position:absolute;left:12%;right:12%;bottom:5px;height:1px;background:linear-gradient(90deg,transparent,var(--aqua),transparent);opacity:.72;}
+.gbtn>*{position:relative;z-index:1;}
+.gbtn:active{transform:scale(.97);}
+.gbtn.sm{min-height:38px;padding:0 13px;font-size:10.5px;}
+.gbtn.lg{min-height:56px;padding:0 26px;font-size:13px;}
+.gbtn.full{width:100%;}
+.gbtn.solid{color:var(--milk);background:linear-gradient(135deg,var(--aqua),var(--aqua-deep));border-color:rgba(255,255,255,.35);box-shadow:0 14px 34px rgba(13,98,93,.28),inset 0 1px 0 rgba(255,255,255,.35);}
+.gbtn.solid::before{background:linear-gradient(120deg,rgba(255,255,255,.28),transparent 45%);}
+.gbtn.solid::after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);}
+.gbtn.gold{color:var(--milk);background:linear-gradient(135deg,var(--gold),var(--gold-deep));border-color:rgba(255,255,255,.35);box-shadow:0 14px 34px rgba(182,132,45,.30),inset 0 1px 0 rgba(255,255,255,.35);}
+.gbtn.gold::after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);}
+.gbtn.gift{border-color:rgba(21,149,142,.4);background:linear-gradient(120deg,rgba(199,231,226,.55),rgba(236,216,165,.45));overflow:visible;}
+.gbtn.gift::after{background:linear-gradient(90deg,transparent,var(--gold-deep),transparent);}
+.gbtn .tag{position:absolute;top:-10px;right:-6px;padding:3px 9px;border-radius:999px;background:var(--aqua-deep);color:var(--milk);font-size:8.5px;font-weight:700;letter-spacing:.08em;box-shadow:0 6px 14px rgba(13,98,93,.3);z-index:2;}
+.gbtn.pulse{animation:ctaPulse 2.6s ease-in-out infinite;}
+@keyframes ctaPulse{0%,100%{box-shadow:inset 0 1px 0 rgba(255,255,255,.75),0 10px 28px rgba(57,74,69,.10),0 0 0 0 rgba(21,149,142,.35);}50%{box-shadow:inset 0 1px 0 rgba(255,255,255,.75),0 10px 28px rgba(57,74,69,.10),0 0 0 10px rgba(21,149,142,0);}}
+.gbtn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+.btn-row{display:flex;gap:8px;}
+.btn-row .gbtn{flex:1;padding-inline:10px;}
+
+/* Вкладки */
+.tabs{flex-shrink:0;display:flex;gap:2px;margin:8px 12px 0;padding:4px;border-radius:999px;border:1px solid rgba(255,255,255,.6);background:rgba(255,252,246,.6);box-shadow:0 8px 24px rgba(43,56,52,.07),inset 0 1px 0 rgba(255,255,255,.8);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);}
+.tab{flex:1;min-width:0;padding:9px 2px;border-radius:999px;font-size:10.5px;font-weight:600;letter-spacing:.02em;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:all .3s var(--ease);}
+.tab.on{color:var(--gold-deep);background:linear-gradient(120deg,rgba(236,216,165,.6),rgba(199,231,226,.5));box-shadow:0 8px 20px rgba(182,132,45,.16),inset 0 1px 0 rgba(255,255,255,.8);}
+.tab:active{transform:scale(.95);}
+
+.screens{flex:1;min-height:0;margin-top:8px;overflow:hidden;position:relative;}
+.scr{display:none;height:100%;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:2px 12px calc(40px + var(--safe-b));overscroll-behavior:contain;}
+.scr.on{display:block;animation:scrIn .45s var(--ease);}
+@keyframes scrIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+
+/* ── Типографика ─────────────────────────────────────────── */
+.kicker{display:flex;align-items:center;gap:10px;margin-bottom:10px;color:var(--aqua-deep);font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;}
+.kicker::after{content:"";width:38px;height:1px;background:linear-gradient(90deg,var(--aqua),transparent);}
+.kicker.c{justify-content:center;}
+.kicker.c::after{display:none;}
+.kicker.gold{color:var(--gold-deep);}
+.h1{font-family:var(--display);font-weight:400;font-size:clamp(40px,12vw,54px);line-height:.95;letter-spacing:-.05em;color:var(--ink);}
+.h1 em,.h2 em,.h3 em{font-style:italic;color:var(--gold-deep);text-shadow:0 2px 0 rgba(255,255,255,.45),0 12px 24px rgba(120,85,29,.18);}
+.shine{position:relative;display:inline-block;}
+.shine::before{content:attr(data-text);position:absolute;inset:0;background-image:var(--title-shine);background-size:320% 100%;background-position:-160% 0;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:shineSweep 8s cubic-bezier(.3,.7,.3,1) infinite;pointer-events:none;}
+@keyframes shineSweep{0%,8%{background-position:-160% 0;}55%{background-position:160% 0;}100%{background-position:160% 0;}}
+.h2{font-family:var(--display);font-weight:400;font-size:clamp(26px,7.4vw,32px);line-height:1.08;letter-spacing:-.03em;color:var(--ink);margin-bottom:8px;}
+.h3{font-family:var(--display);font-weight:400;font-size:21px;line-height:1.15;letter-spacing:-.02em;color:var(--ink);}
+.lead{font-size:15px;line-height:1.7;color:var(--ink-soft);}
+.lead+.lead{margin-top:8px;}
+.lead.invite{font-family:var(--display);font-style:italic;font-size:17px;color:var(--gold-deep);margin-top:12px;}
+.ritual{font-family:var(--display);font-weight:400;font-size:20px;line-height:1.25;color:var(--aqua-deep);text-align:center;margin:16px 0;letter-spacing:-.01em;}
+.ritual.gold{color:var(--gold-deep);}
+.quote{font-family:var(--display);font-style:italic;font-size:17px;line-height:1.45;color:var(--gold-deep);}
+.serif-i{font-family:var(--display);font-style:italic;}
+.c{text-align:center;}
+.mt6{margin-top:6px;}.mt10{margin-top:10px;}.mt14{margin-top:14px;}.mt18{margin-top:18px;}.mb0{margin-bottom:0!important;}
+.sec-head{padding:22px 4px 12px;}
+.sec-head .h2{margin-bottom:4px;}
+.sec-head .lead{font-size:14px;}
+.sec-head.c .kicker{justify-content:center;}
+.sec-head.c .kicker::after{display:none;}
+
+/* Волна-разделитель */
+.wave{display:flex;justify-content:center;margin:6px 0 4px;}
+.wave svg{width:120px;height:22px;opacity:.75;}
+.wave path{fill:none;stroke:url(#waveGrad);stroke-width:1.4;stroke-linecap:round;}
+.wave circle{fill:var(--gold);}
+
+/* ── Карточки ────────────────────────────────────────────── */
+.card{position:relative;padding:18px 16px;margin-bottom:10px;border-radius:var(--r-lg);border:1px solid rgba(255,255,255,.6);border-bottom-color:rgba(182,132,45,.22);background:var(--glass);box-shadow:var(--shadow-sm),inset 0 1px 0 rgba(255,255,255,.75);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);overflow:hidden;}
+.card.hi{background:var(--glass-hi);}
+.card.wash-gold{background:linear-gradient(135deg,rgba(236,216,165,.42),rgba(255,252,246,.7) 55%,rgba(199,231,226,.35));}
+.card.wash-aqua{background:linear-gradient(135deg,rgba(199,231,226,.5),rgba(255,252,246,.72) 55%,rgba(236,216,165,.3));}
+.card.dark{color:var(--milk);background:linear-gradient(160deg,rgba(23,37,34,.94),rgba(13,98,93,.82));border-color:rgba(255,255,255,.14);border-bottom-color:rgba(236,216,165,.35);}
+.card.dark .kicker{color:var(--gold-pale);}
+.card.dark .lead{color:rgba(255,252,246,.8);}
+.card.ornate::before,.card.ornate::after{content:"";position:absolute;width:14px;height:14px;opacity:.85;pointer-events:none;}
+.card.ornate::before{top:9px;left:9px;border-top:1px solid var(--gold);border-left:1px solid var(--gold);}
+.card.ornate::after{bottom:9px;right:9px;border-bottom:1px solid var(--aqua);border-right:1px solid var(--aqua);}
+.tap{transition:transform .3s var(--ease);}
+.tap:active{transform:scale(.975);}
+
+/* Строка-ссылка */
+.row{display:flex;align-items:center;gap:12px;padding:12px 13px;margin-bottom:7px;border-radius:var(--r-md);border:1px solid rgba(255,255,255,.65);background:var(--glass-hi);box-shadow:var(--shadow-sm);color:var(--ink);transition:transform .3s var(--ease);}
+.row:active{transform:translateX(3px) scale(.99);}
+.row-ic{width:40px;height:40px;flex:none;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(21,149,142,.28);background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(199,231,226,.35));color:var(--aqua-deep);}
+.row-ic.gold{border-color:rgba(182,132,45,.3);background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(236,216,165,.4));color:var(--gold-deep);}
+.row-ic svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+.row-body{flex:1;min-width:0;}
+.row-t{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:1px;}
+.row-s{font-size:12.5px;color:var(--ink-soft);line-height:1.4;}
+.row-arr{color:var(--gold);font-size:18px;opacity:.7;flex:none;}
+.row.ghost{background:transparent;border-style:dashed;border-color:rgba(182,132,45,.35);box-shadow:none;}
+
+/* ── HERO (Главная) ──────────────────────────────────────── */
+.hero{position:relative;text-align:center;padding:18px 6px 6px;}
+.hero .kicker{margin-bottom:12px;}
+.hero .h1{position:relative;isolation:isolate;margin-bottom:12px;}
+.hero .h1::before{content:"";position:absolute;z-index:-1;inset:10% -6% -2%;border-radius:50%;background:linear-gradient(90deg,rgba(21,149,142,.14),rgba(236,216,165,.26),rgba(182,132,45,.12));filter:blur(22px);opacity:.7;animation:titleAura 7s ease-in-out infinite alternate;}
+@keyframes titleAura{from{opacity:.5;transform:scaleX(.9);}to{opacity:.82;transform:scaleX(1.05);}}
+.hero-sub{display:inline-block;padding:9px 18px;border-radius:12px;background:rgba(255,252,246,.78);border:1px solid rgba(182,132,45,.28);box-shadow:0 8px 22px rgba(57,74,69,.10),inset 0 1px 0 rgba(255,255,255,.8);color:var(--aqua-deep);font-weight:700;font-size:11px;letter-spacing:.11em;text-transform:uppercase;}
+.stage{position:relative;display:grid;place-items:center;height:250px;margin:6px 0 4px;}
+.stage::before{content:"";position:absolute;width:300px;height:300px;border-radius:50%;background:conic-gradient(from 40deg,transparent 0 19%,rgba(182,132,45,.14) 20%,transparent 22% 51%,rgba(21,149,142,.15) 52%,transparent 54% 100%);animation:rotate 70s linear infinite;}
+.halo{position:absolute;width:222px;height:222px;border-radius:50%;border:1px solid rgba(182,132,45,.24);box-shadow:0 0 0 18px rgba(255,255,255,.28),0 0 0 19px rgba(21,149,142,.10),0 0 60px rgba(21,149,142,.10);}
+.halo::before,.halo::after{content:"";position:absolute;inset:10%;border:1px dashed rgba(21,149,142,.24);border-radius:50%;animation:rotate 32s linear infinite;}
+.halo::after{inset:-11%;border-style:solid;border-color:transparent rgba(182,132,45,.18);animation-direction:reverse;animation-duration:48s;}
+.lotus{position:relative;z-index:2;width:206px;height:206px;border-radius:50%;overflow:hidden;mix-blend-mode:multiply;filter:saturate(.93) contrast(1.03);-webkit-mask-image:radial-gradient(circle,#000 60%,rgba(0,0,0,.94) 70%,transparent 84%);mask-image:radial-gradient(circle,#000 60%,rgba(0,0,0,.94) 70%,transparent 84%);}
+.lotus video,.lotus img{width:100%;height:100%;object-fit:cover;object-position:50% 32%;}
+.lotus img{position:absolute;inset:0;}
+.lotus video{position:relative;z-index:1;}
+.hero-q{font-family:var(--display);font-size:22px;color:var(--ink);margin:4px 0 4px;}
+.hero-hint{font-family:var(--display);font-style:italic;font-size:14px;color:var(--ink-soft);margin-bottom:8px;}
+.hero-hint b{display:block;font-style:normal;color:var(--aqua-deep);animation:bounce 1.8s ease-in-out infinite;}
+@keyframes bounce{0%,100%{transform:translateY(0);opacity:.55;}50%{transform:translateY(5px);opacity:1;}}
+@keyframes rotate{to{transform:rotate(360deg);}}
+
+/* Статистика */
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.stat{padding:14px 10px;text-align:center;border-radius:var(--r-md);border:1px solid rgba(182,132,45,.18);background:rgba(255,252,246,.6);box-shadow:0 8px 20px rgba(57,74,69,.06);}
+.stat b{display:block;font-family:var(--display);font-weight:400;font-size:28px;line-height:1.05;color:var(--aqua-deep);}
+.stat:nth-child(even) b{color:var(--gold-deep);}
+.stat span{display:block;margin-top:3px;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);line-height:1.35;}
+
+/* Таймер */
+.cd{display:flex;align-items:center;justify-content:center;gap:6px;margin:10px 0 4px;}
+.cd-u{min-width:56px;padding:8px 6px;border-radius:12px;background:rgba(255,252,246,.75);border:1px solid rgba(182,132,45,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.8);text-align:center;}
+.cd-n{display:block;font-family:var(--display);font-size:26px;line-height:1;color:var(--gold-deep);font-variant-numeric:tabular-nums;}
+.cd-n.tick{animation:tick .45s var(--ease);}
+@keyframes tick{from{transform:translateY(-4px);opacity:.4;}to{transform:none;opacity:1;}}
+.cd-l{display:block;margin-top:3px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);}
+.cd-sep{font-family:var(--display);font-size:22px;color:var(--gold);opacity:.6;}
+.cd-cap{text-align:center;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--aqua-deep);font-weight:700;}
+.cd-state{text-align:center;font-family:var(--display);font-style:italic;font-size:16px;color:var(--gold-deep);margin:8px 0 2px;}
+
+/* Ближайшее событие (Главная) */
+.next-ev .ev-title{font-family:var(--display);font-size:34px;line-height:1;letter-spacing:-.04em;color:var(--ink);margin:2px 0 6px;}
+.next-ev .ev-title em{font-style:italic;color:var(--gold-deep);}
+.ev-meta{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px 10px;color:var(--aqua-deep);font-family:var(--display);font-size:17px;}
+.ev-meta i{width:4px;height:4px;border-radius:50%;background:var(--gold);}
+.ev-dates{display:inline-flex;align-items:baseline;gap:8px;padding:7px 14px;border-radius:999px;border:1px solid rgba(182,132,45,.22);background:rgba(255,252,246,.7);margin-bottom:8px;}
+.ev-dates strong{font-family:var(--display);font-weight:400;font-size:22px;line-height:1;color:var(--gold-deep);letter-spacing:-.02em;}
+.ev-dates span{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);}
+
+/* Каэмма */
+.kcard{padding:0;overflow:hidden;}
+.kphoto{position:relative;height:330px;}
+.kphoto img{width:100%;height:100%;object-fit:cover;object-position:center 18%;}
+.kphoto::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(15,25,23,.78) 0%,rgba(15,25,23,.18) 42%,transparent 66%);}
+.kfloat{position:absolute;left:18px;right:18px;bottom:18px;z-index:2;}
+.kfloat .h2{color:var(--milk);font-size:36px;margin-bottom:2px;text-shadow:0 12px 30px rgba(0,0,0,.35);}
+.kfloat p{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,252,246,.9);}
+.kpill{position:absolute;top:16px;left:16px;z-index:2;padding:7px 14px;border-radius:999px;background:rgba(255,252,246,.88);backdrop-filter:blur(10px);font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-deep);}
+.kbody{padding:16px 16px 18px;}
+.kquote{position:relative;padding-left:16px;border-left:2px solid var(--gold);margin-bottom:12px;}
+.kbio{font-size:14px;line-height:1.7;color:var(--ink-soft);}
+.kbio+.kbio{margin-top:8px;}
+
+/* О канале */
+.about-ic{width:40px;height:40px;}
+
+/* ── Слайдер (scroll-snap) ───────────────────────────────── */
+.slider{position:relative;margin:0 -12px;}
+.track{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 12px 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+.track::-webkit-scrollbar{display:none;}
+.slide{scroll-snap-align:center;flex:0 0 calc(100% - 44px);}
+.dots{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:6px;}
+.dot{width:6px;height:6px;border-radius:50%;background:rgba(64,81,77,.22);padding:0;transition:all .3s var(--ease);}
+.dot.on{width:20px;border-radius:99px;background:linear-gradient(90deg,var(--gold),var(--aqua));}
+.rev{padding:20px 18px 18px;height:100%;border-radius:var(--r-lg);border:1px solid rgba(182,132,45,.18);background:rgba(255,252,246,.55);box-shadow:var(--shadow-sm);}
+.rev-mark{font-family:var(--display);font-size:32px;line-height:.6;color:var(--gold);opacity:.55;margin-bottom:8px;}
+.rev-q{font-family:var(--display);font-style:italic;font-size:15.5px;line-height:1.55;color:var(--ink);margin-bottom:14px;}
+.rev-n{font-size:12.5px;font-weight:700;}
+.rev-r{font-size:11px;color:var(--ink-soft);margin-top:1px;}
+.rev-t{margin-top:10px;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--aqua-deep);}
+
+/* ── Таинство (интенсив) ─────────────────────────────────── */
+.ahero{position:relative;text-align:center;padding:14px 4px 4px;isolation:isolate;}
+.ahero-photo{position:absolute;z-index:-1;inset:-10px -12px auto;height:360px;background:url('https://fs.getcourse.ru/fileservice/file/download/a/810305/sc/329/h/851bf872f23caa0bebcafbb8a6075727.jpg') center 10%/cover no-repeat;opacity:.16;filter:saturate(.9);-webkit-mask-image:linear-gradient(to bottom,#000 40%,transparent);mask-image:linear-gradient(to bottom,#000 40%,transparent);}
+.ahero .h1{font-size:clamp(38px,11vw,50px);margin:6px 0 10px;white-space:nowrap;}
+.ahero .h1 em{font-size:1.08em;}
+.ahero-watermark{position:absolute;z-index:-1;left:50%;top:28%;transform:translate(-50%,-50%);font-family:var(--display);font-size:200px;line-height:.7;letter-spacing:-.08em;color:transparent;-webkit-text-stroke:1px rgba(21,149,142,.08);pointer-events:none;}
+.offer-meta{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px 10px;margin:12px 0;color:var(--aqua-deep);font-family:var(--display);font-size:16px;font-weight:600;}
+.offer-meta i{width:4px;height:4px;border-radius:50%;background:var(--gold);}
+
+/* Сегмент-переключатель */
+.seg{display:flex;gap:6px;padding:4px;margin:0 0 12px;border-radius:999px;border:1px solid rgba(182,132,45,.25);background:rgba(255,255,255,.45);}
+.seg button{flex:1;padding:10px 4px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);white-space:nowrap;transition:all .3s var(--ease);}
+.seg button.on{color:var(--gold-deep);background:linear-gradient(120deg,rgba(236,216,165,.6),rgba(199,231,226,.5));box-shadow:0 8px 20px rgba(182,132,45,.16),inset 0 1px 0 rgba(255,255,255,.7);}
+.pane{display:none;}
+.pane.on{display:block;animation:paneIn .5s var(--ease);}
+@keyframes paneIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+
+.pimg{margin:-18px -16px 16px;aspect-ratio:4/3;overflow:hidden;position:relative;}
+.pimg img{width:100%;height:100%;object-fit:cover;object-position:50% 25%;}
+.pimg::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,transparent 45%,rgba(255,252,246,.85) 78%,rgba(255,252,246,1));}
+.pimg .num{position:absolute;left:16px;top:14px;font-family:var(--display);font-size:38px;line-height:1;color:var(--milk);text-shadow:0 6px 18px rgba(0,0,0,.4);opacity:.9;}
+.pimg .pq{position:absolute;left:16px;right:16px;bottom:8px;z-index:1;font-family:var(--display);font-style:italic;font-size:17px;color:var(--gold-deep);text-shadow:0 1px 0 rgba(255,255,255,.9),0 0 14px rgba(255,252,246,1);}
+.ptag{font-family:var(--display);font-style:italic;font-size:14.5px;color:var(--gold-deep);margin:6px 0 12px;}
+.pdesc{font-size:15px;line-height:1.7;color:var(--ink-soft);margin:0 0 12px;}
+.plist{display:grid;gap:9px;margin:0 0 14px;}
+.plist li{display:flex;gap:11px;font-size:14.5px;line-height:1.5;color:var(--ink-soft);}
+.plist li::before{content:"";flex:none;width:6px;height:6px;margin-top:8px;border-radius:50%;background:var(--aqua);}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;margin:0 0 14px;}
+.pgrid li{position:relative;padding-left:16px;font-size:14px;color:var(--ink-soft);line-height:1.4;}
+.pgrid li::before{content:"◇";position:absolute;left:0;top:1px;color:var(--gold);font-size:11px;}
+.ptrans{margin:16px 0 4px;padding:18px 16px;border-radius:var(--r-md);background:linear-gradient(135deg,rgba(182,132,45,.08),rgba(21,149,142,.10));border:1px solid var(--line);text-align:center;}
+.ptrans .tl{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.ptrans .tf{display:block;font-style:italic;color:var(--ink-soft);font-size:14px;}
+.ptrans .ta{display:block;margin:6px 0;color:var(--gold-deep);font-size:18px;}
+.ptrans .tt{display:block;font-family:var(--display);color:var(--aqua-deep);font-size:17px;line-height:1.35;}
+.ptrans .tn{display:block;margin-top:12px;font-size:13px;line-height:1.55;color:var(--ink-soft);}
+.locked{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 18px;border-radius:999px;border:1px dashed rgba(64,81,77,.32);color:var(--ink-soft);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
+.locked svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.6;}
+.pcta{margin-top:16px;text-align:center;}
+
+/* Программа — аккордеон */
+.acc{margin-bottom:8px;border-radius:var(--r-md);border:1px solid rgba(255,255,255,.65);border-bottom-color:rgba(182,132,45,.22);background:var(--glass-hi);box-shadow:var(--shadow-sm);overflow:hidden;}
+.acc-btn{width:100%;display:flex;align-items:center;gap:12px;padding:14px 14px;text-align:left;}
+.acc-btn:active{background:rgba(255,255,255,.35);}
+.acc-num{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-size:16px;color:var(--milk);background:linear-gradient(135deg,var(--gold-deep),var(--gold));box-shadow:0 8px 20px rgba(182,132,45,.28);}
+.acc-num.aq{background:linear-gradient(135deg,var(--aqua-deep),var(--aqua));box-shadow:0 8px 20px rgba(13,98,93,.28);}
+.acc-num.img{background:none;box-shadow:none;overflow:hidden;border:1px solid rgba(182,132,45,.3);}
+.acc-num.img img{width:100%;height:100%;object-fit:cover;}
+.acc-meta{flex:1;min-width:0;}
+.acc-d{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-deep);margin-bottom:2px;}
+.acc-t{font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.3;}
+.acc-s{font-size:12px;color:var(--ink-soft);margin-top:1px;}
+.acc-arr{flex:none;color:var(--gold);font-size:18px;opacity:.7;transition:transform .3s var(--ease);}
+.acc.open .acc-arr{transform:rotate(90deg);}
+.acc-body{max-height:0;overflow:hidden;transition:max-height .45s var(--ease);}
+.acc.open .acc-body{max-height:1200px;}
+.acc-in{padding:0 14px 16px;}
+.acc-in .pdesc{margin-bottom:10px;}
+.meta{display:grid;gap:6px;padding-top:12px;border-top:1px dashed rgba(182,132,45,.28);}
+.meta li{font-size:12.5px;color:var(--ink-soft);}
+.meta li b{color:var(--aqua-deep);font-weight:600;}
+
+/* Формат */
+.fmt{flex:0 0 78%;scroll-snap-align:start;padding:20px 18px;border-radius:var(--r-lg);border:1px solid rgba(182,132,45,.18);background:rgba(255,252,246,.55);box-shadow:var(--shadow-sm);}
+.fmt-ic{width:42px;height:42px;display:grid;place-items:center;margin-bottom:12px;border-radius:50%;border:1px solid rgba(21,149,142,.3);background:linear-gradient(135deg,rgba(255,255,255,.7),rgba(199,231,226,.3));color:var(--aqua-deep);}
+.fmt-ic svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;}
+.fmt h4{font-family:var(--display);font-weight:400;font-size:18px;margin-bottom:6px;}
+.fmt p{font-size:13.5px;line-height:1.6;color:var(--ink-soft);}
+
+/* Билет */
+.ticket-wrap{position:relative;margin:4px 0 10px;}
+.ticket-wrap::before{content:"";position:absolute;inset:-2px;border-radius:calc(var(--r-xl) + 2px);background:conic-gradient(from 0deg,var(--gold-pale),var(--gold) 12%,var(--gold-pale) 22%,var(--aqua-pale) 30%,var(--aqua) 42%,var(--aqua-pale) 52%,var(--gold-pale) 62%,var(--gold) 74%,var(--gold-pale) 84%,var(--aqua-pale) 92%,var(--gold-pale));opacity:.45;filter:blur(5px);animation:rotateBg 14s linear infinite;}
+@property --spin{syntax:'<angle>';initial-value:0deg;inherits:false;}
+@keyframes rotateBg{to{--spin:360deg;}}
+.ticket{position:relative;z-index:1;border-radius:var(--r-xl);overflow:hidden;border:1px solid rgba(255,255,255,.7);background:rgba(255,252,246,.78);backdrop-filter:blur(24px) saturate(150%);-webkit-backdrop-filter:blur(24px) saturate(150%);box-shadow:0 30px 70px rgba(63,66,50,.18);}
+.t-main{position:relative;padding:24px 20px 20px;}
+.t-eye{display:flex;align-items:center;gap:8px;color:var(--aqua-deep);font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;margin-bottom:10px;}
+.t-ribbon{position:absolute;top:18px;right:-8px;padding:7px 20px 7px 14px;background:linear-gradient(135deg,var(--gold),var(--gold-deep));color:var(--milk);font-size:8.5px;font-weight:700;line-height:1.4;letter-spacing:.06em;text-transform:uppercase;text-align:center;box-shadow:0 8px 18px rgba(182,132,45,.32);clip-path:polygon(0 0,100% 0,88% 50%,100% 100%,0 100%);}
+.t-list{display:grid;gap:10px;margin-top:12px;}
+.t-list li{display:flex;gap:10px;font-size:14px;line-height:1.5;color:var(--ink-soft);}
+.t-list .tick{flex:none;display:grid;place-items:center;width:20px;height:20px;margin-top:1px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--aqua));color:var(--milk);font-size:10px;}
+.t-stub{position:relative;padding:22px 20px 20px;text-align:center;background:linear-gradient(190deg,rgba(21,149,142,.06),rgba(247,240,220,.3) 46%,rgba(236,216,165,.18));}
+.t-stub::before{content:"";position:absolute;left:0;right:0;top:0;border-top:1.5px dashed rgba(182,132,45,.4);}
+.t-stub::after{content:"";position:absolute;left:-1px;right:-1px;top:-12px;height:24px;background-image:radial-gradient(circle 12px at 17px 12px,var(--ivory) 99%,transparent 100%);background-repeat:repeat-x;background-size:34px 24px;z-index:2;}
+.t-dates{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-deep);margin-bottom:8px;}
+.t-price{font-family:var(--display);font-size:50px;line-height:1;color:var(--ink);margin-bottom:4px;text-shadow:0 0 26px rgba(182,132,45,.28);}
+.t-note{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:18px;}
+.t-g{margin-top:12px;font-size:12.5px;line-height:1.5;color:var(--ink-soft);}
+.t-guard{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:8px;font-size:11.5px;color:var(--aqua-deep);}
+.t-guard svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.6;}
+.t-code{margin-top:16px;padding-top:14px;border-top:1px dashed rgba(182,132,45,.28);display:flex;flex-direction:column;align-items:center;gap:6px;opacity:.8;}
+.t-code svg{width:140px;height:24px;}
+.t-code rect{fill:var(--ink);}
+.t-code span{font-size:8.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-soft);}
+.t-code i{font-family:var(--display);font-style:italic;font-size:13px;color:var(--gold-deep);}
+
+/* Шаги */
+.steps{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.step{text-align:center;padding:16px 10px 14px;border-radius:var(--r-md);border:1px solid rgba(182,132,45,.18);background:rgba(255,252,246,.6);}
+.step-n{width:38px;height:38px;margin:0 auto 10px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-size:15px;color:var(--milk);background:linear-gradient(135deg,var(--gold-deep),var(--gold));box-shadow:0 8px 20px rgba(182,132,45,.26);}
+.step h4{font-size:13.5px;font-weight:700;margin-bottom:3px;}
+.step p{font-size:12px;line-height:1.45;color:var(--ink-soft);}
+
+/* FAQ */
+.faq{margin-bottom:7px;border-radius:var(--r-md);border:1px solid rgba(182,132,45,.18);background:rgba(255,252,246,.6);overflow:hidden;}
+.faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 15px;text-align:left;font-size:14px;font-weight:600;color:var(--ink);}
+.faq-q svg{flex:none;width:16px;height:16px;stroke:var(--gold);fill:none;stroke-width:1.6;transition:transform .3s var(--ease);}
+.faq.open .faq-q svg{transform:rotate(180deg);}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s var(--ease);}
+.faq.open .faq-a{max-height:300px;}
+.faq-a p{padding:0 15px 14px;font-size:14px;line-height:1.65;color:var(--ink-soft);}
+
+/* Финал */
+.final{text-align:center;padding:26px 18px 24px;}
+.final .h2{max-width:300px;margin:0 auto 10px;}
+.dedic{margin:14px 0 6px;font-family:var(--display);font-size:17px;line-height:1.55;color:var(--ink);}
+.dedic span{display:block;color:var(--gold-deep);font-style:italic;}
+.final-price{font-family:var(--display);font-size:38px;color:var(--gold-deep);margin:14px 0 14px;}
+.final-note{margin-top:14px;font-size:12.5px;line-height:1.65;color:var(--ink-soft);}
+.sign{margin-top:22px;font-family:var(--display);font-size:22px;color:var(--gold-deep);}
+.sign span{display:block;font-family:var(--sans);font-size:10.5px;letter-spacing:.08em;color:var(--ink-soft);margin-top:4px;text-transform:uppercase;}
+
+/* ── ЭльЛита ─────────────────────────────────────────────── */
+.el-hero{text-align:center;padding:24px 16px 20px;}
+.el-hero .h1{font-size:46px;margin:4px 0 10px;}
+.el-nums{display:flex;gap:8px;margin-top:14px;}
+.el-num{flex:1;padding:12px 6px;border-radius:14px;background:rgba(255,252,246,.65);border:1px solid rgba(182,132,45,.2);}
+.el-num b{display:block;font-family:var(--display);font-weight:400;font-size:24px;line-height:1;color:var(--aqua-deep);}
+.el-num:nth-child(2) b{color:var(--gold-deep);}
+.el-num span{display:block;margin-top:4px;font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);line-height:1.35;}
+.course .acc-num{background:linear-gradient(135deg,rgba(255,255,255,.85),rgba(199,231,226,.4));color:var(--aqua-deep);border:1px solid rgba(21,149,142,.28);box-shadow:none;}
+.course .acc-num svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+.course.feat{border-color:rgba(182,132,45,.35);background:linear-gradient(135deg,rgba(236,216,165,.35),rgba(255,252,246,.85));}
+.course.feat .acc-num{background:linear-gradient(135deg,var(--gold-deep),var(--gold));color:var(--milk);border:0;box-shadow:0 8px 20px rgba(182,132,45,.28);}
+.badge{display:inline-block;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,var(--aqua),var(--aqua-deep));color:var(--milk);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+.badge.gold{background:linear-gradient(135deg,var(--gold),var(--gold-deep));}
+.phase{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.9);margin-bottom:6px;}
+.phase b{display:block;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px;}
+.phase span{font-size:12.5px;line-height:1.5;color:var(--ink-soft);}
+.plan{display:flex;align-items:center;gap:12px;padding:14px 14px;margin-bottom:8px;border-radius:var(--r-md);border:1.5px solid rgba(255,255,255,.7);background:var(--glass-hi);box-shadow:var(--shadow-sm);cursor:pointer;position:relative;overflow:hidden;transition:all .3s var(--ease);}
+.plan:active{transform:scale(.98);}
+.plan.sel{border-color:rgba(21,149,142,.55);box-shadow:0 0 0 3px rgba(21,149,142,.15),var(--shadow-sm);}
+.plan.best{background:linear-gradient(135deg,rgba(236,216,165,.45),rgba(255,252,246,.85));border-color:rgba(182,132,45,.35);}
+.plan.top{color:var(--milk);background:linear-gradient(160deg,rgba(23,37,34,.94),rgba(13,98,93,.85));border-color:rgba(236,216,165,.4);}
+.plan.top .plan-d,.plan.top .plan-s{color:rgba(255,252,246,.75);}
+.plan.top .plan-p{color:var(--gold-pale);}
+.plan.top .plan-old{color:rgba(255,252,246,.5);}
+.plan-chk{flex:none;width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(182,132,45,.45);display:grid;place-items:center;transition:all .3s;}
+.plan.sel .plan-chk{background:linear-gradient(135deg,var(--gold),var(--aqua));border-color:transparent;}
+.plan.sel .plan-chk::after{content:"✓";font-size:11px;color:#fff;font-weight:700;}
+.plan-body{flex:1;}
+.plan-d{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:2px;}
+.plan-p{font-family:var(--display);font-size:26px;line-height:1;color:var(--ink);}
+.plan-old{font-size:11px;color:var(--gold-deep);text-decoration:line-through;opacity:.7;margin-top:2px;}
+.plan-s{font-size:11.5px;color:var(--ink-soft);text-align:right;line-height:1.4;}
+.plan-save{position:absolute;top:0;right:0;padding:4px 10px;background:linear-gradient(135deg,var(--gold),var(--gold-deep));color:var(--milk);font-size:8.5px;font-weight:700;letter-spacing:.06em;border-radius:0 var(--r-md) 0 10px;}
+.plan.top .plan-save{background:linear-gradient(135deg,var(--gold-pale),var(--gold));color:var(--ink);}
+
+/* ── Библиотека ──────────────────────────────────────────── */
+.lib-intro{font-family:var(--display);font-style:italic;font-size:20px;line-height:1.4;color:var(--ink);text-align:center;padding:14px 8px 16px;}
+.lib-intro em{color:var(--gold-deep);}
+.lib-cat{display:flex;align-items:center;gap:14px;padding:16px 16px;margin-bottom:8px;border-radius:var(--r-lg);border:1px solid rgba(255,255,255,.65);border-bottom-color:rgba(182,132,45,.22);background:var(--glass);box-shadow:var(--shadow-sm);cursor:pointer;position:relative;overflow:hidden;transition:transform .3s var(--ease);}
+.lib-cat:active{transform:scale(.975);}
+.lib-ic{position:relative;flex:none;width:54px;height:54px;display:grid;place-items:center;}
+.lib-ic .orb{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(182,132,45,.25);}
+.lib-ic .orb.d{border-style:dashed;border-color:rgba(21,149,142,.3);animation:rotate 12s linear infinite;}
+.lib-ic svg{position:relative;width:22px;height:22px;stroke:var(--aqua-deep);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+.lib-ic.gold svg{stroke:var(--gold-deep);}
+.lib-t{font-family:var(--display);font-size:20px;color:var(--ink);margin-bottom:2px;}
+.lib-s{font-size:12.5px;color:var(--ink-soft);line-height:1.4;margin-bottom:6px;}
+.lib-n{display:inline-block;padding:3px 10px;border-radius:999px;background:rgba(21,149,142,.10);color:var(--aqua-deep);font-size:10px;font-weight:700;letter-spacing:.04em;}
+.lib-cat.dark{color:var(--milk);background:linear-gradient(160deg,rgba(23,37,34,.94),rgba(13,98,93,.82));border-color:rgba(255,255,255,.14);}
+.lib-cat.dark .lib-t{color:var(--milk);}
+.lib-cat.dark .lib-s{color:rgba(255,252,246,.75);}
+.lib-cat.dark .lib-n{background:rgba(236,216,165,.18);color:var(--gold-pale);}
+.lib-cat.dark .lib-ic svg{stroke:var(--gold-pale);}
+.back{display:inline-flex;align-items:center;gap:6px;padding:6px 0 10px;font-size:12.5px;font-weight:600;color:var(--aqua-deep);}
+.back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.grp{font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-deep);padding:12px 4px 6px;display:block;}
+.mat{display:flex;align-items:flex-start;gap:10px;padding:12px 13px;margin-bottom:6px;border-radius:var(--r-sm);border:1px solid rgba(255,255,255,.7);background:var(--glass-hi);box-shadow:var(--shadow-sm);color:var(--ink);transition:transform .3s var(--ease);}
+.mat:active{transform:translateX(3px);}
+.mat i{flex:none;width:6px;height:6px;margin-top:8px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--aqua));}
+.mat span{flex:1;font-size:13.5px;line-height:1.5;color:var(--ink-soft);}
+.mat b{color:var(--gold);font-weight:400;opacity:.6;}
+.vid{display:flex;align-items:center;gap:0;margin-bottom:8px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.7);background:var(--glass-hi);box-shadow:var(--shadow-sm);color:var(--ink);transition:transform .3s var(--ease);}
+.vid:active{transform:scale(.98);}
+.vid-th{flex:none;width:100px;height:66px;position:relative;background:var(--ink);}
+.vid-th img{width:100%;height:100%;object-fit:cover;}
+.vid-th::after{content:"";position:absolute;inset:0;background:rgba(23,37,34,.2);}
+.vid-th svg{position:absolute;left:50%;top:50%;width:24px;height:24px;transform:translate(-50%,-50%);z-index:1;}
+.vid-t{flex:1;padding:10px 12px;font-size:12.5px;font-weight:600;line-height:1.4;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.pager{position:sticky;bottom:0;display:flex;align-items:center;gap:10px;margin:0 -12px;padding:22px 12px calc(14px + var(--safe-b));background:linear-gradient(to bottom,rgba(247,242,232,0),rgba(247,242,232,.96) 40%,var(--ivory));z-index:5;}
+.pager .gbtn{flex:1;}
+.pager-info{font-size:12px;color:var(--ink-soft);min-width:46px;text-align:center;font-variant-numeric:tabular-nums;}
+
+/* ── Ещё ─────────────────────────────────────────────────── */
+.soc{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+.soc a{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 8px;border-radius:var(--r-md);border:1px solid rgba(255,255,255,.7);background:var(--glass-hi);box-shadow:var(--shadow-sm);font-size:12.5px;font-weight:600;color:var(--ink-soft);}
+.soc a:active{transform:scale(.96);}
+.soc-ic{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;}
+.soc-ic svg{width:22px;height:22px;}
+.support-av{position:relative;width:44px;height:44px;flex:none;}
+.support-av .ring{position:absolute;inset:-3px;border-radius:50%;background:conic-gradient(var(--gold),var(--aqua),var(--gold));animation:rotate 4s linear infinite;opacity:.8;}
+.support-av .in{position:absolute;inset:1px;border-radius:50%;background:linear-gradient(135deg,var(--aqua),var(--aqua-deep));display:grid;place-items:center;color:var(--milk);font-family:var(--display);font-size:18px;}
+.legal{margin-top:16px;padding:18px 16px 6px;border-top:1px dashed rgba(182,132,45,.28);}
+.legal h5{font-family:var(--display);font-weight:400;font-size:14px;color:var(--gold-deep);margin:10px 0 4px;}
+.legal p,.legal a{display:block;font-size:12px;line-height:1.7;color:var(--ink-soft);}
+.legal a{color:var(--aqua-deep);}
+.copy{text-align:center;font-size:10px;letter-spacing:.06em;color:var(--ink-mute);padding:14px 0 4px;}
+
+/* ── Слайд-экраны и модалки ──────────────────────────────── */
+.sheet{position:fixed;inset:0;z-index:50;max-width:480px;margin:0 auto;background:var(--ivory);transform:translateX(100%);transition:transform .42s var(--ease);overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 12px calc(40px + var(--safe-b));}
+.sheet.on{transform:translateX(0);}
+.sheet-hdr{position:sticky;top:0;z-index:3;display:flex;align-items:center;margin:0 -12px 10px;padding:12px 14px 10px;background:rgba(247,242,232,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(182,132,45,.16);}
+.sheet-hdr .ttl{flex:1;text-align:center;font-family:var(--display);font-size:16px;color:var(--ink);}
+.sheet-hdr .sp{width:64px;}
+.modal{position:fixed;inset:0;z-index:60;display:grid;place-items:end center;padding:0;opacity:0;visibility:hidden;transition:opacity .35s var(--ease),visibility .35s;}
+.modal.on{opacity:1;visibility:visible;}
+.modal-bd{position:absolute;inset:0;background:rgba(23,37,34,.5);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
+.modal-card{position:relative;z-index:1;width:100%;max-width:480px;max-height:92dvh;overflow-y:auto;padding:24px 20px calc(24px + var(--safe-b));border-radius:30px 30px 0 0;border:1px solid rgba(255,255,255,.7);background:rgba(255,252,246,.97);box-shadow:var(--shadow);text-align:center;transform:translateY(30px);transition:transform .4s var(--ease);}
+.modal.on .modal-card{transform:none;}
+.modal-card .h2{font-family:var(--display);font-style:italic;color:var(--gold-deep);font-size:24px;margin:2px 0 12px;}
+.modal-x{position:absolute;top:14px;right:14px;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(182,132,45,.3);background:rgba(255,255,255,.6);}
+.modal-x svg{width:14px;height:14px;stroke:var(--ink);fill:none;stroke-width:1.7;}
+.mlist{display:grid;gap:8px;margin:0 0 14px;}
+.mlist p{font-family:var(--display);font-size:17px;line-height:1.4;color:var(--ink);}
+.mtext{font-size:14.5px;line-height:1.65;color:var(--ink-soft);margin-bottom:10px;}
+.mfinal{font-family:var(--display);font-size:28px;color:var(--aqua-deep);margin:14px 0 16px;letter-spacing:-.01em;}
+.grab{width:38px;height:4px;border-radius:99px;background:rgba(64,81,77,.2);margin:-8px auto 14px;}
+
+/* Экран оплаты (виджет GetCourse) */
+.buy-sum{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.buy-sum .h3{font-size:19px;}
+.buy-price{font-family:var(--display);font-size:30px;line-height:1;color:var(--gold-deep);white-space:nowrap;}
+#gc-holder{padding:6px 4px 2px;min-height:120px;}
+#gc-holder iframe{display:block;width:100%;border:0;}
+.gc-loading{display:flex;flex-direction:column;align-items:center;gap:12px;padding:30px 10px;color:var(--ink-soft);font-size:13px;text-align:center;}
+.gc-loading .spin{width:26px;height:26px;border-radius:50%;border:2px solid rgba(182,132,45,.25);border-top-color:var(--aqua);animation:rotate 1s linear infinite;}
+.buy-note{font-size:12px;line-height:1.6;color:var(--ink-soft);text-align:center;padding:6px 10px 0;}
+.buy-note b{color:var(--aqua-deep);font-weight:600;}
+
+/* Появление при скролле */
+.rv{opacity:0;transform:translateY(16px);transition:opacity .65s var(--ease),transform .65s var(--ease);}
+.rv.in{opacity:1;transform:none;}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;}.rv{opacity:1;transform:none;}}
+@media (max-width:360px){.tab{font-size:9.5px;letter-spacing:0;padding:9px 0;}.cd-u{min-width:50px;}.cd-n{font-size:22px;}.h1{font-size:38px;}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="waveGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#78551d"/><stop offset="50%" stop-color="#15958e"/><stop offset="100%" stop-color="#78551d"/></linearGradient></defs></svg>
+<div class="bg" aria-hidden="true"><div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div></div>
+<canvas id="dna" aria-hidden="true"></canvas>
+
+<div id="app">
+  <header class="hdr">
+    <div class="brand"><span class="brand-mark"></span><span class="brand-text">ДНК Код <em>Красоты и Молодости</em></span></div>
+    <a href="https://t.me/Kaemma_Support" class="gbtn sm" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Помощь</span></a>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Разделы">
+    <button class="tab on" data-tab="home" role="tab">Главная</button>
+    <button class="tab" data-tab="alchemy" role="tab">Таинство</button>
+    <button class="tab" data-tab="ellita" role="tab" data-ellita>ЭльЛита</button>
+    <button class="tab" data-tab="library" role="tab">Библиотека</button>
+    <button class="tab" data-tab="more" role="tab">Ещё</button>
+  </nav>
+
+  <main class="screens">
+
+    <!-- ══════════════════ ГЛАВНАЯ ══════════════════ -->
+    <section class="scr on" id="s-home">
+      <div class="hero">
+        <p class="kicker c">Каэмма · Пространство женщины</p>
+        <h1 class="h1">Больше <em class="shine" data-text="Жизни">Жизни</em></h1>
+        <span class="hero-sub">Сначала я — потом всё остальное</span>
+        <div class="stage">
+          <div class="halo" aria-hidden="true"></div>
+          <div class="lotus">
+            <img src="https://fs.getcourse.ru/fileservice/file/download/a/810305/sc/60/h/593a47f34e50e16552c089dc59ea2276.png" alt="" aria-hidden="true">
+            <video autoplay muted loop playsinline preload="metadata" poster="https://fs.getcourse.ru/fileservice/file/download/a/810305/sc/60/h/593a47f34e50e16552c089dc59ea2276.png" aria-label="Лотос со спиралью ДНК">
+              <source src="https://fs.getcourse.ru/fileservice/file/download/a/810305/sc/49/h/15686e0b7da29093142dd0a44b7757f3.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+        <p class="hero-q">Ты хочешь больше жизни?</p>
+        <p class="hero-hint">Нажми на «Я хочу жить»<b>↓</b></p>
+        <button class="gbtn lg pulse" type="button" data-modal="m-life"><span>Я хочу жить</span></button>
+      </div>
+
+      <div class="wave rv"><svg viewBox="0 0 140 26" aria-hidden="true"><path d="M2 13c12-12 24-12 36 0s24 12 36 0 24-12 36 0 18 10 28 0"/><circle cx="70" cy="13" r="2.2"/></svg></div>
+
+      <!-- Ближайшее Таинство -->
+      <div class="card wash-gold ornate next-ev c rv">
+        <p class="kicker c">Ближайшее Таинство</p>
+        <div class="ev-title">Алхимия <em>Времени</em></div>
+        <div class="ev-dates"><strong data-fill="dates">24 · 25 · 26</strong><span data-fill="month">сентября</span></div>
+        <div class="ev-meta"><span>3 дня</span><i></i><span data-fill="time">11:11 МСК</span><i></i><span>прямые эфиры</span></div>
+        <p class="lead mt10" style="font-size:14px">Как за 3 дня совершить Переход в жизнь своей мечты. Три Таинства · Три Посвящения · Три Инициации.</p>
+        <p class="cd-cap mt14" data-cd-cap>До начала Таинства</p>
+        <div class="cd" data-cd>
+          <div class="cd-u"><span class="cd-n" data-cd-d>00</span><span class="cd-l">дн</span></div><span class="cd-sep">:</span>
+          <div class="cd-u"><span class="cd-n" data-cd-h>00</span><span class="cd-l">ч</span></div><span class="cd-sep">:</span>
+          <div class="cd-u"><span class="cd-n" data-cd-m>00</span><span class="cd-l">мин</span></div><span class="cd-sep">:</span>
+          <div class="cd-u"><span class="cd-n" data-cd-s>00</span><span class="cd-l">сек</span></div>
+        </div>
+        <p class="cd-state" data-cd-state hidden></p>
+        <div class="btn-row mt14">
+          <button class="gbtn" type="button" onclick="switchTab('alchemy')"><span>Подробнее</span></button>
+          <a class="gbtn solid" data-fill-href="buy" href="https://kaemma144.getcourse.ru/intensive" target="_blank" rel="noopener"><span>Билет · <span data-fill="price">3 000 ₽</span></span></a>
+        </div>
+      </div>
+
+      <!-- Подарок -->
+      <div class="card wash-aqua rv" style="display:flex;align-items:center;gap:14px;">
+        <div class="lib-ic gold" style="flex:none"><span class="orb"></span><span class="orb d"></span><svg viewBox="0 0 24 24"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg></div>
+        <div style="flex:1;min-width:0">
+          <p class="kicker gold" style="margin-bottom:4px">Подарок</p>
+          <div class="h3" style="font-size:19px">Инициация «Первичный Код»</div>
+          <p class="lead" style="font-size:13px;margin:4px 0 10px">Первое Таинство — бесплатно. Бот @KaemmaBot пришлёт аудио-инициацию в Telegram.</p>
+          <button class="gbtn sm gift" type="button" data-modal="m-gift"><span class="tag">Бесплатно</span><span>Забрать подарок</span></button>
+        </div>
+      </div>
+
+      <div class="stats rv">
+        <div class="stat"><b>25+</b><span>лет практики</span></div>
+        <div class="stat"><b>10 000+</b><span>участниц из разных стран</span></div>
+        <div class="stat"><b>10+</b><span>потоков интенсивов</span></div>
+        <div class="stat"><b>45 000+</b><span>подписчиков на YouTube</span></div>
+      </div>
+
+      <!-- Каэмма -->
+      <div class="card kcard rv">
+        <div class="kphoto">
+          <img src="kaemma.jpg" alt="Каэмма" onerror="this.src='https://fs.getcourse.ru/fileservice/file/download/a/810305/sc/185/h/9b93623956a12abc2cfd31f24db5172e.webp'">
+          <span class="kpill">Кто ведёт</span>
+          <div class="kfloat"><div class="h2">Каэмма</div><p>Практический психолог · проводник</p></div>
+        </div>
+        <div class="kbody">
+          <p class="quote kquote">«Всё, чем я делюсь, — мой путь. Я прохожу его вместе с вами».</p>
+          <p class="kbio">Я провожу женщину из 3D-матрицы ограничений в реальность Больше Жизни — туда, где больше денег, любви, красоты, масштаба и удовольствия даются легко. Показываю, как перестать догонять свою Жизнь — и войти в неё сейчас.</p>
+          <p class="kbio">Более 25 лет исследую связь тела, нервной системы и тех результатов, которые женщина получает в деньгах, отношениях и здоровье. Инициации и Посвящения передаю через свой звук.</p>
+          <div class="pcta"><button class="gbtn" type="button" onclick="openSheet('about')"><span>История Каэммы</span></button></div>
+        </div>
+      </div>
+
+      <!-- О канале -->
+      <div class="sec-head rv"><p class="kicker">Что здесь происходит</p><div class="h2">Живой канал — каждый день</div></div>
+      <div class="rv">
+        <a class="row" href="https://www.youtube.com/channel/UC13b2gT33MFeIK6W4nM1cbQ" target="_blank" rel="noopener">
+          <div class="row-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 7v5l3 3"/></svg></div>
+          <div class="row-body"><div class="row-t">Омолаживающие китайские гимнастики</div><div class="row-s">Каждый понедельник в 11:11 МСК · прямой эфир на всех платформах</div></div><span class="row-arr">›</span>
+        </a>
+        <div class="row" onclick="switchTab('library');showMat('aktiv')">
+          <div class="row-ic gold"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
+          <div class="row-body"><div class="row-t">Голосовые активации и настройки</div><div class="row-s">Перепрошивка состояния · утро, дорога, сон</div></div><span class="row-arr">›</span>
+        </div>
+        <div class="row" onclick="switchTab('library');showMat('init')">
+          <div class="row-ic"><svg viewBox="0 0 24 24"><path d="M12 3c-2 4-6 6-6 10a6 6 0 0 0 12 0c0-4-4-6-6-10z"/><path d="M12 21v-6"/></svg></div>
+          <div class="row-body"><div class="row-t">Инициации и Посвящения</div><div class="row-s">Дыхание, голос, работа с телом и состоянием</div></div><span class="row-arr">›</span>
+        </div>
+        <div class="row" onclick="switchTab('ellita')" data-ellita>
+          <div class="row-ic gold"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <div class="row-body"><div class="row-t">Закрытый клуб ЭльЛита</div><div class="row-s">Два живых интенсива в месяц · библиотека практик</div></div><span class="row-arr">›</span>
+        </div>
+      </div>
+
+      <div class="sec-head rv"><p class="kicker">Живой опыт</p><div class="h2">Они уже прикоснулись</div></div>
+      <div class="slider rv" data-reviews></div>
+
+      <div class="c rv" style="padding:18px 0 6px"><a class="gbtn" href="https://t.me/Kaemma144_otzyvy" target="_blank" rel="noopener"><span>Все отзывы в Telegram ↗</span></a></div>
+    </section>
+
+    <!-- ══════════════════ ТАИНСТВО ══════════════════ -->
+    <section class="scr" id="s-alchemy">
+      <div class="ahero">
+        <div class="ahero-photo" aria-hidden="true"></div>
+        <div class="ahero-watermark" aria-hidden="true">144</div>
+        <p class="kicker c gold">✦ 3-дневный живой интенсив</p>
+        <h1 class="h1">Алхимия <em class="shine" data-text="Времени">Времени</em></h1>
+        <span class="hero-sub">Как за 3 дня совершить Переход<br>в жизнь своей мечты</span>
+        <div class="mt14"><div class="ev-dates"><strong data-fill="dates">24 · 25 · 26</strong><span data-fill="month">сентября</span></div></div>
+        <div class="offer-meta"><span>Три Таинства</span><i></i><span>Три Посвящения</span><i></i><span>Три Инициации</span></div>
+        <p class="cd-cap" data-cd-cap>До начала Таинства</p>
+        <div class="cd" data-cd>
+          <div class="cd-u"><span class="cd-n" data-cd-d>00</span><span class="cd-l">дн</span></div><span class="cd-sep">:</span>
+          <div class="cd-u"><span class="cd-n" data-cd-h>00</span><span class="cd-l">ч</span></div><span class="cd-sep">:</span>
+          <div class="cd-u"><span class="cd-n" data-cd-m>00</span><span class="cd-l">мин</span></div><span class="cd-sep">:</span>
+          <div class="cd-u"><span class="cd-n" data-cd-s>00</span><span class="cd-l">сек</span></div>
+        </div>
+        <p class="cd-state" data-cd-state hidden></p>
+        <p class="lead mt10" style="font-size:13px">Старт каждый день в <b data-fill="time">11:11 МСК</b> · прямые эфиры, домашние задания</p>
+        <div class="btn-row mt14">
+          <button class="gbtn" type="button" data-modal="m-life"><span>Я хочу жить</span></button>
+          <a class="gbtn solid" href="#" onclick="scrollToEl('ticket');return false;"><span>Билет · <span data-fill="price">3 000 ₽</span></span></a>
+        </div>
+      </div>
+
+      <div class="wave rv"><svg viewBox="0 0 140 26" aria-hidden="true"><path d="M2 13c12-12 24-12 36 0s24 12 36 0 24-12 36 0 18 10 28 0"/><circle cx="70" cy="13" r="2.2"/></svg></div>
+
+      <!-- Три Таинства -->
+      <div class="sec-head c rv">
+        <div class="h2">Три Таинства Алхимии Времени</div>
+        <p class="lead">Я могу разложить это по шагам. Рассказать, как устроена шахматная доска твоей жизни — где ты двигаешь фигуры, кого пытаешься переубедить, что стараешься удержать под контролем.</p>
+        <p class="lead">Но выйти из неё нельзя головой. Из неё можно только вспомнить — кто ты до этой доски.</p>
+        <p class="lead invite">Я приглашаю тебя вспомнить это вместе со мной</p>
+        <p class="lead mt10">Три дня, три Посвящения. Каждое возвращает часть тебя, которая застряла — в прошлом, у чужой двери, в ожидании. И после каждого — своя Инициация, к которой ты сможешь возвращаться сама.</p>
+      </div>
+
+      <div class="rv" data-seg="mystery">
+        <div class="seg">
+          <button class="on" data-pane="0">I · Код</button>
+          <button data-pane="1">II · Выкуп</button>
+          <button data-pane="2">III · Двойник</button>
+        </div>
+
+        <div class="pane on card" data-pane-body="0">
+          <div class="pimg"><img src="https://fs.getcourse.ru/fileservice/file/download/a/810305/sc/26/h/d77f261563886489a9c327db4926bb08.jpg" alt="" loading="lazy"><span class="num">I</span><span class="pq">«Одна. Целая. Настоящая. Живая».</span></div>
+          <div class="h3">Первичный Код</div>
+          <p class="ptag">Первое Таинство · Возвращение к Первичному Коду</p>
+          <p class="pdesc">Ты хочешь многого. Любви. Больших денег. Красивого, молодого, живого тела. Путешествий. Красивого дома. Творчества. Реализации. Удовольствия. Сильного мужчину рядом.</p>
+          <p class="pdesc">Ты хочешь просыпаться и чувствовать интерес к своему дню. И иногда возникает ощущение: «Я хочу так много… а меня самой на всё это словно уже мало».</p>
+          <p class="pdesc">Представь шахматную доску. На каждой клетке — своя фигура: деньги, тело, мужчина, дети, дела. Ты стоишь не над ней, а внутри — двигаешь фигуры одну за другой, а к вечеру чувствуешь, что нигде не была по-настоящему.</p>
+          <ul class="plist">
+            <li>Часть тебя всё ещё разговаривает с прошлым</li>
+            <li>Часть думает о деньгах, часть ждёт сообщения</li>
+            <li>Часть переживает за тело, часть пытается понять будущее</li>
+            <li>Часть решает бесконечные задачи</li>
+          </ul>
+          <p class="pdesc">И ты словно распределена по собственной Жизни. Первое Посвящение начинается не с ещё одного хода, а с того, что ты поднимаешься над доской. Мы идём к твоему:</p>
+          <p class="ritual">ПЕРВИЧНОМУ КОДУ</p>
+          <p class="pdesc">К той точке внутри, где ещё нет формы и возраста, а есть только «Я ЕСТЬ». Там я передам тебе код, которым можно за секунду вернуть себя в центр, и ключ, который держит эту точку:</p>
+          <p class="ritual">СИЛА МОЯ КО МНЕ.</p>
+          <p class="pdesc">И внутри снова появляется пространство.</p>
+          <ul class="pgrid"><li>Для денег</li><li>Для любви</li><li>Для мужчины</li><li>Для удовольствия</li><li>Для масштаба</li><li>Для самой себя</li></ul>
+          <div class="ptrans">
+            <span class="tl">Первый Переход</span>
+            <span class="tf">«Меня словно мало на мою большую Жизнь»</span>
+            <span class="ta">↓</span>
+            <span class="tt">«СИЛА МОЯ КО МНЕ. МНЕ МОЖНО. Я ВСЁ МОГУ».</span>
+            <span class="tn">После Посвящения ты получишь первую Инициацию — код, которым сможешь возвращать себя в центр в любой момент дня.</span>
+          </div>
+          <div class="pcta"><button class="gbtn gift" type="button" data-modal="m-gift"><span class="tag">Подарок</span><span>Получить бесплатно</span></button></div>
+        </div>
+
+        <div class="pane card" data-pane-body="1">
+          <div class="pimg"><img src="https://fs.getcourse.ru/fileservice/file/download/a/810305/sc/354/h/ec159c7e2715ebbc6ec8bf2985e26ed5.jpg" alt="" loading="lazy"><span class="num">II</span><span class="pq">«Не жди. Выбирай».</span></div>
+          <div class="h3">Выкуп Жизни</div>
+          <p class="ptag">Второе Таинство · Возвращение своей Силы</p>
+          <p class="pdesc">На второй день я поведу тебя туда, где остаётся огромное количество твоей энергии. В ожидание. Представь женщину перед закрытой дверью.</p>
+          <ul class="plist">
+            <li>За ней — мужчина. За ней — деньги</li>
+            <li>За ней — желанное тело. За ней — признание</li>
+            <li>За ней — новая Жизнь</li>
+          </ul>
+          <p class="pdesc">И она ждёт. Когда дверь откроется. Когда её позовут. Когда выберут. А в паре шагов от неё — портал, который она даже не заметила, потому что смотрит только на закрытую дверь.</p>
+          <p class="pdesc">Иногда женщина остаётся у такой двери месяц. Иногда год. Иногда десять лет. И самое дорогое, что остаётся там вместе с ней —</p>
+          <p class="ritual gold">ЕЁ ЖИЗНЬ.</p>
+          <p class="pdesc">Поэтому второе Посвящение называется:</p>
+          <p class="ritual">ВЫКУП ЖИЗНИ</p>
+          <p class="pdesc">Здесь я передам тебе факел: куда смотришь, тот мир и освещаешь. И вместо того чтобы стоять и ждать, когда выберут, ты сможешь спросить: а как бы я хотела прямо сейчас? Мы пойдём за той частью тебя, которая осталась у чужих дверей — за женщиной, которая:</p>
+          <ul class="pgrid"><li>Ждала любви</li><li>Ждала денег</li><li>Ждала нового тела</li><li>Ждала подходящего момента</li><li>Спрашивала «Когда?»</li></ul>
+          <p class="pdesc">И здесь рождается новый вопрос:</p>
+          <p class="ritual gold">А ЧТО ВЫБИРАЮ Я?</p>
+          <p class="pdesc">И возвращается Сила. Не через борьбу за дверью — через факел и один честный ответ себе.</p>
+          <div class="ptrans">
+            <span class="tl">Второй Переход</span>
+            <span class="tf">«Я жду, когда Жизнь выберет меня»</span>
+            <span class="ta">↓</span>
+            <span class="tt">«Я ВЫБИРАЮ СВОЮ ЖИЗНЬ. МОЯ СИЛА ПРИНАДЛЕЖИТ МНЕ».</span>
+            <span class="tn">После Посвящения ты получишь вторую Инициацию — факел, которым сможешь освещать нужный мир в любой момент, когда ловишь себя в ожидании.</span>
+          </div>
+          <div class="pcta"><span class="locked"><svg viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="9" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg>Доступ при покупке билета</span></div>
+        </div>
+
+        <div class="pane card" data-pane-body="2">
+          <div class="pimg"><img src="https://fs.getcourse.ru/fileservice/file/download/a/810305/sc/212/h/f0b899b328d7e7363eae0e0956dc8e44.jpg" alt="" loading="lazy"><span class="num">III</span><span class="pq">«Ты — это Ты. Только ближе».</span></div>
+          <div class="h3">Совершенный Двойник</div>
+          <p class="ptag">Третье Таинство · Возвращение будущей Себя в настоящее</p>
+          <p class="pdesc">На третий день я познакомлю тебя с одной женщиной. Ты знаешь её очень давно. Ты много раз представляла её. Это ты. Та Ты, которая словно живёт немного впереди.</p>
+          <ul class="pgrid"><li>Она красивая. Свободная. Любимая</li><li>Богатая. Живая</li><li>Она нравится себе</li><li>Она умеет получать</li><li>Она живёт рядом со своим мужчиной</li><li>Она вмещает масштаб своих желаний</li></ul>
+          <p class="pdesc">Она просыпается утром в той Жизни, которую сегодня ты называешь мечтой. И долгое время между вами существовало одно слово:</p>
+          <p class="ritual gold">«КОГДА-НИБУДЬ»</p>
+          <ul class="plist">
+            <li>Когда-нибудь я стану ею</li>
+            <li>Когда-нибудь буду так выглядеть, буду столько зарабатывать</li>
+            <li>Когда-нибудь встречу такую любовь, начну так жить</li>
+          </ul>
+          <p class="pdesc">Увидеть её — ещё не значит стать ею. Здесь я передам тебе последний код. Он живёт в горле, не в голове: не «я хочу стать такой», а вслух, голосом — «Я ВЫБИРАЮ этот мир». Выбор, произнесённый голосом, ложится в тело иначе, чем выбор, продуманный умом.</p>
+          <p class="pdesc">В Алхимии Времени будущая Ты приходит сюда. В настоящее. Мы соединяем образ женщины, которой ты выбираешь быть, с её сегодняшним телом, голосом, решениями, действиями и Жизнью. И «когда-нибудь» превращается в:</p>
+          <p class="ritual">ОНА УЖЕ ЗДЕСЬ. ОНА — Я.</p>
+          <div class="ptrans">
+            <span class="tl">Третий Переход</span>
+            <span class="tf">«Моя настоящая Жизнь впереди»</span>
+            <span class="ta">↓</span>
+            <span class="tt">«ОПРЕДЕЛЯЮ Я. ВЫБИРАЮ Я».</span>
+            <span class="tn">После Посвящения ты получишь третью Инициацию — «Совершенный Двойник / Тело Света».</span>
+          </div>
+          <div class="pcta"><span class="locked"><svg viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="9" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg>Доступ при покупке билета</span></div>
+        </div>
+      </div>
+
+      <!-- Программа -->
+      <div class="sec-head c rv"><p class="kicker">Программа</p><div class="h2">Три дня — три встречи с собой</div><p class="lead">Вернуть. Собрать. Выбрать. Воплотить. Каждый день — прямой эфир, практика, домашнее задание и общение с Каэммой.</p></div>
+      <div class="rv">
+        <div class="acc open" id="d1">
+          <button class="acc-btn" type="button" onclick="toggleAcc('d1')">
+            <div class="acc-num img"><img src="https://fs.getcourse.ru/fileservice/file/download/a/810305/sc/242/h/418cdfd41813d5e4cebb2275f518ce45.jpg" alt="" loading="lazy"></div>
+            <div class="acc-meta"><div class="acc-d"><span data-fill="d1">24 сентября</span> · день 1</div><div class="acc-t">Я возвращаю себя</div><div class="acc-s">Первичный Код · Сила моя ко мне</div></div><span class="acc-arr">›</span>
+          </button>
+          <div class="acc-body"><div class="acc-in">
+            <p class="pdesc">Первое Таинство. Возвращение к Первичному Коду. Первое Посвящение и первая Инициация.</p>
+            <p class="pdesc">Мы поднимемся над шахматной доской твоей жизни. Ты получишь код возврата к себе и ключ: «Сила моя ко мне».</p>
+            <ul class="plist"><li>Шахматная доска · выход из круга задач</li><li>Код возврата к себе · Сила моя ко мне</li><li>Тело · Энергия · Целостность</li></ul>
+            <p class="quote" style="font-size:15px">«Вот же Я. Я снова у себя».</p>
+            <ul class="meta mt10"><li><b>Формат:</b> прямой эфир + практика</li><li><b>После эфира:</b> домашнее задание · аудио-инициация</li></ul>
+          </div></div>
+        </div>
+        <div class="acc" id="d2">
+          <button class="acc-btn" type="button" onclick="toggleAcc('d2')">
+            <div class="acc-num img"><img src="https://fs.getcourse.ru/fileservice/file/download/a/810305/sc/210/h/7d1e5cf3f51708a668577c4b55bfcd29.jpg" alt="" loading="lazy"></div>
+            <div class="acc-meta"><div class="acc-d"><span data-fill="d2">25 сентября</span> · день 2</div><div class="acc-t">Я возвращаю свою силу</div><div class="acc-s">Выкуп Жизни · Выбор и свобода</div></div><span class="acc-arr">›</span>
+          </button>
+          <div class="acc-body"><div class="acc-in">
+            <p class="pdesc">Второе Таинство. Выкуп Жизни. Второе Посвящение и вторая Инициация.</p>
+            <p class="pdesc">Мы войдём в Коридор ожидания, зажжём факел, который освещает выбранный мир, — и заберём твою энергию не борьбой, а наслаждением.</p>
+            <ul class="plist"><li>Коридор ожидания · выход из него</li><li>Наслаждение вместо борьбы</li><li>Выбор · Время · Свобода</li></ul>
+            <p class="quote" style="font-size:15px">«Я выбираю свою Жизнь. Моя сила принадлежит мне».</p>
+            <ul class="meta mt10"><li><b>Формат:</b> прямой эфир + практика</li><li><b>После эфира:</b> домашнее задание · аудио-инициация</li></ul>
+          </div></div>
+        </div>
+        <div class="acc" id="d3">
+          <button class="acc-btn" type="button" onclick="toggleAcc('d3')">
+            <div class="acc-num img"><img src="https://fs.getcourse.ru/fileservice/file/download/a/810305/sc/304/h/d7cdb468d6fe95df70236a760d9bdf13.jpg" alt="" loading="lazy"></div>
+            <div class="acc-meta"><div class="acc-d"><span data-fill="d3">26 сентября</span> · день 3</div><div class="acc-t">Я возвращаю будущую себя в настоящее</div><div class="acc-s">Совершенный Двойник · Голос выбора</div></div><span class="acc-arr">›</span>
+          </button>
+          <div class="acc-body"><div class="acc-in">
+            <p class="pdesc">Третье Таинство. Совершенный Двойник / Тело Света. Третье Посвящение и третья Инициация.</p>
+            <p class="pdesc">Ты встретишь женщину своей большой Жизни и голосом закрепишь выбор: «Определяю я. Выбираю я». Не просто увидишь ту жизнь — произнесёшь её вслух, чтобы она легла в тело. И будущая Ты начинает получать форму в настоящем.</p>
+            <ul class="plist"><li>Большую Жизнь · Любовь</li><li>Голос выбора · Тело Света</li><li>Я — Сейчас</li></ul>
+            <p class="quote" style="font-size:15px">«Она уже здесь. Она — Я».</p>
+            <ul class="meta mt10"><li><b>Формат:</b> прямой эфир + практика</li><li><b>После эфира:</b> домашнее задание · аудио-инициация</li></ul>
+          </div></div>
+        </div>
+      </div>
+
+      <!-- Формат -->
+      <div class="sec-head c rv"><p class="kicker">Алхимия Времени</p><div class="h2">Три дня вместо нескольких лет проработок</div></div>
+      <div class="slider rv" data-slider>
+        <div class="track">
+          <div class="fmt"><div class="fmt-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><path d="M8.5 8.5a5 5 0 0 1 7 0M5.6 5.6a9 9 0 0 1 12.8 0M8.5 15.5a5 5 0 0 0 7 0M5.6 18.4a9 9 0 0 0 12.8 0"/></svg></div><h4>Прямой эфир каждый день</h4><p>Три встречи <span data-fill="dates-short">24, 25 и 26 сентября</span> в <span data-fill="time">11:11 МСК</span>: практика, разбор и ответы на вопросы.</p></div>
+          <div class="fmt"><div class="fmt-ic"><svg viewBox="0 0 24 24"><rect x="4.5" y="4.5" width="15" height="15" rx="4"/><path d="m8.5 12.5 2.3 2.3 4.7-5"/></svg></div><h4>Домашнее задание</h4><p>Задания после эфиров — чтобы Переход входил в обычную жизнь, а не оставался в моменте эфира.</p></div>
+          <div class="fmt"><div class="fmt-ic"><svg viewBox="0 0 24 24"><path d="M4 6.8A2.8 2.8 0 0 1 6.8 4h10.4A2.8 2.8 0 0 1 20 6.8v6.4a2.8 2.8 0 0 1-2.8 2.8H10l-4.2 3.4v-3.4H6.8A2.8 2.8 0 0 1 4 13.2z"/></svg></div><h4>Чат без кураторов</h4><p>Каэмма лично читает и отвечает все три дня.</p></div>
+          <div class="fmt"><div class="fmt-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M10.3 9v6l4.8-3z" fill="currentColor" stroke="none"/></svg></div><h4>Записи на GetCourse</h4><p>Не успеваешь онлайн — все материалы останутся в записи в личном кабинете.</p></div>
+        </div>
+        <div class="dots"></div>
+      </div>
+
+      <!-- Билет -->
+      <div class="sec-head c rv" id="ticket"><p class="kicker">Билет</p><div class="h2">3 Дня Таинства</div></div>
+      <div class="ticket-wrap rv">
+        <div class="ticket">
+          <div class="t-main">
+            <div class="t-ribbon" aria-hidden="true">Место<br>подтверждено</div>
+            <p class="t-eye"><span class="brand-mark"></span>Kaemma144 · Алхимия Времени</p>
+            <div class="h3">Один билет. Все три дня.<br>Весь Переход.</div>
+            <ul class="t-list">
+              <li><span class="tick">✓</span>Три живых эфира — <span data-fill="dates-short">24, 25 и 26 сентября</span></li>
+              <li><span class="tick">✓</span>Три Таинства Алхимии Времени</li>
+              <li><span class="tick">✓</span>Три Посвящения и три Инициации</li>
+              <li><span class="tick">✓</span>Практики и задания после каждого эфира</li>
+              <li><span class="tick">✓</span>Закрытый чат и личное общение с Каэммой</li>
+              <li><span class="tick">✓</span>Все записи и материалы</li>
+            </ul>
+          </div>
+          <div class="t-stub">
+            <p class="t-dates" data-fill="dates-range">24—26 сентября</p>
+            <div class="t-price" data-fill="price">3 000 ₽</div>
+            <p class="t-note">Стандартный билет</p>
+            <a class="gbtn solid lg full" data-fill-href="buy" href="https://kaemma144.getcourse.ru/intensive" target="_blank" rel="noopener"><span>Я вхожу в Таинство</span></a>
+            <p class="t-g">Сразу после оплаты — доступ в пространство, где мы встретимся.</p>
+            <p class="t-guard"><svg viewBox="0 0 24 24"><path d="M12 3.5 5 6.5v5c0 5 3 8 7 9 4-1 7-4 7-9v-5z"/><path d="m9 12 2 2 4-4.5"/></svg>Гарантия возврата после 1-го дня</p>
+            <div class="t-code" aria-hidden="true">
+              <svg viewBox="0 0 148 26" preserveAspectRatio="none"><rect x="0" width="2" height="26"/><rect x="4" width="1" height="26"/><rect x="7" width="3" height="26"/><rect x="12" width="1" height="26"/><rect x="15" width="2" height="26"/><rect x="19" width="1" height="26"/><rect x="22" width="4" height="26"/><rect x="28" width="1" height="26"/><rect x="31" width="2" height="26"/><rect x="35" width="1" height="26"/><rect x="38" width="1" height="26"/><rect x="41" width="3" height="26"/><rect x="46" width="1" height="26"/><rect x="49" width="2" height="26"/><rect x="53" width="1" height="26"/><rect x="56" width="4" height="26"/><rect x="62" width="1" height="26"/><rect x="65" width="1" height="26"/><rect x="68" width="2" height="26"/><rect x="72" width="3" height="26"/><rect x="77" width="1" height="26"/><rect x="80" width="1" height="26"/><rect x="83" width="2" height="26"/><rect x="87" width="1" height="26"/><rect x="90" width="4" height="26"/><rect x="96" width="1" height="26"/><rect x="99" width="2" height="26"/><rect x="103" width="1" height="26"/><rect x="106" width="1" height="26"/><rect x="109" width="3" height="26"/><rect x="114" width="1" height="26"/><rect x="117" width="2" height="26"/><rect x="121" width="1" height="26"/><rect x="124" width="4" height="26"/><rect x="130" width="1" height="26"/><rect x="133" width="1" height="26"/><rect x="136" width="2" height="26"/><rect x="140" width="1" height="26"/><rect x="143" width="3" height="26"/></svg>
+              <span>Kaemma144 · АВ · <span data-fill="dates-code">24—26.09</span></span>
+              <i>Билет в новую жизнь</i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="c rv" style="padding:4px 0 6px"><a class="gbtn" href="https://t.me/Kaemma_Support" target="_blank" rel="noopener"><span>У меня есть вопросы</span></a></div>
+
+      <!-- После оплаты -->
+      <div class="sec-head c rv"><p class="kicker">После оплаты</p><div class="h2">Дальше всё просто</div></div>
+      <div class="steps rv">
+        <div class="step"><div class="step-n">1</div><h4>Оплачиваешь участие</h4><p data-fill="price">3 000 ₽</p></div>
+        <div class="step"><div class="step-n">2</div><h4>Получаешь доступ</h4><p>К закрытому пространству и материалам</p></div>
+        <div class="step"><div class="step-n">3</div><h4>Проходишь Первичный Код</h4><p>Первое Таинство — в подарок</p></div>
+        <div class="step"><div class="step-n">4</div><h4><span data-fill="d1">24 сентября</span> начинаем</h4><p>Три дня, три Таинства, один Переход</p></div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="sec-head c rv"><p class="kicker">Вопросы</p><div class="h2">Если ещё сомневаешься</div></div>
+      <div class="rv">
+        <div class="faq"><button class="faq-q" type="button" onclick="this.parentElement.classList.toggle('open')"><span>Если не смогу быть на эфире вживую — что тогда?</span><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button><div class="faq-a"><p>Все три эфира остаются в записи в твоём личном кабинете. Сможешь пройти в своём темпе, ничего не потеряется.</p></div></div>
+        <div class="faq"><button class="faq-q" type="button" onclick="this.parentElement.classList.toggle('open')"><span>Нужна подготовка или особый опыт?</span><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button><div class="faq-a"><p>Нет. Всё, что нужно — прийти и быть с собой. Практики устроены так, что подходят в любом состоянии и на любом уровне.</p></div></div>
+        <div class="faq"><button class="faq-q" type="button" onclick="this.parentElement.classList.toggle('open')"><span>Что именно входит в билет за <span data-fill="price">3 000 ₽</span>?</span><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button><div class="faq-a"><p>Три живых эфира, три Таинства с их Инициациями, закрытый чат с личным ответом Каэммы и доступ ко всем записям — один билет на все три дня.</p></div></div>
+        <div class="faq"><button class="faq-q" type="button" onclick="this.parentElement.classList.toggle('open')"><span>А если пойму, что это не моё?</span><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button><div class="faq-a"><p>Гарантия возврата действует после первого дня. Просто напиши нам — оплату вернём, без лишних вопросов.</p></div></div>
+        <div class="faq"><button class="faq-q" type="button" onclick="this.parentElement.classList.toggle('open')"><span>Когда я получу доступ после оплаты?</span><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button><div class="faq-a"><p>Сразу после оплаты — вся информация об участии и вход в закрытое пространство приходят в течение нескольких минут.</p></div></div>
+      </div>
+
+      <!-- Отзывы -->
+      <div class="sec-head c rv"><p class="kicker">Живой опыт</p><div class="h2">Они уже прикоснулись к Таинству</div></div>
+      <div class="slider rv" data-reviews></div>
+
+      <!-- Финал -->
+      <div class="card ornate final rv mt18">
+        <p class="kicker c" data-fill="dates-range">24—26 сентября</p>
+        <div class="h2">Я приглашаю тебя</div>
+        <p class="lead">Если, пока ты читала, внутри несколько раз возникло: «Да. Это про меня». Если ты чувствуешь женщину своей большой Жизни и хочешь встретиться с ней сейчас — я приглашаю тебя.</p>
+        <p class="dedic">Три дня, которые мы посвятим тебе.<span>Твоему времени.</span><span>Твоей энергии.</span><span>Твоему телу.</span><span>Твоим желаниям.</span><span>Твоей Силе.</span><span>Твоей будущей Себе.</span></p>
+        <div class="final-price" data-fill="price">3 000 ₽</div>
+        <a class="gbtn solid lg full" data-fill-href="buy" href="https://kaemma144.getcourse.ru/intensive" target="_blank" rel="noopener"><span>Войти в Таинство</span></a>
+        <p class="final-note">Если внутри звучит: «Моё время пришло» — приходи. Мы встретимся в точке Безвременья. Там, где «когда-нибудь» превращается в: Я ЕСТЬ. Я ВЫБИРАЮ. Я ЖИВУ.</p>
+        <p class="sign">Каэмма<span>Алхимия Времени · <span data-fill="dates-range">24—26 сентября</span></span></p>
+      </div>
+    </section>
+
+    <!-- ══════════════════ ЭЛЬЛИТА ══════════════════ -->
+    <section class="scr" id="s-ellita" data-ellita>
+      <div class="card wash-gold ornate el-hero rv">
+        <p class="kicker c">Закрытый клуб Каэммы</p>
+        <h1 class="h1">Эль<em class="shine" data-text="Лита">Лита</em></h1>
+        <p class="lead">Закрытое пространство с инициациями, практиками и живым контактом. Каждый месяц — два живых интенсива и доступ ко всей библиотеке материалов.</p>
+        <div class="el-nums">
+          <div class="el-num"><b>2</b><span>интенсива<br>в месяц</span></div>
+          <div class="el-num"><b>200+</b><span>часов<br>практик</span></div>
+          <div class="el-num"><b>10+</b><span>потоков<br>в архиве</span></div>
+        </div>
+        <div class="mt14"><button class="gbtn solid" type="button" onclick="scrollToEl('pricing')"><span>Выбрать участие</span></button></div>
+      </div>
+
+      <div class="row rv" onclick="switchTab('alchemy')">
+        <div class="row-ic gold"><svg viewBox="0 0 24 24"><path d="M12 2l2.4 5.8L20 9l-4.5 4 1.3 6L12 16l-4.8 3 1.3-6L4 9l5.6-1.2z"/></svg></div>
+        <div class="row-body"><div class="row-t">Ближайший интенсив — Алхимия Времени</div><div class="row-s"><span data-fill="dates-short">24, 25 и 26 сентября</span> · открыт для всех · <span data-fill="price">3 000 ₽</span></div></div><span class="row-arr">›</span>
+      </div>
+
+      <div class="sec-head rv"><p class="kicker">Что внутри</p><div class="h2">Курсы в доступе участниц</div></div>
+      <div class="rv">
+        <div class="acc course feat" id="c0">
+          <button class="acc-btn" type="button" onclick="toggleAcc('c0')">
+            <div class="acc-num"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+            <div class="acc-meta"><div class="acc-t">Трансформационный Переход</div><div class="acc-s">21 день · 3 фазы · сейчас в фокусе</div></div><span class="acc-arr">›</span>
+          </button>
+          <div class="acc-body"><div class="acc-in">
+            <span class="badge gold">✦ Сейчас в фокусе</span>
+            <p class="pdesc">Пересборка состояния. Этот путь переводит тебя в новое качество жизни — шаг за шагом, без спешки.</p>
+            <div class="phase"><b>Фаза I (1–7 день) · Распад старой формы</b><span>Выходишь из напряжения, контроля, автоматических реакций. Через тело и дыхание возвращается ощущение безопасности.</span></div>
+            <div class="phase"><b>Фаза II (8–14 день) · Сборка опоры</b><span>Формируется внутренняя устойчивость. Тишина внутри и состояние «я есть». Жизнь больше не держится на усилии.</span></div>
+            <div class="phase"><b>Фаза III (15–21 день) · Новая форма и масштаб</b><span>Желание становится спокойной силой. Новое состояние закрепляется в нервной системе и становится естественным.</span></div>
+          </div></div>
+        </div>
+        <div class="acc course" id="c1">
+          <button class="acc-btn" type="button" onclick="toggleAcc('c1')">
+            <div class="acc-num"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+            <div class="acc-meta"><div class="acc-t">Алхимия Тела</div><div class="acc-s">2 потока · более 40 дней</div></div><span class="acc-arr">›</span>
+          </button>
+          <div class="acc-body"><div class="acc-in">
+            <p class="pdesc">Глубокая работа с телом через гимнастику, настройки и практики. Тело как пространство жизни — не как проблема. Авторская гимнастика 12 меридианов, осознанное дыхание, работа со спиралями ДНК.</p>
+            <div class="phase"><b>Поток №1 · 21 день</b><span>Ежедневные практики + аудиофайлы: расслабление тела, портал женской сверхсилы, финансовый поток, гормоны.</span></div>
+            <div class="phase"><b>Поток №2 · 17 дней</b><span>Переход на Новую Кристаллическую Решётку Сознания. Углублённая работа с состоянием.</span></div>
+          </div></div>
+        </div>
+        <div class="acc course" id="c2">
+          <button class="acc-btn" type="button" onclick="toggleAcc('c2')">
+            <div class="acc-num"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+            <div class="acc-meta"><div class="acc-t">ДНК Код Денег</div><div class="acc-s">3 дня · аудио-формат</div></div><span class="acc-arr">›</span>
+          </button>
+          <div class="acc-body"><div class="acc-in">
+            <p class="pdesc">Убираем блокирующие энергии через тело. Каждая получает свой денежный кристалл.</p>
+            <div class="phase"><b>День 1 · Тело и деньги</b><span>Техника сверхускорения: наэлектризовать тело, стать магнитом для желаемых событий.</span></div>
+            <div class="phase"><b>День 2 · Сексуальная энергия</b><span>Выявление вторичных выгод в подсознании. Переход в вибрацию Богатства.</span></div>
+            <div class="phase"><b>День 3 · Энергетические протяжки</b><span>Синхронизация мозга с новыми частотами. Активация денежного кристалла.</span></div>
+          </div></div>
+        </div>
+        <div class="acc course" id="c3">
+          <button class="acc-btn" type="button" onclick="toggleAcc('c3')">
+            <div class="acc-num"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+            <div class="acc-meta"><div class="acc-t">Мне можно Всё!</div><div class="acc-s">21 день · Золотой Интеллект</div></div><span class="acc-arr">›</span>
+          </button>
+          <div class="acc-body"><div class="acc-in"><p class="pdesc mb0">Практический курс о том, как обучить ум совершенно новому многомерному восприятию — чтобы успевать за скоростью изменений внутри и снаружи. Каждый день — новый уровень осознания.</p></div></div>
+        </div>
+        <div class="acc course" id="c4">
+          <button class="acc-btn" type="button" onclick="toggleAcc('c4')">
+            <div class="acc-num"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+            <div class="acc-meta"><div class="acc-t">Активация Золотого ДНК</div><div class="acc-s">21 день + 3 практики</div></div><span class="acc-arr">›</span>
+          </button>
+          <div class="acc-body"><div class="acc-in"><p class="pdesc mb0">Внедрить практические навыки творения собственной реальности. Переход от линейного мышления к многомерному. Жизнь Сердцем. Каждый день: урок + практика + прямой эфир.</p></div></div>
+        </div>
+        <div class="row ghost">
+          <div class="row-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16"/></svg></div>
+          <div class="row-body"><div class="row-t">Архив всех 10+ потоков интенсивов</div><div class="row-s">200+ часов записей · идти в своём темпе</div></div>
+        </div>
+      </div>
+
+      <div class="sec-head rv"><p class="kicker">Живой опыт</p><div class="h2">Отзывы участниц клуба</div></div>
+      <div class="slider rv" data-reviews="club"></div>
+
+      <div class="sec-head rv" id="pricing"><p class="kicker">Участие</p><div class="h2">Выбери срок</div><p class="lead">Доступ ко всем интенсивам и библиотеке в период действия подписки</p></div>
+      <div class="rv">
+        <div class="plan" id="plan-0" onclick="selectPlan(0)">
+          <div class="plan-chk"></div>
+          <div class="plan-body"><div class="plan-d">1 месяц</div><div class="plan-p">5 000 ₽</div></div>
+          <div class="plan-s">2 интенсива</div>
+        </div>
+        <div class="plan" id="plan-1" onclick="selectPlan(1)">
+          <span class="plan-save">−10%</span>
+          <div class="plan-chk"></div>
+          <div class="plan-body"><div class="plan-d">2 месяца</div><div class="plan-p">9 000 ₽</div><div class="plan-old">10 000 ₽</div></div>
+          <div class="plan-s">4 интенсива<br>−1 000 ₽</div>
+        </div>
+        <div class="plan best" id="plan-2" onclick="selectPlan(2)">
+          <span class="plan-save">−10%</span>
+          <div class="plan-chk"></div>
+          <div class="plan-body"><div class="plan-d">3 месяца</div><div class="plan-p">13 500 ₽</div><div class="plan-old">15 000 ₽</div></div>
+          <div class="plan-s">6 интенсивов<br>−1 500 ₽</div>
+        </div>
+        <div class="plan top" id="plan-3" onclick="selectPlan(3)">
+          <span class="plan-save">Лучший</span>
+          <div class="plan-chk"></div>
+          <div class="plan-body"><div class="plan-d">4 месяца</div><div class="plan-p">18 000 ₽</div><div class="plan-old">20 000 ₽</div></div>
+          <div class="plan-s">8 интенсивов<br>−2 000 ₽</div>
+        </div>
+        <a class="gbtn solid lg full" id="join-btn" href="#" onclick="joinPlan();return false;" style="opacity:.45;pointer-events:none;transition:opacity .3s"><span>Присоединиться к ЭльЛита</span></a>
+        <p class="c mt10" style="font-size:12.5px;color:var(--ink-soft)">Есть вопросы? Александр ответит в течение часа — <a href="https://t.me/Kaemma_Support" target="_blank" rel="noopener" style="color:var(--aqua-deep);font-weight:600">@Kaemma_Support</a></p>
+      </div>
+    </section>
+
+    <!-- ══════════════════ БИБЛИОТЕКА ══════════════════ -->
+    <section class="scr" id="s-library">
+      <div id="mat-home">
+        <p class="lib-intro">Выбери то,<br>что откликается<br><em>прямо сейчас</em></p>
+        <div class="lib-cat rv" onclick="showMat('efiry')">
+          <div class="lib-ic"><span class="orb"></span><span class="orb d"></span><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><line x1="12" y1="18" x2="12" y2="21"/><line x1="9" y1="21" x2="15" y2="21"/></svg></div>
+          <div style="flex:1"><div class="lib-t">Прямые эфиры</div><div class="lib-s">Разборы тем, переходы, живые встречи</div><span class="lib-n">40+ записей</span></div><span class="row-arr">›</span>
+        </div>
+        <div class="lib-cat rv" onclick="showMat('aktiv')">
+          <div class="lib-ic"><span class="orb"></span><svg viewBox="0 0 24 24"><path d="M4 12h1M7 8v8M10 5v14M13 8v8M16 10v4M19 11v2"/></svg></div>
+          <div style="flex:1"><div class="lib-t">Активации</div><div class="lib-s">Аудио-настройки, практики, медитации</div><span class="lib-n">30+ аудио</span></div><span class="row-arr">›</span>
+        </div>
+        <div class="lib-cat rv" onclick="showMat('init')">
+          <div class="lib-ic gold"><span class="orb"></span><span class="orb d"></span><svg viewBox="0 0 24 24"><path d="M12 3c-2 4-6 6-6 10a6 6 0 0 0 12 0c0-4-4-6-6-10z"/><path d="M12 21v-6"/></svg></div>
+          <div style="flex:1"><div class="lib-t">Инициации</div><div class="lib-s">Видео на YouTube — выбирай по отклику</div><span class="lib-n" style="background:rgba(182,132,45,.12);color:var(--gold-deep)">71 видео</span></div><span class="row-arr">›</span>
+        </div>
+        <div class="lib-cat dark rv" onclick="showMat('exclusive')">
+          <div class="lib-ic"><span class="orb" style="border-color:rgba(236,216,165,.35)"></span><span class="orb d" style="border-color:rgba(236,216,165,.3)"></span><svg viewBox="0 0 24 24"><path d="M12 2l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/></svg></div>
+          <div style="flex:1"><div class="lib-t">Эксклюзивные знания</div><div class="lib-s">Закрытые материалы · только здесь</div><span class="lib-n">Скоро</span></div><span class="row-arr" style="color:var(--gold-pale)">›</span>
+        </div>
+        <div class="card wash-aqua rv mt10"><p class="kicker" style="margin-bottom:6px">Как использовать</p><p class="lead" style="font-size:14px">Выбирай по отклику — не по порядку. Эфиры — для глубины, активации — для состояния прямо сейчас, инициации — для Перехода.</p></div>
+      </div>
+
+      <div id="mat-efiry" hidden>
+        <button class="back" type="button" onclick="showMat('home')"><svg viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg>Назад</button>
+        <div class="sec-head" style="padding-top:0"><p class="kicker">Библиотека</p><div class="h2">Записи прямых эфиров</div><p class="lead">Живые встречи с Каэммой. Иди сверху вниз или выбирай по теме.</p></div>
+        <span class="grp">Недавние</span>
+        <a href="https://t.me/Kaemma144/976" class="mat" target="_blank"><i></i><span>Смена опоры: квантовый скачок через тело, дыхание и внутреннего мужчину</span><b>›</b></a>
+        <a href="https://t.me/Kaemma144/968" class="mat" target="_blank"><i></i><span>Идентичность нового времени: переход из выживания в сияние</span><b>›</b></a>
+        <a href="https://t.me/Kaemma144/958" class="mat" target="_blank"><i></i><span>Переход без возврата: честность, обнуление и зрелая опора души</span><b>›</b></a>
+        <a href="https://t.me/Kaemma144/843" class="mat" target="_blank"><i></i><span>Омолаживающая гимнастика: переподключение тела и сознания</span><b>›</b></a>
+        <a href="https://t.me/Kaemma144/815" class="mat" target="_blank"><i></i><span>Правила перемен: перепрошивка программ и выбор сердца</span><b>›</b></a>
+        <span class="grp">Переход · Новое время</span>
+        <a href="https://t.me/Kaemma144/767" class="mat" target="_blank"><i></i><span>Врата Льва 8.8: активация проявленности, денег и высшей линии жизни</span><b>›</b></a>
+        <a href="https://t.me/Kaemma144/746" class="mat" target="_blank"><i></i><span>Священное тело: освобождение от программ и вход в частоту нового времени</span><b>›</b></a>
+        <a href="https://t.me/Kaemma144/670" class="mat" target="_blank"><i></i><span>Квантовый протокол изобилия: выход из ограничений и активация силы творца</span><b>›</b></a>
+        <a href="https://t.me/Kaemma144/636" class="mat" target="_blank"><i></i><span>Красная точка реальности: как удерживать частоту и проходить переход</span><b>›</b></a>
+        <span class="grp">Тело · Сознание</span>
+        <a href="https://t.me/Kaemma144/572" class="mat" target="_blank"><i></i><span>Многомерная осознанность: выход из круга действий в центр творения</span><b>›</b></a>
+        <a href="https://t.me/Kaemma144/558" class="mat" target="_blank"><i></i><span>Тело как навигация сознания: прохлопывание, центр и память Бога</span><b>›</b></a>
+        <a href="https://t.me/Kaemma144/541" class="mat" target="_blank"><i></i><span>Возвращение в центр: тело, которое помнит, кто ты есть</span><b>›</b></a>
+        <a href="https://t.me/Kaemma144/525" class="mat" target="_blank"><i></i><span>Алхимия тела: утренняя гимнастика пробуждения и соединения с источником</span><b>›</b></a>
+        <div class="c mt14"><a href="https://t.me/Kaemma144/978" class="gbtn" target="_blank"><span>Все записи в Telegram ↗</span></a></div>
+      </div>
+
+      <div id="mat-aktiv" hidden>
+        <button class="back" type="button" onclick="showMat('home')"><svg viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg>Назад</button>
+        <div class="sec-head" style="padding-top:0"><p class="kicker">Библиотека</p><div class="h2">Голосовые активации и настройки</div><p class="lead">Выбирай по теме или состоянию прямо сейчас. Утром, в дороге или перед сном.</p></div>
+        <span class="grp">Утро · Настройка</span>
+        <a href="https://t.me/Kaemma144/898" class="mat" target="_blank"><i></i><span>Сверхчастотное Приветствие</span><b>›</b></a>
+        <a href="https://t.me/Kaemma144/161" class="mat" target="_blank"><i></i><span>Доброе утро, Любимая</span><b>›</b></a>
+        <a href="https://t.me/Kaemma144/60" class="mat" target="_blank"><i></i><span>Утреннее приветствие на Меркабическом Языке</span><b>›</b></a>
+        <span class="grp">Тело · Расслабление</span>
+        <a href="https://t.me/Kaemma144/136" class="mat" target="_blank"><i></i><span>Расслабление как ключ к силе: выход из сжатия в живое тело</span><b>›</b></a>
+        <a href="https://t.me/Kaemma144/357" class="mat" target="_blank"><i></i><span>Золотая ДНК: как убеждения создают тело и реальность</span><b>›</b></a>
+        <a href="https://t.me/Kaemma144/80" class="mat" target="_blank"><i></i><span>Алхимия Тела</span><b>›</b></a>
+        <span class="grp">Деньги · Изобилие</span>
+        <a href="https://t.me/Kaemma144/716" class="mat" target="_blank"><i></i><span>Материализация на миллион</span><b>›</b></a>
+        <a href="https://t.me/Kaemma144/770" class="mat" target="_blank"><i></i><span>Билет в Благополучие</span><b>›</b></a>
+        <a href="https://t.me/Kaemma144/140" class="mat" target="_blank"><i></i><span>Расслабиться и получить</span><b>›</b></a>
+        <span class="grp">Сердце · Отношения</span>
+        <a href="https://t.me/Kaemma144/920" class="mat" target="_blank"><i></i><span>Любовь = Боль</span><b>›</b></a>
+        <a href="https://t.me/Kaemma144/15" class="mat" target="_blank"><i></i><span>Возвращение домой: встреча с подлинным возлюбленным</span><b>›</b></a>
+        <span class="grp">Инициации · Источник</span>
+        <a href="https://t.me/Kaemma144/13" class="mat" target="_blank"><i></i><span>Слияние с источником: пробуждение Бога в теле</span><b>›</b></a>
+        <a href="https://t.me/Kaemma144/8" class="mat" target="_blank"><i></i><span>Путь восхождения через тело: золотые спирали ДНК</span><b>›</b></a>
+        <a href="https://t.me/Kaemma144/179" class="mat" target="_blank"><i></i><span>Свети и не смотри назад</span><b>›</b></a>
+        <div class="c mt14"><a href="https://t.me/Kaemma144/979" class="gbtn" target="_blank"><span>Все активации в Telegram ↗</span></a></div>
+      </div>
+
+      <div id="mat-init" hidden>
+        <button class="back" type="button" onclick="showMat('home')"><svg viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg>Назад</button>
+        <div class="sec-head" style="padding-top:0"><p class="kicker">Библиотека</p><div class="h2">Инициации и практики</div><p class="lead">Видео на YouTube. Открывай ту, что откликается сегодня.</p></div>
+        <div id="init-list"></div>
+        <div class="pager">
+          <button class="gbtn" id="init-prev" type="button" onclick="initPage(-1)"><span>← Назад</span></button>
+          <div class="pager-info" id="init-info"></div>
+          <button class="gbtn solid" id="init-next" type="button" onclick="initPage(1)"><span>Дальше →</span></button>
+        </div>
+      </div>
+
+      <div id="mat-exclusive" hidden>
+        <button class="back" type="button" onclick="showMat('home')"><svg viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg>Назад</button>
+        <div class="card dark ornate c" style="padding:44px 20px">
+          <div style="font-family:var(--display);font-size:40px;line-height:1;color:var(--gold-pale);margin-bottom:14px;animation:bounce 4s ease-in-out infinite">✦</div>
+          <div class="h2" style="color:var(--milk)">Скоро здесь будет<br>кое-что интересное</div>
+          <p class="lead serif-i">Закрытые материалы, которых нет нигде больше. Следи за обновлениями в канале.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ ЕЩЁ ══════════════════ -->
+    <section class="scr" id="s-more">
+      <div class="sec-head rv" style="padding-top:8px"><p class="kicker">Мы рядом</p><div class="h2">Соцсети и поддержка</div></div>
+      <div class="soc rv">
+        <a href="https://t.me/Kaemma144" target="_blank" rel="noopener"><div class="soc-ic" style="background:rgba(100,149,237,.12)"><svg viewBox="0 0 36 36" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M28.4 8.6a1 1 0 0 0-1.3-.1L6.3 16.9a1 1 0 0 0 .1 1.8l4.8 1.7 1.9 5.8a1 1 0 0 0 1.6.4l2.8-2.3 4.3 3.2a1 1 0 0 0 1.5-.6l4-17a1 1 0 0 0-.9-1.3zM13.5 19.7l-.9 2.8-.9-2.7 9.6-8.4-7.8 8.3zm1.9 3.5.5-1.6 1.1.8-1.6.8zm5.2-1.2L16.9 20l8.7-9.5-5.9 11.5z" fill="#4f86d9"/></svg></div>Telegram</a>
+        <a href="https://max.ru/join/arQuS-9YRsUogasTjPlt54jMtg64TuOHcoyO5lBOxD4" target="_blank" rel="noopener"><div class="soc-ic" style="background:rgba(85,51,238,.1)"><svg viewBox="0 0 1000 1000"><defs><linearGradient id="maxa" x1="0" x2="1" y1="1" y2="0"><stop offset="0" stop-color="#4cf"/><stop offset=".66" stop-color="#53e"/><stop offset="1" stop-color="#93d"/></linearGradient></defs><rect width="1000" height="1000" fill="url(#maxa)" ry="249"/><path fill="#fff" fill-rule="evenodd" d="M508.211 878.328c-75.007 0-109.864-10.95-170.453-54.75-38.325 49.275-159.686 87.783-164.979 21.9 0-49.456-10.95-91.248-23.36-136.873-14.782-56.21-31.572-118.807-31.572-209.508 0-216.626 177.754-379.597 388.357-379.597 210.785 0 375.947 171.001 375.947 381.604.707 207.346-166.595 376.118-373.94 377.224m3.103-571.585c-102.564-5.292-182.499 65.7-200.201 177.024-14.6 92.162 11.315 204.398 33.397 210.238 10.585 2.555 37.23-18.98 53.837-35.587a189.8 189.8 0 0 0 92.71 33.032c106.273 5.112 197.08-75.794 204.215-181.95 4.154-106.382-77.67-196.486-183.958-202.574Z" clip-rule="evenodd"/></svg></div>Канал в MAX</a>
+        <a href="https://www.youtube.com/channel/UC13b2gT33MFeIK6W4nM1cbQ" target="_blank" rel="noopener"><div class="soc-ic" style="background:rgba(220,38,38,.1)"><svg viewBox="0 0 36 36" fill="none"><rect x="8" y="12" width="20" height="12" rx="3" stroke="#dc2626" stroke-width="1.5"/><polygon points="15,15 23,18 15,21" fill="#dc2626"/></svg></div>YouTube</a>
+        <a href="https://vk.com/dnkkod" target="_blank" rel="noopener"><div class="soc-ic" style="background:rgba(0,119,255,.1)"><svg viewBox="0 0 36 36" fill="none"><path d="M18.9 24c-6.2 0-9.7-4.2-9.8-11.2h3.1c.1 5.2 2.4 7.4 4.2 7.8V12.8h2.9v4c1.8-.2 3.7-2.2 4.3-4h2.8a8.5 8.5 0 0 1-3.9 5.5 8.8 8.8 0 0 1 4.5 5.7h-3.1a5.2 5.2 0 0 0-4.3-3.8V24h-1z" fill="#0077FF"/></svg></div>ВКонтакте</a>
+        <a href="http://www.tiktok.com/@kaemma144" target="_blank" rel="noopener"><div class="soc-ic" style="background:rgba(0,0,0,.06)"><svg viewBox="0 0 36 36" fill="none"><path d="M21 10.5v10a4 4 0 1 1-2-3.46V13.8A7 7 0 1 0 23 20v-7.2a8.4 8.4 0 0 0 4 1.2v-2.5a4.5 4.5 0 0 1-4-2z" fill="#333" opacity=".7"/></svg></div>TikTok</a>
+        <a href="https://t.me/Kaemma144_otzyvy" target="_blank" rel="noopener"><div class="soc-ic" style="background:rgba(21,149,142,.1)"><svg viewBox="0 0 24 24" style="stroke:var(--aqua-deep);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>Канал отзывов</a>
+      </div>
+
+      <a class="row rv" href="https://t.me/Kaemma_Support" target="_blank" rel="noopener">
+        <div class="support-av"><span class="ring"></span><span class="in">А</span></div>
+        <div class="row-body"><div class="row-t">Александр · поддержка</div><div class="row-s">@Kaemma_Support · любые вопросы по оплате и доступу</div></div><span class="row-arr">›</span>
+      </a>
+
+      <div class="card wash-gold ornate c rv">
+        <div class="lib-ic gold" style="margin:0 auto 10px"><span class="orb"></span><span class="orb d"></span><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <div class="h3">Энергообмен</div>
+        <p class="lead" style="font-size:14px;margin:6px 0 14px">Если чувствуешь отклик и хочешь поддержать пространство — это можно сделать здесь.</p>
+        <a href="https://www.donationalerts.com/r/kaemma144" class="gbtn gold" target="_blank" rel="noopener"><span>Выразить благодарность</span></a>
+      </div>
+
+      <div class="sec-head rv"><p class="kicker">Живой опыт</p><div class="h2">Отзывы</div></div>
+      <div class="slider rv" data-reviews></div>
+
+      <div class="legal rv">
+        <h5>Контакты</h5>
+        <a href="mailto:safalex777@gmail.com">safalex777@gmail.com</a>
+        <a href="tel:+79277722166">+7 (927) 772-21-66</a>
+        <h5>Реквизиты</h5>
+        <p>ИП Сафин Александр Ильсурович<br>ИНН 632143954879 · ОГРНИП 0324632700216990</p>
+        <h5>Документы</h5>
+        <a href="https://kaemma144.getcourse.ru/offer_agreement" target="_blank" rel="noopener">Договор оферты ↗</a>
+        <a href="https://onedrive.live.com/:w:/g/personal/4ccebccd3397bdad/IQCls0s5YPJxRbu6hVi-hxGQARvsoWBJU1PeUbjbb8BfM1Y?rtime=Mxky2FIK30g&amp;redeem=aHR0cHM6Ly8xZHJ2Lm1zL3cvYy80Y2NlYmNjZDMzOTdiZGFkL0VhV3pTemxnOG5GRnU3cUZXTDZIRVpBQkcteWhZRWxUVTk1UnVOdHZ3Rjh6Vmc_ZT1FZkVMVkw" target="_blank" rel="noopener">Политика конфиденциальности ↗</a>
+        <p class="copy">© 2026 · ДНК Код Красоты и Молодости · Все права защищены</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ══════════════════ ЭКРАН: ИСТОРИЯ КАЭММЫ ══════════════════ -->
+<div class="sheet" id="sheet-about">
+  <div class="sheet-hdr">
+    <button class="back" type="button" onclick="closeSheet('about')" style="padding:4px 0"><svg viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg>Назад</button>
+    <div class="ttl">История Каэммы</div><div class="sp"></div>
+  </div>
+  <div class="card kcard">
+    <div class="kphoto" style="height:380px">
+      <img src="https://fs.getcourse.ru/fileservice/file/download/a/810305/sc/185/h/9b93623956a12abc2cfd31f24db5172e.webp" alt="Каэмма" onerror="this.src='kaemma.jpg'">
+      <span class="kpill">Проводник</span>
+      <div class="kfloat"><div class="h2">Каэмма</div><p>Практический психолог · проводник</p></div>
+    </div>
+    <div class="kbody">
+      <p class="quote kquote">«Всё, чем я делюсь с вами, приходит ко мне через проживание, внутреннее знание, образы, состояния и смыслы, которые раскрываются во мне и проходят через меня».</p>
+      <p class="kbio">Несколько лет назад у меня не было ничего из того, что сейчас похоже на путь: онкология, смерть мужа через несколько дней после свадьбы сына, кредиты и старый телефон без микрофона, на который я записывала свои первые инициации.</p>
+      <p class="kbio">Я думала, что должна вытащить себя сама — зубами, силой воли. Сейчас понимаю: вытащило не усилие. Вытащило то, что я вспомнила, кто я до всего этого.</p>
+      <p class="kbio">Моё имя — Каэмма. Я провожу женщину из 3D-матрицы ограничений в реальность Больше Жизни — туда, где больше денег, любви, красоты, масштаба и удовольствия даются легко. Я показываю, как перестать догонять свою Жизнь — и войти в неё сейчас.</p>
+      <p class="kbio">Мой путь — создание Тела Света: тела, способного вместить Больше Жизни, проводить через себя высокочастотные энергии и воплощать выбранную реальность в материи.</p>
+      <p class="kbio">Инициации и Посвящения я передаю через свой звук, на который приходят сердца, готовые к Пробуждению.</p>
+    </div>
+  </div>
+  <div class="card">
+    <p class="kicker">Опыт и образование</p>
+    <p class="kbio">Практический психолог с высшим образованием — МУИЦ, Москва. Первое образование — педагогическое. Более 25 лет исследую связь тела, нервной системы и результатов, которые женщина получает в деньгах, отношениях, здоровье.</p>
+    <p class="kbio">Моя работа — вывести женщину из хронического напряжения и борьбы с собой: вернуть энергию, опору, способность создавать изменения без постоянного истощения. Объединяю психологию, знания о нервной системе, телесные практики, авторские методики и живые разборы.</p>
+    <p class="kbio serif-i" style="color:var(--gold-deep)">Внутри каждой женщины уже есть всё для полной, красивой Жизни. Нужно лишь убрать то, что мешает этому раскрыться.</p>
+  </div>
+  <div class="stats">
+    <div class="stat"><b>25+</b><span>лет практики</span></div>
+    <div class="stat"><b>10 000+</b><span>участниц из разных стран</span></div>
+    <div class="stat"><b>10+</b><span>потоков интенсивов</span></div>
+    <div class="stat"><b>45 000+</b><span>подписчиков на YouTube</span></div>
+  </div>
+  <div class="row" onclick="closeSheet('about');switchTab('ellita')" data-ellita>
+    <div class="row-ic gold"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+    <div class="row-body"><div class="row-t">Основатель клуба ЭльЛита</div><div class="row-s">Закрытое сообщество с живой библиотекой практик</div></div><span class="row-arr">›</span>
+  </div>
+  <button class="gbtn solid lg full mt10" type="button" onclick="closeSheet('about');switchTab('alchemy')"><span>Ближайшее Таинство</span></button>
+</div>
+
+<!-- ══════════════════ ЭКРАН: ОПЛАТА БИЛЕТА ══════════════════ -->
+<div class="sheet" id="sheet-buy">
+  <div class="sheet-hdr">
+    <button class="back" type="button" onclick="closeSheet('buy')" style="padding:4px 0"><svg viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg>Назад</button>
+    <div class="ttl">Билет в Таинство</div><div class="sp"></div>
+  </div>
+  <div class="card wash-gold ornate">
+    <p class="kicker">Алхимия Времени · <span data-fill="dates-range">24—26 сентября</span></p>
+    <div class="buy-sum">
+      <div><div class="h3">3 Дня Таинства</div><p class="lead" style="font-size:13px;margin-top:2px">Три эфира · три Инициации · записи · чат с Каэммой</p></div>
+      <div class="buy-price" data-fill="price">3 000 ₽</div>
+    </div>
+    <p class="t-guard" style="justify-content:flex-start;margin-top:10px"><svg viewBox="0 0 24 24"><path d="M12 3.5 5 6.5v5c0 5 3 8 7 9 4-1 7-4 7-9v-5z"/><path d="m9 12 2 2 4-4.5"/></svg>Гарантия возврата после 1-го дня</p>
+  </div>
+  <div class="card hi" id="gc-holder">
+    <div class="gc-loading" id="gc-loading"><span class="spin"></span>Загружаем форму оплаты…</div>
+    <div id="gc-widget"></div>
+  </div>
+  <p class="buy-note">Заполни имя, e-mail и телефон и нажми <b>«Оплатить»</b> — откроется защищённая страница оплаты. Доступ и письмо с входом придут на указанный e-mail сразу после оплаты.</p>
+  <div class="c mt14" id="gc-fallback" hidden>
+    <p class="buy-note" style="margin-bottom:10px">Форма не загрузилась? Оплату можно оформить на сайте:</p>
+    <a class="gbtn full" data-fill-href="buy" href="https://kaemma144.getcourse.ru/intensive" target="_blank" rel="noopener"><span>Открыть страницу оплаты ↗</span></a>
+  </div>
+  <div class="c mt14"><a class="gbtn sm" href="https://t.me/Kaemma_Support" target="_blank" rel="noopener"><span>Вопрос по оплате · Александр</span></a></div>
+</div>
+
+<!-- ══════════════════ МОДАЛКИ ══════════════════ -->
+<div class="modal" id="m-life" role="dialog" aria-modal="true">
+  <div class="modal-bd" data-close></div>
+  <div class="modal-card">
+    <div class="grab"></div>
+    <button class="modal-x" type="button" data-close aria-label="Закрыть"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+    <p class="kicker c">Ты хочешь больше жизни</p>
+    <div class="h2 shine" data-text="Жизни, в которой тебе нравится быть собой">Жизни, в которой тебе нравится быть собой</div>
+    <div class="mlist">
+      <p>Нравится смотреть на себя в зеркало.</p>
+      <p>Нравится чувствовать своё тело.</p>
+      <p>Нравится хотеть большего.</p>
+      <p>Нравится любить, создавать, путешествовать, наслаждаться, зарабатывать, выбирать.</p>
+    </div>
+    <p class="mtext">Ты хочешь чувствовать себя молодой, красивой, желанной. Хочешь большие деньги — и лёгкость внутри, чтобы их выдержать. Хочешь сильного мужчину рядом — и быть с ним женщиной, а не крепостью.</p>
+    <p class="mtext">И, возможно, за всеми этими желаниями есть одно огромное желание:</p>
+    <p class="mfinal">Я ХОЧУ ЖИТЬ.</p>
+    <button class="gbtn solid lg full" type="button" data-close onclick="switchTab('alchemy')"><span>Войти в Таинство</span></button>
+  </div>
+</div>
+
+<div class="modal" id="m-gift" role="dialog" aria-modal="true">
+  <div class="modal-bd" data-close></div>
+  <div class="modal-card">
+    <div class="grab"></div>
+    <button class="modal-x" type="button" data-close aria-label="Закрыть"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+    <p class="kicker c gold">Подарок</p>
+    <div class="h2">Забери Первичный Код</div>
+    <p class="mtext">Первое Таинство — бесплатно. Открой бота — он пришлёт аудио-инициацию прямо в Telegram.</p>
+    <div class="mt14">
+      <a class="gbtn solid lg full" data-fill-href="botTelegram" href="https://t.me/KaemmaBot" target="_blank" rel="noopener"><span>Забрать в Telegram · @KaemmaBot</span></a>
+    </div>
+    <p class="mtext mt14" style="font-size:12.5px">После инициации бот расскажет, как продолжить Переход на интенсиве «Алхимия Времени».</p>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   НАСТРОЙКИ — всё, что меняется от потока к потоку, здесь.
+   ═══════════════════════════════════════════════════════════ */
+const CFG = {
+  start: '2026-09-24T11:11:00+03:00',   // старт первого эфира
+  end:   '2026-09-26T23:59:00+03:00',   // конец третьего дня
+  dates: '24 · 25 · 26',
+  month: 'сентября',
+  d1: '24 сентября', d2: '25 сентября', d3: '26 сентября',
+  'dates-short': '24, 25 и 26 сентября',
+  'dates-range': '24—26 сентября',
+  'dates-code':  '24—26.09',
+  time:  '11:11 МСК',
+  price: '3 000 ₽',
+  buy:   'https://kaemma144.getcourse.ru/intensive',          // запасная ссылка, если виджет не загрузился
+  gcWidget: { id: 1656576, hash: 'b5d79b32162fc6a24ef208a65dc6ab830f09c08f', host: 'https://kaemma144.getcourse.ru' }, // виджет формы заказа GetCourse (Виджеты → «Веб-апп · Билет»)
+  botTelegram: 'https://t.me/KaemmaBot',
+  botMax: '',                           // MAX-бота пока нет
+  showEllita: false,                   // вкладка ЭльЛита скрыта до открытия набора
+  plans: ['https://t.me/m/qY8PzYZnNjRi','https://t.me/m/7DUfLeLyNTVi','https://t.me/m/NVCjmnyqOGRi','https://t.me/m/xAm1iE5dOGQ6']
+};
+
+const REVIEWS = [
+  {q:'Тело говорило: да-а-а-а! Я этих слов долго ждало. Душа улыбается до сих пор. Ощущение целостности внутри — как никогда ранее.', n:'Ольга Гольцас', r:'3 дня интенсива', t:'Целостность · присутствие'},
+  {q:'3 дня интенсива прошли волшебно. Чувствую лёгкость, расслабленность, воодушевлённость, полноту сил. Безмерно благодарю.', n:'Наталья Базнат', r:'участница интенсива', t:'Лёгкость · полнота сил'},
+  {q:'Я пришла в поле Каэммы меньше месяца назад. Ощущаю себя дома. Пишу и реву — просто я попала домой, я вздохнула наконец. Я в себе, я вернулась.', n:'Ирина', r:'участница канала', t:'Возвращение к себе', club:true},
+  {q:'От дыхания 4-2-6 пошло расслабление. С удовольствием беру все инструменты и с кайфом шагаю в свою счастливую и изобильную версию.', n:'Натали Хазовская', r:'участница интенсива', t:'Расслабление · новая опора'},
+  {q:'Расширение, осознанность, раскрытие сердца — все говорят, что я изменилась.', n:'Natali Gerbreder', r:'5 месяцев в ЭльЛите', t:'Проявленность · гармония', club:true},
+  {q:'Получила состояние тихой радости, спокойствия, наслаждения и великой благодарности. Теперь это моя любимая настройка, хотя они все любимые.', n:'Светлана', r:'участница практики', t:'Тихая радость', club:true},
+  {q:'В клубе пять месяцев — с этого началась моя трансформация. Наступило внутреннее спокойствие, расслабление. Я никуда не спешу, ничего не жду. Жизнь течёт через меня.', n:'Ирина', r:'5 месяцев в ЭльЛите', t:'Спокойствие · поток', club:true},
+  {q:'Появилась опора внутри. Мягкое расширяющее ощущение и спокойствие в теле.', n:'Гульнара', r:'участница интенсива', t:'Опора · спокойствие'},
+  {q:'Очень тонкое новое ощущение. Уютно в своём теле оказывается. Такая нежность к нему. Как будто чуть подвинули тумблер.', n:'Шахла', r:'участница практики', t:'Тело · нежность', club:true},
+  {q:'С вашим появлением появилось очень важное — вы умеете раскрыть женщину, её сексуальность в любом возрасте и веру в себя.', n:'Светлана Жукова', r:'зритель YouTube', t:'Женственность · вера в себя'}
+];
+
+const INIT_VIDEOS = [
+  {id:"QVP7WOSoACg",title:"ТРОН ЖЕНЩИНЫ И ТРОН МУЖЧИНЫ | Как очистить пространство и впустить своего мужчину"},
+  {id:"UPP_mm9xHGI",title:"Активация Денежного Потока и Новой Судьбы"},
+  {id:"rXXCAHHcGEc",title:"Мощная УТРЕННЯЯ НАСТРОЙКА | Руна ВУНЬЕ | Настрой поле на ИЗОБИЛИЕ и ЛЮБОВЬ"},
+  {id:"7b8B5lFs9So",title:"#Инициация / Квантовое Поле. Эликсир / Руна Йера и Алхимия Времени"},
+  {id:"3RWs6Y1AWk8",title:"РУНА ЛАГУЗ | Практика дыхания | За 10 минут УБРАТЬ ТРЕВОГУ и СНЯТЬ НАПРЯЖЕНИЕ"},
+  {id:"ZuRlI2nkNyU",title:"#Инициация / Фасции: новая запись / Перепиши тело изнутри"},
+  {id:"7olj2RJcMFo",title:"Квантовый Переход в ДЕНЬГИ / Дыхательная Практика"},
+  {id:"iSiAizJZyno",title:"КВАНТОВЫЙ СКАЧОК из Коридора Ожидания в жизнь, где ДЕНЬГИ, МАСШТАБ, СИЛЬНЫЙ МУЖЧИНА"},
+  {id:"X-9-5PlZpps",title:"МАСТЕР-КЛЕТКА / Кто на самом деле управляет твоей жизнью"},
+  {id:"R2SILN9aZCg",title:"ХРАМ БЕЗВРЕМЕНЬЯ / Инициация снятия стресса, тревоги и спешки"},
+  {id:"W4YNwFGNYVA",title:"ЖЕНСКИЙ МАГНЕТИЗМ / Расширение Сосуда / ЭльЛита - Глава V"},
+  {id:"8TaRFZbwYfY",title:"Нервная система женщины / Магнетизм и Восстановление Энергии"},
+  {id:"VSAj4yA9-eI",title:"Мне Можно Быть / Инициация Опоры и Формы Тела"},
+  {id:"IP-GsZEXEzI",title:"Тело - Храм / Основа Женской Устойчивости"},
+  {id:"I18t-FJUOYM",title:"Как выйти из постоянного напряжения в теле и жизни"},
+  {id:"35MQoPVRSRE",title:"Тело, в котором хочется жить"},
+  {id:"QbMNl8NygVg",title:"Внутренний мужчина / Возвращение опоры"},
+  {id:"vuqwlpLOUH8",title:"Точка, где начинается омоложение тела"},
+  {id:"a3giAANKF0I",title:"Ваше тело начнёт стройнеть и молодеть, когда вы сделаете вот это"},
+  {id:"WJNmbVE9L-I",title:"Любовь сладкая, как мёд. Сильная, как предназначение. #медитациялюбви"},
+  {id:"1KQSnt5_ZAo",title:"Владычица Нервной Системы / Сверхмощная инициация для восстановления и омоложения"},
+  {id:"JXe9HxwEQ-8",title:"Почему Любовь = боль"},
+  {id:"05SXQQ98WS4",title:"Россыпь Бриллиантов — Твоя Новая Реальность"},
+  {id:"4LTnbF8hQn8",title:"Обесценивание / Проклятие одиночества от мамы и папы"},
+  {id:"H-iZSU6Nyps",title:"#Практика / Магия Любви"},
+  {id:"UInQQ4YCLNg",title:"#Практика / Я Ценная. Я Нужная. Я Важная / Снятие Блоков на отношения"},
+  {id:"b7SMbn9mFGc",title:"#Инициация / Портал Женской Сверхсилы / Магнетизм и Сексуальность"},
+  {id:"_B8Jg0FwZXE",title:"#Инициация / ЗОЛОТАЯ ДНК / Замена человеческих клеток на клетки Бога"},
+  {id:"JYHI90rnV7o",title:"#Инициация / Корона Всемогущества / Активируем спящие слои мозга"},
+  {id:"PPDMJZWhCLM",title:"#Инициация / Корона Всемогущества / Здесь тебе МОЖНО ВСЁ"},
+  {id:"TrMlt0aAJ6s",title:"Как вибрировать на частоте любви и материализовывать? / ЭГО против ЖИВОГО ПРИСУТСТВИЯ"},
+  {id:"v96znCVhsxQ",title:"#Настройка / Выход из жертвы / Твоя новая реальность уже есть"},
+  {id:"cK0I1Sd9YPQ",title:"АКТИВАЦИЯ СВОБОДЫ: Выход из Застоя и Квантовый Скачок в Высшую Реальность"},
+  {id:"4MAexDgi5Rc",title:"#Инициация / Квантовый скачок в Совершенную Реальность"},
+  {id:"PhBVEAkoXkU",title:"#Настройка / Мощное Квантовое Проявление / Проявите Свои Мечты"},
+  {id:"aR3NMv5-WP0",title:"#Инициация / Священная Лимфа / Лемурийское посвящение"},
+  {id:"0MMg5DXuSpI",title:"Я Тот Кто совершенен во всем / Вибрационная утренняя настройка"},
+  {id:"Ur39Cbya-FY",title:"#Инициация / Кармические отношения / Выход из всех страданий"},
+  {id:"5Js96vfNa2o",title:"Запись прямого эфира Кармические Отношения от 14.05.2025"},
+  {id:"hAKeIFUdZ4k",title:"#Инициация / Квантовое Дыхание / Дыхание Бога"},
+  {id:"rta9Q2GsiK4",title:"#Практика / Тело всё знает / В зеркале вы видите только своё восприятие"},
+  {id:"vupPjOe5oOE",title:"#Инициация / Совершенство во всём / Переход в новый опыт"},
+  {id:"JhzXSARQAKI",title:"#Практика / День Безграничной Фантазии / Всё, о чём желаете — уже существует"},
+  {id:"OQbnSkaMaJg",title:"#Настройка / Сущность Денег / Расширение денежной ёмкости"},
+  {id:"WaZ5BoaTFL0",title:"Вы все успеете. Времени нет. Желания исполнятся."},
+  {id:"vtbzR0v2txE",title:"Как за 3 дня выйти из всех негативных ситуаций / Контрасты. Свобода Выбора."},
+  {id:"6glXwA5t3gQ",title:"КТО Я? | 4 урок"},
+  {id:"fPzFad0M2BQ",title:"#Инициация / Живое Присутствие / В Вашу жизнь войдут чудеса и волшебство"},
+  {id:"aFnGcX2dYbE",title:"Как открыть своё Сердце | 3 урок"},
+  {id:"ckSCPYNrXUc",title:"Гипноз Реальности | 2 урок"},
+  {id:"6OWzo4sPMnY",title:"Мир, в котором всё наоборот | 1 урок"},
+  {id:"SXHcOrO782A",title:"Пишем Новую Книгу Жизни"},
+  {id:"TolFvC2jWYI",title:"Торжество Богов в День Зимнего Солнцестояния. Самая тёмная ночь позади"},
+  {id:"moip354ezrs",title:"Возвращение твоих Сверхспособностей. Встреча с Первой Проекцией"},
+  {id:"YRTqn6sq_U0",title:"Космическое слияние с подлинной любовью и встреча со своим истинным мужчиной"},
+  {id:"wrXM_UzduQI",title:"Слияние со своим Совершенным Двойником из Миров Рая"},
+  {id:"hafoLP9vMuk",title:"Омолаживающая Плазма Миров Рая"},
+  {id:"LANBgVlqDxM",title:"Потоки Наслаждения из Высших Сфер"},
+  {id:"JyPTEWqglhI",title:"Выход из Кармического Тела в Тело Света"},
+  {id:"tb_Mu4vtb3A",title:"Принятие из Высших Сфер Роскоши, Изобилия и Денег в Вашу жизнь"},
+  {id:"qCt8vUr3bLU",title:"Доброе утро, Любимая — Утренняя Настройка"},
+  {id:"2f7UVO9Wrh4",title:"Инициация Счастливой Жизни. Активация мистической части ДНК"},
+  {id:"-jMPAyhLEsw",title:"Симфония для тела. Моделируем совершенное тело"},
+  {id:"Arupb8Pd8Ww",title:"Зачатие ребёнка, идеи, нового проекта"},
+  {id:"Lxo22LtKos4",title:"Жиросжигающая настройка. Сброс лишнего веса через перезапись ДНК"},
+  {id:"5_jjzDCJHEI",title:"Роскошь и Изобилие — Золотые монеты АНХ"},
+  {id:"avXvN4HzEY0",title:"Могущественная Сексуальная Энергия"},
+  {id:"ZtGHUdDnNgc",title:"Настройка на расслабление тела"},
+  {id:"dcn-xak4bUg",title:"Город Света. Грааль Омоложения"},
+  {id:"IDtoWgpfJP0",title:"Инициация Вечно Молодое Красивое Тело"}
+];
+
+/* ── Telegram WebApp ─────────────────────────────────────── */
+const tg = window.Telegram && window.Telegram.WebApp;
+if (tg) {
+  tg.ready(); tg.expand();
+  try { tg.setHeaderColor('#f7f2e8'); tg.setBackgroundColor('#f7f2e8'); } catch (e) {}
+  // Ссылки: t.me — внутри Telegram, остальное — во внешнем браузере
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="http"]');
+    if (!a || (a.dataset.fillHref === 'buy' && !a.closest('#sheet-buy'))) return;
+    e.preventDefault();
+    if (/^https?:\/\/t\.me\//.test(a.href)) tg.openTelegramLink(a.href); else tg.openLink(a.href);
+  });
+}
+const haptic = (t) => { try { tg && tg.HapticFeedback && tg.HapticFeedback.impactOccurred(t || 'light'); } catch (e) {} };
+
+/* ── Подстановка настроек ────────────────────────────────── */
+if (!CFG.showEllita) document.querySelectorAll('[data-ellita]').forEach(el => el.remove());
+document.querySelectorAll('[data-fill]').forEach(el => { const v = CFG[el.dataset.fill]; if (v != null) el.textContent = v; });
+document.querySelectorAll('[data-fill-href]').forEach(el => { const v = CFG[el.dataset.fillHref]; if (v) el.href = v; });
+
+/* ── Вкладки ─────────────────────────────────────────────── */
+function switchTab(id) {
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('on', b.dataset.tab === id));
+  document.querySelectorAll('.scr').forEach(s => s.classList.remove('on'));
+  const scr = document.getElementById('s-' + id);
+  scr.classList.add('on'); scr.scrollTop = 0;
+  haptic('light');
+  requestAnimationFrame(observeReveals);
+}
+document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.tab)));
+
+function scrollToEl(id) {
+  const el = document.getElementById(id); if (!el) return;
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ── Сегменты / аккордеоны ───────────────────────────────── */
+document.querySelectorAll('[data-seg]').forEach(group => {
+  const btns = [...group.querySelectorAll('.seg button')];
+  const panes = [...group.querySelectorAll('[data-pane-body]')];
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.toggle('on', x === b));
+    panes.forEach(p => p.classList.toggle('on', p.dataset.paneBody === b.dataset.pane));
+    haptic('light');
+    group.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }));
+});
+function toggleAcc(id) {
+  const el = document.getElementById(id);
+  const open = el.classList.contains('open');
+  el.parentElement.querySelectorAll('.acc').forEach(a => a.classList.remove('open'));
+  if (!open) el.classList.add('open');
+  haptic('light');
+}
+
+/* ── Слайдеры (scroll-snap + точки) ──────────────────────── */
+function initSlider(root) {
+  const track = root.querySelector('.track'); const dotsWrap = root.querySelector('.dots');
+  if (!track) return;
+  const cards = [...track.children];
+  if (dotsWrap) {
+    dotsWrap.innerHTML = '';
+    cards.forEach((c, i) => {
+      const d = document.createElement('button'); d.className = 'dot' + (i === 0 ? ' on' : ''); d.type = 'button'; d.setAttribute('aria-label', 'Слайд ' + (i + 1));
+      d.addEventListener('click', () => track.scrollTo({ left: c.offsetLeft - 12, behavior: 'smooth' }));
+      dotsWrap.appendChild(d);
+    });
+  }
+  let ticking = false;
+  track.addEventListener('scroll', () => {
+    if (ticking || !dotsWrap) return; ticking = true;
+    requestAnimationFrame(() => {
+      const center = track.scrollLeft + track.clientWidth / 2;
+      let best = 0, bd = Infinity;
+      cards.forEach((c, i) => { const d = Math.abs(c.offsetLeft + c.offsetWidth / 2 - center); if (d < bd) { bd = d; best = i; } });
+      dotsWrap.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('on', i === best));
+      ticking = false;
+    });
+  }, { passive: true });
+}
+function renderReviews() {
+  document.querySelectorAll('[data-reviews]').forEach(root => {
+    const onlyClub = root.dataset.reviews === 'club';
+    const list = onlyClub ? REVIEWS.filter(r => r.club) : REVIEWS;
+    root.innerHTML = '<div class="track">' + list.map(r =>
+      '<div class="slide"><div class="rev"><div class="rev-mark">«</div><p class="rev-q">' + r.q + '</p><p class="rev-n">' + r.n + '</p><p class="rev-r">' + r.r + '</p><p class="rev-t">' + r.t + '</p></div></div>'
+    ).join('') + '</div><div class="dots"></div>';
+    initSlider(root);
+  });
+}
+renderReviews();
+document.querySelectorAll('[data-slider]').forEach(initSlider);
+
+/* ── Таймер ──────────────────────────────────────────────── */
+(function countdown() {
+  const start = new Date(CFG.start).getTime(), end = new Date(CFG.end).getTime();
+  const pad = n => String(n).padStart(2, '0');
+  const blocks = [...document.querySelectorAll('[data-cd]')];
+  function tick() {
+    const now = Date.now();
+    blocks.forEach(b => {
+      const cap = b.parentElement.querySelector('[data-cd-cap]'), st = b.parentElement.querySelector('[data-cd-state]');
+      if (now < start) {
+        const diff = start - now;
+        b.querySelector('[data-cd-d]').textContent = pad(Math.floor(diff / 864e5));
+        b.querySelector('[data-cd-h]').textContent = pad(Math.floor(diff % 864e5 / 36e5));
+        b.querySelector('[data-cd-m]').textContent = pad(Math.floor(diff % 36e5 / 6e4));
+        const s = b.querySelector('[data-cd-s]'), v = pad(Math.floor(diff % 6e4 / 1e3));
+        if (s.textContent !== v) { s.textContent = v; s.classList.remove('tick'); void s.offsetWidth; s.classList.add('tick'); }
+      } else {
+        b.hidden = true; if (cap) cap.hidden = true;
+        if (st) { st.hidden = false; st.textContent = now <= end ? '✦ Таинство идёт прямо сейчас — присоединяйся' : '✦ Поток завершён · записи доступны участницам'; }
+      }
+    });
+  }
+  tick(); setInterval(tick, 1000);
+})();
+
+/* ── Модалки и слайд-экраны ──────────────────────────────── */
+function openModal(id) { const m = document.getElementById(id); m.classList.add('on'); haptic('medium'); }
+function closeModal(m) { m.classList.remove('on'); }
+document.querySelectorAll('[data-modal]').forEach(b => b.addEventListener('click', () => openModal(b.dataset.modal)));
+document.querySelectorAll('.modal').forEach(m => m.querySelectorAll('[data-close]').forEach(x => x.addEventListener('click', () => closeModal(m))));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.modal.on').forEach(closeModal); });
+function openSheet(id) { document.getElementById('sheet-' + id).classList.add('on'); haptic('light'); }
+function closeSheet(id) { const s = document.getElementById('sheet-' + id); s.classList.remove('on'); setTimeout(() => s.scrollTop = 0, 400); }
+// Кнопка «Назад» Telegram закрывает открытый экран/модалку
+if (tg && tg.BackButton) {
+  const sync = () => { const open = document.querySelector('.sheet.on, .modal.on'); open ? tg.BackButton.show() : tg.BackButton.hide(); };
+  new MutationObserver(sync).observe(document.body, { attributes: true, subtree: true, attributeFilter: ['class'] });
+  tg.BackButton.onClick(() => { document.querySelectorAll('.modal.on').forEach(closeModal); document.querySelectorAll('.sheet.on').forEach(s => s.classList.remove('on')); });
+}
+
+/* ── Оплата внутри приложения (виджет GetCourse) ─────────── */
+let gcStarted = false;
+function openBuy() {
+  openSheet('buy');
+  if (gcStarted) return;
+  gcStarted = true;
+  const w = CFG.gcWidget, holder = document.getElementById('gc-widget');
+  const s = document.createElement('script');
+  s.id = w.hash; s.src = w.host + '/pl/lite/widget/script?id=' + w.id;
+  // скрипт GetCourse стартует по DOMContentLoaded — мы грузим его позже, поэтому будим его событием
+  s.onload = () => document.dispatchEvent(new Event('StartWidget' + w.hash));
+  s.onerror = () => { document.getElementById('gc-loading').hidden = true; document.getElementById('gc-fallback').hidden = false; gcStarted = false; };
+  holder.appendChild(s);
+  // как только виджет прислал высоту — прячем лоадер; если за 8 с не прислал — показываем запасную ссылку
+  const onMsg = e => { if (e.data && e.data.uniqName === w.hash && e.data.height) { document.getElementById('gc-loading').hidden = true; window.removeEventListener('message', onMsg); } };
+  window.addEventListener('message', onMsg);
+  setTimeout(() => { if (!document.getElementById('gc-loading').hidden) document.getElementById('gc-fallback').hidden = false; }, 8000);
+}
+// все кнопки «купить» открывают экран оплаты; сама ссылка остаётся запасным путём внутри него
+document.querySelectorAll('[data-fill-href="buy"]').forEach(a => {
+  if (a.closest('#sheet-buy')) return;
+  a.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); openBuy(); }, true);
+});
+
+/* ── Библиотека ──────────────────────────────────────────── */
+function showMat(id) {
+  ['home', 'efiry', 'aktiv', 'init', 'exclusive'].forEach(k => { const el = document.getElementById('mat-' + k); if (el) el.hidden = k !== id; });
+  document.getElementById('s-library').scrollTop = 0;
+  if (id === 'init') { initCur = 0; renderInitPage(); }
+  haptic('light');
+}
+let initCur = 0; const INIT_PER = 10;
+function initPage(dir) {
+  const total = Math.ceil(INIT_VIDEOS.length / INIT_PER);
+  initCur = Math.max(0, Math.min(initCur + dir, total - 1));
+  renderInitPage(); document.getElementById('s-library').scrollTop = 0; haptic('light');
+}
+function renderInitPage() {
+  const list = document.getElementById('init-list'); if (!list) return;
+  const total = Math.ceil(INIT_VIDEOS.length / INIT_PER);
+  const page = INIT_VIDEOS.slice(initCur * INIT_PER, (initCur + 1) * INIT_PER);
+  list.innerHTML = page.map(v =>
+    '<a class="vid" href="https://youtu.be/' + v.id + '" target="_blank" rel="noopener"><div class="vid-th"><img src="https://img.youtube.com/vi/' + v.id + '/mqdefault.jpg" alt="" loading="lazy"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="rgba(182,132,45,.85)"/><polygon points="10,8 17,12 10,16" fill="#fff"/></svg></div><div class="vid-t">' + v.title + '</div></a>'
+  ).join('');
+  document.getElementById('init-info').textContent = (initCur + 1) + ' / ' + total;
+  document.getElementById('init-prev').style.visibility = initCur > 0 ? 'visible' : 'hidden';
+  document.getElementById('init-next').style.visibility = initCur < total - 1 ? 'visible' : 'hidden';
+}
+
+/* ── Тарифы ЭльЛиты ──────────────────────────────────────── */
+let selectedPlan = null;
+function selectPlan(i) {
+  selectedPlan = i;
+  for (let k = 0; k < 4; k++) document.getElementById('plan-' + k).classList.toggle('sel', k === i);
+  const btn = document.getElementById('join-btn'); btn.style.opacity = '1'; btn.style.pointerEvents = 'auto';
+  haptic('medium');
+}
+function joinPlan() {
+  if (selectedPlan == null) return;
+  const url = CFG.plans[selectedPlan];
+  if (tg) tg.openTelegramLink(url); else window.open(url, '_blank');
+}
+
+/* ── Появление при скролле ───────────────────────────────── */
+let io = null;
+function observeReveals() {
+  if (!('IntersectionObserver' in window)) { document.querySelectorAll('.rv').forEach(n => n.classList.add('in')); return; }
+  if (!io) io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .08 });
+  document.querySelectorAll('.rv:not(.in)').forEach(n => io.observe(n));
+}
+observeReveals();
+
+/* ── Фон: спираль ДНК (золото/аква) ──────────────────────── */
+(function () {
+  const c = document.getElementById('dna'); if (!c) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { c.remove(); return; }
+  const ctx = c.getContext('2d');
+  function resize() { c.width = innerWidth; c.height = innerHeight; } resize(); addEventListener('resize', resize);
+  const CYCLE = 1800, STEP = 30, AMP = 44, WAVE = .3; let t = 0;
+  function draw() {
+    ctx.clearRect(0, 0, c.width, c.height);
+    const cx = c.width * .5, tf = t / CYCLE, scroll = (tf * (c.height + STEP * 2)) % STEP, ph0 = tf * Math.PI * 2, n = Math.ceil(c.height / STEP) + 4;
+    for (let i = -1; i < n; i++) {
+      const y = i * STEP - scroll, ph = i * WAVE - ph0, x1 = cx + Math.sin(ph) * AMP, x2 = cx + Math.sin(ph + Math.PI) * AMP;
+      const fade = Math.min(1, y / 80, (c.height - y) / 80), br = .5 + .5 * Math.sin(ph);
+      ctx.beginPath(); ctx.arc(x1, y, 2.6, 0, 7); ctx.fillStyle = 'rgba(182,132,45,' + fade * (.08 + .16 * br) + ')'; ctx.fill();
+      ctx.beginPath(); ctx.arc(x2, y, 2.6, 0, 7); ctx.fillStyle = 'rgba(21,149,142,' + fade * (.08 + .16 * (1 - br)) + ')'; ctx.fill();
+      if (i % 2 === 0) { ctx.beginPath(); ctx.moveTo(x1, y); ctx.lineTo(x2, y); ctx.strokeStyle = 'rgba(182,132,45,' + fade * (.04 + .06 * Math.abs(Math.sin(ph))) + ')'; ctx.lineWidth = .8; ctx.stroke(); }
+    }
+    t = (t + 1) % CYCLE; requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>
