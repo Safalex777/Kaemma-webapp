@@ -64,10 +64,10 @@ img,video{display:block}
 .lead{padding:8px 20px 0;color:var(--muted)}
 
 /* шапка главной: спираль ДНК */
-.hero{position:relative;height:470px;overflow:hidden;color:#fff}
+.hero{position:relative;height:440px;overflow:hidden;color:#fff}
 .hq{margin-top:14px;max-width:300px;font:italic 400 19px/1.3 R,serif;text-shadow:0 1px 14px rgba(0,0,0,.45)}
 .hq span{display:block;margin-top:6px;font:500 13px var(--sans);font-style:normal;opacity:.9}
-#home .step{margin-top:-120px;position:relative;z-index:3}
+#home .step{margin-top:-130px;position:relative;z-index:3}
 .hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,30,32,.2) 0%,rgba(10,30,32,0) 40%,rgba(246,241,232,.55) 84%,var(--bg) 100%),linear-gradient(100deg,rgba(10,30,32,.62) 0%,rgba(10,30,32,.35) 45%,rgba(10,30,32,0) 75%)}
 .hero .tp2{position:absolute;left:20px;right:20px;top:calc(14px + var(--safe));z-index:2;display:flex;justify-content:space-between;align-items:center}
@@ -227,7 +227,7 @@ img,video{display:block}
 .pop .pr b .rub{-webkit-text-fill-color:var(--gold-d);color:var(--gold-d)}
 .pill .i{width:16px;height:16px;color:var(--gold-l)}
 .doors{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 14px 6px;scrollbar-width:none}
-.dr{flex:none;width:88%;scroll-snap-align:center;border-radius:26px;overflow:hidden;background:var(--card);box-shadow:0 1px 0 var(--line),0 12px 30px rgba(80,60,20,.08);text-align:left}
+.dr{display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;flex:none;width:88%;scroll-snap-align:center;border-radius:26px;overflow:hidden;background:var(--card);box-shadow:0 1px 0 var(--line),0 12px 30px rgba(80,60,20,.08);text-align:left}
 .dr .m{position:relative;aspect-ratio:16/9;overflow:hidden;background:#cfc3ad}
 .dr .m video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .dr .n{position:absolute;left:14px;top:14px;z-index:2;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font:italic 400 22px R,serif;color:var(--gold-d);background:radial-gradient(circle at 30% 25%,#fff,#F3E8D2);box-shadow:0 8px 20px rgba(60,45,15,.25)}
@@ -415,7 +415,7 @@ body.sheet-open .fb{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
 <section class="screen on" id="home">
  <div class="hero"><video src="v/hero-v.mp4" poster="v/hero-v.jpg" muted loop playsinline autoplay></video>
   <div class="tp2"><div class="brand">Миры Рая</div><button class="me" data-tab="me" id="meava">Р</button></div>
-  <div class="gr"><div class="d" id="date"></div><h1 id="hello">Добрый день</h1><div class="hq" id="wish"></div></div></div>
+  <div class="gr"><div class="d" id="date"></div><h1 id="hello">Добрый день</h1></div></div>
  <div class="step rise" id="step"></div>
  <div id="livewrap"><div class="h2"><b>Ближайший эфир</b><a data-act="sched">Расписание</a></div>
  <div class="live card" id="live"></div></div>
@@ -662,7 +662,6 @@ function renderHome(){
  var h=new Date().getHours(),g=h<5?'Доброй ночи':h<12?'Доброе утро':h<18?'Добрый день':'Добрый вечер';
  $('hello').innerHTML=esc(g)+(name?',<br>'+esc(name):'');
  $('date').textContent=new Date().toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'});
- $('wish').innerHTML='«'+esc(Q[doy%Q.length])+'»<span>Каэмма · мысль дня</span>';
  var s=stage(),L=['Подарок','Эфир','Промо-урок','Таинства'],IC=['gift','calendar-blank','play','sparkle'];
  var lt=nextLive(),X,rem=ST.remind==='1';
  if(s===0){var pos=+ST.gift_pos||0;X={m:'<video src="v/gift-lotus.mp4" poster="v/gift-lotus.jpg" muted loop playsinline autoplay></video>',k:'Подарок для тебя',h:'Первая Инициация',p:'Около часа, моим голосом. В ней мы собираем тебя целой.',c:'<button class="cta" data-act="gift">'+I('play')+(pos>30?'Продолжить с '+fmt(pos):'Слушать подарок')+'</button>'+(pos>30?'<div class="pbar"><i style="width:'+Math.min(100,pos/GIFT_LEN*100)+'%"></i></div>':'')}}
