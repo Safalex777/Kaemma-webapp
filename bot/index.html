@@ -357,6 +357,16 @@ body.sheet-open .tabbar{transform:translate(-50%,160%)}
 .x .i{transform:rotate(180deg)}
 .x .i{width:18px;height:18px}
 #player{overflow-y:auto;-webkit-overflow-scrolling:touch}
+.subsbtn{position:fixed;right:14px;top:calc(12px + var(--safe));z-index:65;height:38px;padding:0 14px;border-radius:19px;display:flex;align-items:center;gap:7px;color:#fff;font:600 15px var(--sans);background:rgba(11,23,22,.55);box-shadow:0 0 0 1px rgba(255,255,255,.2) inset,0 6px 18px rgba(0,0,0,.18);transition:background .3s,color .3s}
+.subsbtn .aa{font:600 13px var(--sans);letter-spacing:-.02em;opacity:.9}
+.subsbtn.on{background:rgba(246,227,176,.92);color:#3a2a10}
+.subs{flex:1;display:flex;align-items:center;justify-content:center;min-height:180px;padding:90px 4px 18px;text-align:center;pointer-events:none}
+.subs p{max-width:340px;padding:14px 20px;border-radius:22px;background:rgba(11,23,22,.38);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 0 0 1px rgba(255,255,255,.12) inset;font:600 21px/1.42 var(--sans);color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.35);opacity:0;transform:translateY(8px);filter:blur(4px);transition:opacity .7s var(--ease),transform .7s var(--ease),filter .7s var(--ease)}
+.subs p.in{opacity:1;transform:none;filter:none}
+.subs p:empty{display:none}
+.subs p i{font-style:normal;opacity:.55;transition:opacity .35s ease}
+.subs p i.s{opacity:1}
+.subs.off{visibility:hidden}
 .pscreen{position:relative;z-index:3;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 24px calc(26px + env(safe-area-inset-bottom,0px));max-width:480px;margin:0 auto}
 .voice{display:flex;align-items:center;gap:10px;font:500 15px var(--sans)}
 .voice img{width:36px;height:36px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px rgba(255,255,255,.7)}
@@ -550,7 +560,9 @@ body.sheet-open .fb{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
 <div class="sheet" id="player">
  <video class="bgv" src="v/gift-lotus.mp4" poster="v/gift-lotus.jpg" muted loop playsinline></video><div class="shade"></div>
  <button class="x dglass" data-act="close"><svg class="i"><use href="#p-caret-right"/></svg>Назад</button>
+ <button class="subsbtn dglass" id="subsbtn" data-act="subs"><span class="aa">Аа</span>Слова</button>
  <div class="pscreen">
+  <div class="subs" id="subs" aria-live="polite"><p id="subsp"></p></div>
   <div class="voice"><img src="v/k.jpg" alt="">Голос Каэммы · подарок</div>
   <h2>Первая Инициация</h2>
   <div class="s">Слушай в наушниках, можно прилечь. Ничего не нужно понимать умом: я держу поток.</div>
@@ -809,11 +821,25 @@ setInterval(function(){var l=left(),t=leftTxt(l);if(l>0)[['tmr','Цена дер
 function openSheet(id){document.body.classList.add('sheet-open');var s=$(id);s.classList.add('on');s.scrollTop=0;mb('',null);back(closeSheet);var bg=s.querySelector('video.bgv');if(bg)bg.play().catch(function(){})}
 function closeSheet(){document.querySelectorAll('.sheet.on').forEach(function(s){s.classList.remove('on');var bg=s.querySelector('video.bgv');if(bg)bg.pause()});document.body.classList.remove('sheet-open');$('vframe').innerHTML='';au.pause();back(null);show(cur)}
 var au=$('au'),seek=$('seek'),ring=$('ring');
-function openGift(){openSheet('player');renderHalls();track('gift');$('pmcta').textContent='Открыть Три двери · '+priceTxt()+' ₽';if(ST.gift_pos&&!au.currentTime){au.preload='auto';au.addEventListener('loadedmetadata',function f(){au.currentTime=+ST.gift_pos||0;au.removeEventListener('loadedmetadata',f)});au.load()}$('after').classList.toggle('on',ST.gift==='1');if('mediaSession' in navigator)try{navigator.mediaSession.metadata=new MediaMetadata({title:'Первая Инициация',artist:'Каэмма',album:'Миры Рая',artwork:[{src:'v/gift-lotus.jpg',sizes:'540x960',type:'image/jpeg'}]})}catch(e){}}
+function openGift(){openSheet('player');subsUI();renderHalls();track('gift');$('pmcta').textContent='Открыть Три двери · '+priceTxt()+' ₽';if(ST.gift_pos&&!au.currentTime){au.preload='auto';au.addEventListener('loadedmetadata',function f(){au.currentTime=+ST.gift_pos||0;au.removeEventListener('loadedmetadata',f)});au.load()}$('after').classList.toggle('on',ST.gift==='1');if('mediaSession' in navigator)try{navigator.mediaSession.metadata=new MediaMetadata({title:'Первая Инициация',artist:'Каэмма',album:'Миры Рая',artwork:[{src:'v/gift-lotus.jpg',sizes:'540x960',type:'image/jpeg'}]})}catch(e){}}
 function upd(){var d=au.duration||GIFT_LEN,c=au.currentTime||0,p=c/d;seek.value=Math.round(p*1000);seek.style.setProperty('--p',(p*100)+'%');ring.style.strokeDashoffset=308*(1-p);$('cur').textContent=fmt(c);$('left').textContent='−'+fmt(d-c);if(p>.8)$('after').classList.add('on')}
 var lastSave=0;
 au.addEventListener('timeupdate',function(){upd();var t=Math.floor(au.currentTime);if(Math.abs(t-lastSave)>=5){lastSave=t;save('gift_pos',t)}});
 au.addEventListener('play',function(){$('pp').classList.add('playing')});
+/* субтитры подарка: фразы [начало мс, конец мс, [[слово, начало мс], ...]] из v/gift-subs.json */
+var SUBS=null,subI=-1,subRaf=0;
+function subsOn(){return ST.subs==='1'}
+function subsUI(){$('subsbtn').classList.toggle('on',subsOn());$('subs').classList.toggle('off',!subsOn());if(subsOn())loadSubs();subTick(true)}
+function loadSubs(){if(SUBS)return;SUBS=[];fetch('v/gift-subs.json?v=1').then(function(r){return r.json()}).then(function(d){SUBS=d;subI=-1;subTick(true)}).catch(function(){SUBS=null})}
+function subFind(ms){var lo=0,hi=SUBS.length-1,r=-1;while(lo<=hi){var m=(lo+hi)>>1;if(SUBS[m][0]<=ms){r=m;lo=m+1}else hi=m-1}return r}
+function subTick(force){if(!subsOn()||!SUBS||!SUBS.length)return;var ms=(au.currentTime||0)*1000,i=subFind(ms),p=$('subsp');
+ if(i>=0&&ms>SUBS[i][1]+1500)i=-1;
+ if(i!==subI||force){subI=i;p.classList.remove('in');setTimeout(function(){if(subI!==i)return;p.innerHTML=i<0?'':SUBS[i][2].map(function(w){return '<i data-t="'+w[1]+'">'+esc(w[0])+'</i>'}).join(' ');if(i>=0)requestAnimationFrame(function(){p.classList.add('in')})},i<0?0:260)}
+ var ws=p.children;for(var k=0;k<ws.length;k++){var on=+ws[k].dataset.t<=ms+120;if(on!==ws[k].classList.contains('s'))ws[k].classList.toggle('s',on)}}
+function subLoop(){subTick();if(!au.paused)subRaf=requestAnimationFrame(subLoop)}
+au.addEventListener('play',function(){cancelAnimationFrame(subRaf);subRaf=requestAnimationFrame(subLoop)});
+au.addEventListener('seeked',function(){subTick(true)});
+
 au.addEventListener('pause',function(){$('pp').classList.remove('playing')});
 au.addEventListener('ended',function(){$('after').classList.add('on');if(ST.gift!=='1'){save('gift',1);hap('ok')}});
 seek.addEventListener('input',function(){var d=au.duration||GIFT_LEN;au.currentTime=seek.value/1000*d;upd()});
@@ -858,6 +884,7 @@ document.addEventListener('click',function(e){
  if(a==='reviews')return openTg('https://t.me/Kaemma144_otzyvy');
  if(a==='cabinet')return openUrl(CABINET);
  if(a==='close')return closeSheet();
+ if(a==='subs'){hap();save('subs',subsOn()?0:1);subsUI();return}
  if(a==='pp'){if(au.paused)au.play().catch(function(){});else au.pause();return}
  if(a==='back15'){au.currentTime=Math.max(0,au.currentTime-15);return}
  if(a==='fwd15'){au.currentTime=au.currentTime+15;return}
@@ -877,7 +904,7 @@ if(cuid&&ST.cuid!==cuid)save('cuid',cuid);
  if(scr==='gift'||scr==='gift-more'){show('home');openGift();if(scr==='gift-more')setTimeout(function(){$('player').scrollTop=9999},300)}
  else if(scr==='lib'||scr==='praktiki')show('lib');else if(scr==='tainstva')show('tainstva');else if(scr==='me'||scr==='kabinet')show('me');else if(scr==='sched'){show('home');renderSched();openSheet('sched')}else if(scr==='intro'){$('intro').classList.add('on');show('home')}else show('home');
 }
-var KEYS=['cuid','gift','gift_pos','efir','promo','bought','tt_start','intro','fav','opened','first','remind','hall','peek','krugs'];
+var KEYS=['subs','cuid','gift','gift_pos','efir','promo','bought','tt_start','intro','fav','opened','first','remind','hall','peek','krugs'];
 KEYS.forEach(function(k){var v=lsG(k);if(v!=null)ST[k]=v});
 if(cloud){try{tg.CloudStorage.getItems(KEYS,function(err,res){if(!err&&res)KEYS.forEach(function(k){if(res[k])ST[k]=res[k]});boot()})}catch(e){boot()}}else boot();
 </script>
