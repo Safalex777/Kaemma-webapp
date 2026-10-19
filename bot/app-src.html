@@ -628,7 +628,7 @@ var parts=sp.split('__'),sp0=parts[0]||'';
 var cuid=/^\d+$/.test(sp0)?'9usu.'+sp0:sp0;
 var flags=parts.slice(1);
 var PAY='https://kaemma144.getcourse.ru/tainstva?utm_source=bot_app&utm_medium=telegram_app&utm_campaign=tri_tainstva'+(cuid?'&utm_content='+encodeURIComponent(cuid):'')+'#s10';
-var CABINET='https://kaemma144.getcourse.ru/teach/control';
+var CABINET='https://kaemma144.getcourse.ru/teach/control/stream/view/id/935923232';
 /* уроки Таинств в GetCourse: заполнить ссылками, когда Саша загрузит */
 var LESSONS=['','',''];
 var GIFT_LEN=3480;
@@ -668,6 +668,8 @@ function cleanName(){var raw=(user().first_name||'').trim().split(/\s+/)[0]||'';
 function key(v){return v.k+':'+v.id}
 function plural(n,a,b,c){n=Math.abs(n)%100;var m=n%10;return n>10&&n<20?c:m>1&&m<5?b:m===1?a:c}
 var TT=72*3600*1000;
+/* срок цены: 72 часа с первого показа предложения (экран Таинств, карточка Таинств или кнопка из предложения в боте) */
+function offerSeen(){if(!ST.tt_start)save('tt_start',Date.now())}
 function left(){return (+ST.tt_start||Date.now())+TT-Date.now()}
 function priceTxt(){return left()>0?'3 000':'5 000'}
 function rub(){return priceTxt()+'<span class="rub">₽</span>'}
@@ -701,7 +703,7 @@ function renderHome(){
  if(s===0){var pos=+ST.gift_pos||0;X={m:'<video src="v/gift-lotus.mp4" poster="v/gift-lotus.jpg" muted loop playsinline autoplay></video>',k:'Подарок для тебя',h:'Первая Инициация',p:'Около часа, моим голосом. В ней мы собираем тебя целой.',c:'<button class="cta" data-act="gift">'+I('play')+(pos>30?'Продолжить с '+fmt(pos):'Слушать подарок')+'</button>'+(pos>30?'<div class="pbar"><i style="width:'+Math.min(100,pos/GIFT_LEN*100)+'%"></i></div>':'')}}
  else if(s===1)X={m:'<img src="v/gym.jpg" alt="">',k:'Встреча с Каэммой',h:'Утренняя гимнастика каждый понедельник',p:'11:11 по Москве, прямой эфир · '+liveTxt(lt),c:'<button class="cta" data-act="remind">'+I('bell')+(rem?'Напоминание включено':'Напомнить мне в боте')+'</button><button class="cta gold" style="margin-top:8px" data-v="'+key(STREAMS[0])+'">'+I('play')+'Посмотреть прошлый эфир</button>'};
  else if(s===2)X={m:'<img src="v/promo-cover.jpg?v=2" alt="">',k:'Моя история · 5 минут',h:'Что было дальше со мной',p:'5 минут. Моя история: как между самым дном и домом у моря оказалось всего четыре месяца.',c:'<button class="cta" data-act="promo">'+I('play')+'Смотреть промо-урок</button>'};
- else if(s===3){var l=left();X={m:'<video src="v/t1.mp4" poster="v/t1.jpg" muted loop playsinline autoplay></video>',k:'Три Таинства',h:'Три двери в Миры Рая',p:l>0?'Твоя цена 3 000 ₽ держится ещё <b id="stt">'+leftTxt(l)+'</b>':'Доступ 3 месяца · 5 000 ₽',c:'<button class="cta gold" data-tab="tainstva">'+I('sparkle')+'Посмотреть, что внутри</button>'}}
+ else if(s===3){offerSeen();var l=left();X={m:'<video src="v/t1.mp4" poster="v/t1.jpg" muted loop playsinline autoplay></video>',k:'Три Таинства',h:'Три двери в Миры Рая',p:l>0?'Твоя цена 3 000 ₽ держится ещё <b id="stt">'+leftTxt(l)+'</b>':'Доступ 3 месяца · 5 000 ₽',c:'<button class="cta gold" data-tab="tainstva">'+I('sparkle')+'Посмотреть, что внутри</button>'}}
  else X={m:'<video src="v/me-lotus.mp4" poster="v/me-lotus.jpg" muted loop playsinline autoplay></video>',k:'Ты внутри',h:'Мои Таинства',p:'Три двери, три Инициации, группа. Доступ 3 месяца.',c:'<button class="cta gold" data-tab="tainstva">'+I('sparkle')+'Открыть Мои Таинства</button>'};
  $('step').innerHTML=X.m+'<div class="bd"><div class="k">'+X.k+'</div><h2>'+X.h+'</h2><p>'+X.p+'</p>'+X.c+'</div>';
  $('livewrap').style.display='';
@@ -728,6 +730,7 @@ $('q').addEventListener('input',renderList);
 
 /* ---------- ТАИНСТВА ---------- */
 function renderTainstva(){
+ if(ST.bought!=='1')offerSeen();
  var b=ST.bought==='1',l=left();
  $('ttitle').textContent=b?'Мои Таинства':'Три Таинства';
  $('tk').textContent=b?'Доступ 3 месяца':'В записи · доступ 3 месяца';
@@ -755,7 +758,7 @@ $('kvid').addEventListener('ended',closeKrug);
 $('kvid').addEventListener('click',function(){if(this.paused)this.play();else this.pause()});
 
 /* окно покупки для закрытой двери */
-function openPop(i){var d=DOORS[i],l=left();$('popc').innerHTML='<div class="im"><img src="'+d.p+'" alt=""><u>'+I('lock-simple')+'</u></div><div class="k">'+d.k+'</div><h3>'+d.h+'</h3><p>'+d.t+'</p><p style="margin-top:8px">Эта дверь откроется в Трёх Таинствах вместе с Инициацией.</p>'+(i===1?krug('k03','Эта дверь ждёт тебя внутри трёх','Послушай Каэмму','card2" style="margin:12px 0 0'):'')+'<div class="pr"><b>'+rub()+'</b>'+(l>0?'<span>· цена держится ещё '+leftTxt(l).replace(/:\d\d$/,'')+'</span>':'')+'</div><button class="cta gold" data-act="buy">'+I('sparkle')+'Войти в Три Таинства</button><button class="ghost" data-act="popmore">Посмотреть, что внутри</button>';$('pop').classList.add('on');hap()}
+function openPop(i){offerSeen();var d=DOORS[i],l=left();$('popc').innerHTML='<div class="im"><img src="'+d.p+'" alt=""><u>'+I('lock-simple')+'</u></div><div class="k">'+d.k+'</div><h3>'+d.h+'</h3><p>'+d.t+'</p><p style="margin-top:8px">Эта дверь откроется в Трёх Таинствах вместе с Инициацией.</p>'+(i===1?krug('k03','Эта дверь ждёт тебя внутри трёх','Послушай Каэмму','card2" style="margin:12px 0 0'):'')+'<div class="pr"><b>'+rub()+'</b>'+(l>0?'<span>· цена держится ещё '+leftTxt(l).replace(/:\d\d$/,'')+'</span>':'')+'</div><button class="cta gold" data-act="buy">'+I('sparkle')+'Войти в Три Таинства</button><button class="ghost" data-act="popmore">Посмотреть, что внутри</button>';$('pop').classList.add('on');hap()}
 function closePop(){$('pop').classList.remove('on')}
 function renderHalls(){$('k04').innerHTML=krug('k04','С возвращением, родная','Послушай, что я хочу тебе сказать','light');var h=ST.hall;$('halls').innerHTML=HALLS.map(function(x,i){return '<button class="hl'+(h==String(i)?' on':'')+'" data-hall="'+i+'">'+x[0]+'</button>'}).join('');var a=$('hans');if(h!=null&&HALLS[+h]){a.innerHTML=esc(HALLS[+h][1])+'<small>Каэмма</small>'+(+h===5?'<div style="margin-top:12px">'+krug('k02','Тело сначала оттаивает','Каэмма о том, что будет дальше','light')+'</div>':'');a.classList.add('on')}else a.classList.remove('on')}
 
@@ -782,7 +785,9 @@ function setMain(){
  if(cur==='tainstva'&&ST.bought!=='1')mb('Войти в Три Таинства · '+priceTxt()+' ₽',pay);else mb('',null);
 }
 function show(t){if(!$(t))return;cur=t;document.querySelectorAll('.screen').forEach(function(s){s.classList.toggle('on',s.id===t)});document.querySelectorAll('.tb').forEach(function(b){b.classList.toggle('on',b.dataset.tab===t)});window.scrollTo(0,0);if(!document.body.classList.contains('sheet-open'))back(t==='home'?null:function(){show('home')});if(t==='home')renderHome();if(t==='lib'){renderTopics();renderList()}if(t==='tainstva')renderTainstva();if(t==='me')renderMe();setMain()}
-function pay(){hap('ok');mb('',null);location.href=PAY}
+var OFFER='https://t.me/KaemmaBot?start=dl-1792356930396';
+/* без номера подписчицы (открыто кнопкой «Миры Рая») оплата идёт через предложение в боте: так бот и приложение узнают о покупке */
+function pay(){hap('ok');if(!cuid){toast('Открываю оплату в боте, там доступ придёт сразу');setTimeout(function(){openTg(OFFER)},700);return}mb('',null);location.href=PAY}
 setInterval(function(){var l=left(),t=leftTxt(l);if(l>0)[['tmr','Цена держится ещё '+t],['stt',t],['tpt','ещё '+t]].forEach(function(p){var e=$(p[0]);if(e)e.textContent=p[1]});var x=$('ltx');if(x)x.textContent=liveTxt(nextLive())},1000);
 
 /* ---------- шторки ---------- */
@@ -848,7 +853,6 @@ document.addEventListener('click',function(e){
 function boot(){
  if(flags.indexOf('k')>=0&&ST.bought!=='1')save('bought',1);
  if(flags.indexOf('g')>=0&&ST.gift!=='1')save('gift',1);
- if(!ST.tt_start)save('tt_start',Date.now());
  if(!ST.first)save('first',Date.now());
  var scr=flags.filter(function(f){return f!=='k'&&f!=='g'})[0]||(location.hash||'').slice(1);
  if(!ST.intro&&!scr)$('intro').classList.add('on');
