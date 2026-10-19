@@ -198,9 +198,10 @@ var open=function(u){haptic(); if(/^https:\/\/t\.me\//.test(u)&&tg&&tg.openTeleg
 /* имя из Telegram */
 var u=tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user; if(u&&u.first_name){document.getElementById('hi').textContent='Родная, '+u.first_name+', ты дома'}
 
-/* оплата: номер подписчицы бота приходит в start_param (t.me/KaemmaBot/app?startapp=<cuid>) */
+/* оплата: номер подписчицы бота приходит в start_param (t.me/KaemmaBot/mir?startapp=<bh_user_id>) */
 var sp=(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.start_param)||'';
-var cuid=sp.split('__')[0];
+/* в ссылке только число bh_user_id (Telegram не пропускает точку), номер BotHelp = 9usu.<число> */
+var sp0=sp.split('__')[0];var cuid=/^\d+$/.test(sp0)?'9usu.'+sp0:sp0;
 var PAY='https://kaemma144.getcourse.ru/tainstva?utm_source=bot_app&utm_medium=telegram_app&utm_campaign=tri_tainstva'+(cuid?'&utm_content='+encodeURIComponent(cuid):'')+'#s10';
 var GIFT='https://t.me/KaemmaBot?start=c1792347548632';
 
