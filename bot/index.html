@@ -415,7 +415,7 @@ body.sheet-open .fb{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
 <section class="screen on" id="home">
  <div class="hero"><video src="v/hero-v.mp4" poster="v/hero-v.jpg" muted loop playsinline autoplay></video>
   <div class="tp2"><div class="brand">Миры Рая</div><button class="me" data-tab="me" id="meava">Р</button></div>
-  <div class="gr"><div class="d" id="date"></div><h1 id="hello">Добрый день</h1></div></div>
+  <div class="gr"><div class="d" id="date"></div><h1 id="hello">Добрый день</h1><div class="hq" id="wish"></div></div></div>
  <div class="step rise" id="step"></div>
  <div id="livewrap"><div class="h2"><b>Ближайший эфир</b><a data-act="sched">Расписание</a></div>
  <div class="live card" id="live"></div></div>
@@ -661,6 +661,7 @@ function renderHome(){
  if(u.photo_url)$('meava').innerHTML='<img src="'+esc(u.photo_url)+'" alt="">';else $('meava').textContent=(name||'Р').charAt(0);
  var h=new Date().getHours(),g=h<5?'Доброй ночи':h<12?'Доброе утро':h<18?'Добрый день':'Добрый вечер';
  $('hello').innerHTML=esc(g)+(name?',<br>'+esc(name):'');
+ $('wish').textContent='«'+Q[doy%Q.length]+'»';
  $('date').textContent=new Date().toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'});
  var s=stage(),L=['Подарок','Эфир','Промо-урок','Таинства'],IC=['gift','calendar-blank','play','sparkle'];
  var lt=nextLive(),X,rem=ST.remind==='1';
