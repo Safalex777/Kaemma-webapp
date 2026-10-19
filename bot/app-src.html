@@ -121,10 +121,14 @@ img,video{display:block}
 .kc .kv i{position:absolute;right:-2px;bottom:-2px;width:22px;height:22px;border-radius:50%;background:#fff;color:var(--ink);display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.25)}
 .kc .kv i .i{width:11px;height:11px;margin-left:1px}
 .kc b{display:block;font:600 15px/1.25 var(--sans)}
-.kc span{display:block;font:400 14px/1.3 var(--sans);opacity:.85;margin-top:2px}
+.kc>span:not(.kv){display:block;flex:1;min-width:0}
+.kc>span>span{display:block;font:400 14px/1.3 var(--sans);opacity:.85;margin-top:3px}
 .kc.light{background:rgba(255,255,255,.14);box-shadow:0 0 0 1px rgba(255,255,255,.22) inset;color:#fff}
 .kc.card2{background:var(--card);box-shadow:0 1px 0 var(--line),0 8px 22px rgba(80,60,20,.06);color:var(--ink);margin:12px 14px 0}
-.kc.card2 span{color:var(--muted);opacity:1}
+.kc.card2>span>span{color:var(--muted);opacity:1}
+.kc.card2{width:calc(100% - 28px)}
+.pm .kc{width:100%;margin:12px 0 4px;border-radius:20px;padding:12px 16px 12px 12px}
+.pm .kc+h3,#k04+h3{margin-top:16px}
 .kc.pulse .kv{box-shadow:0 0 0 0 rgba(232,204,142,.6);animation:kpulse 2.4s ease-out infinite}
 @keyframes kpulse{0%{box-shadow:0 0 0 0 rgba(232,204,142,.65)}100%{box-shadow:0 0 0 16px rgba(232,204,142,0)}}
 .kmod{position:fixed;inset:0;z-index:95;display:none;background:rgba(8,18,18,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
@@ -277,7 +281,7 @@ img,video{display:block}
 .how{margin:0 14px;padding:4px 18px}
 .hw{display:flex;gap:14px;padding:14px 0;align-items:center}
 .hw+.hw{border-top:1px solid var(--line)}
-.hw .num{width:32px;height:32px;border-radius:50%;flex:none;display:grid;place-items:center;font:italic 400 18px R,serif;color:#fff;background:linear-gradient(145deg,#D2A453,#9A6E2C)}
+.hw .num{width:32px;height:32px;border-radius:50%;flex:none;display:grid;place-items:center;font:600 15px var(--sans);color:#fff;background:linear-gradient(145deg,#D2A453,#9A6E2C)}
 .hw p{font-size:16px;color:var(--ink2)}
 .price{margin:14px 14px 0;padding:22px 20px;border-radius:28px;position:relative;overflow:hidden;background:linear-gradient(150deg,#1E3433,#0E2524);color:#fff}
 .price:before{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(232,204,142,.35),rgba(232,204,142,0) 70%)}
@@ -385,7 +389,8 @@ body.sheet-open .tabbar{transform:translate(-50%,160%)}
 .pr3 b{display:block;margin-top:3px;font:600 15.5px/1.3 var(--sans);color:#fff}
 .pr3 .st{flex:none;display:flex;align-items:center;gap:5px;font:600 13px var(--sans);color:#fff;opacity:.85}
 .pr3 .st .i{width:18px;height:18px}
-.pr3 .st.ok{color:var(--gold-l);opacity:1}
+.pr3 .st.ok{width:28px;height:28px;border-radius:50%;justify-content:center;background:var(--gold);color:#fff;opacity:1}
+.pr3 .st.ok .i{width:15px;height:15px}
 .mini3{display:flex;gap:8px;margin-top:14px}
 .mini3 div{flex:1;border-radius:16px;overflow:hidden;position:relative;height:110px}
 .mini3 img{width:100%;height:100%;object-fit:cover}
@@ -576,7 +581,7 @@ body.sheet-open .fb{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
    <div class="lb">Это первая из трёх</div>
    <h3>Две другие Инициации ждут тебя за дверями Таинств</h3>
    <p>В подарке мы собираем тебя целой. Дальше ты живёшь так, как хочешь ты, и перестаёшь верить отражениям.</p>
-   <div class="pairs3"><div class="pr3"><img src="v/t1.jpg" alt=""><div class="tx"><small>Таинство I · Корона Всемогущества</small><b>Инициация «Собери свои части»</b></div><span class="st ok"><svg class="i"><use href="#p-check"/></svg>У тебя</span></div><div class="pr3" data-lock="1"><img src="v/t2.jpg" alt=""><div class="tx"><small>Таинство II · Путешествие в Миры Рая</small><b>Вторая Инициация «Выкуп Жизни»</b></div><span class="st"><svg class="i"><use href="#p-lock-simple"/></svg></span></div><div class="pr3" data-lock="2"><img src="v/t3.jpg" alt=""><div class="tx"><small>Таинство III · Выбор своего Мира</small><b>Третья Инициация «Совершенный Двойник»</b></div><span class="st"><svg class="i"><use href="#p-lock-simple"/></svg></span></div></div>
+   <div class="pairs3"><div class="pr3"><img src="v/t1.jpg" alt=""><div class="tx"><small>Таинство I · Корона Всемогущества</small><b>Инициация «Собери свои части»</b></div><span class="st ok"><svg class="i"><use href="#p-check"/></svg></span></div><div class="pr3" data-lock="1"><img src="v/t2.jpg" alt=""><div class="tx"><small>Таинство II · Путешествие в Миры Рая</small><b>Вторая Инициация «Выкуп Жизни»</b></div><span class="st"><svg class="i"><use href="#p-lock-simple"/></svg></span></div><div class="pr3" data-lock="2"><img src="v/t3.jpg" alt=""><div class="tx"><small>Таинство III · Выбор своего Мира</small><b>Третья Инициация «Совершенный Двойник»</b></div><span class="st"><svg class="i"><use href="#p-lock-simple"/></svg></span></div></div>
    <button class="cta gold" data-act="tab:tainstva" id="pmcta">Открыть Три двери</button>
   </div>
   <div class="pm"><div class="lb">Если ничего не почувствовала</div><p style="margin-top:8px">Родная, так бывает, и это тоже ответ. Поток всё равно прошёл. Очень часто он возвращается потом, снами и картинками в течение дня.</p></div>
