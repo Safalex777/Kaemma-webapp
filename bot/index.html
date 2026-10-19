@@ -643,7 +643,8 @@ function rub(){return priceTxt()+'<span class="rub">₽</span>'}
 function leftTxt(l){var d=Math.floor(l/864e5),h=Math.floor(l%864e5/36e5),m=Math.floor(l%36e5/6e4),s=Math.floor(l%6e4/1e3);return (d?d+' д ':'')+String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')}
 function track(k){var a=J('opened');var i=a.indexOf(k);if(i>=0)a.splice(i,1);a.unshift(k);save('opened',JSON.stringify(a.slice(0,60)));if(BYKEY[k]&&BYKEY[k].x)save('efir',1)}
 /* путь: 0 подарок, 1 эфир, 2 промо-урок, 3 Таинства, 4 купила */
-function stage(){if(ST.bought==='1')return 4;if(ST.gift!=='1')return 0;if(ST.efir!=='1')return 1;if(ST.promo!=='1')return 2;return 3}
+/* путь: подарок → промо-урок → Таинства; эфир живёт отдельным блоком */
+function stage(){if(ST.bought==='1')return 4;if(ST.gift!=='1')return 0;if(ST.promo!=='1')return 2;return 3}
 /* ближайший понедельник 11:11 мск (UTC+3) */
 function nextLive(){var now=Date.now(),d=new Date(now+3*36e5),day=d.getUTCDay(),add=(8-day)%7;var t=Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()+add,8,11);if(t+60*60e3<now)t+=7*864e5;return t}
 function liveTxt(t){var l=t-Date.now();if(l<=0)return 'идёт сейчас';var d=Math.floor(l/864e5),h=Math.floor(l%864e5/36e5),m=Math.floor(l%36e5/6e4);return 'через '+(d?d+' '+plural(d,'день','дня','дней'):(h?h+' ч ':'')+m+' мин')}
@@ -671,7 +672,7 @@ function renderHome(){
  else if(s===3){var l=left();X={m:'<video src="v/t1.mp4" poster="v/t1.jpg" muted loop playsinline autoplay></video>',k:'Три Таинства',h:'Три двери в Миры Рая',p:l>0?'Твоя цена 3 000 ₽ держится ещё <b id="stt">'+leftTxt(l)+'</b>':'Доступ 3 месяца · 5 000 ₽',c:'<button class="cta gold" data-tab="tainstva">'+I('sparkle')+'Посмотреть, что внутри</button>'}}
  else X={m:'<video src="v/me-lotus.mp4" poster="v/me-lotus.jpg" muted loop playsinline autoplay></video>',k:'Ты внутри',h:'Мои Таинства',p:'Три двери, три Инициации, группа. Доступ 3 месяца.',c:'<button class="cta gold" data-tab="tainstva">'+I('sparkle')+'Открыть Мои Таинства</button>'};
  $('step').innerHTML=X.m+'<div class="bd"><div class="k">'+X.k+'</div><h2>'+X.h+'</h2><p>'+X.p+'</p>'+X.c+'</div>';
- $('livewrap').style.display=s===1?'none':'';
+ $('livewrap').style.display='';
  var d=new Date(lt+3*36e5);
  $('live').innerHTML='<div class="cal"><span>'+['вс','пн','вт','ср','чт','пт','сб'][d.getUTCDay()]+'</span><b>'+d.getUTCDate()+'</b></div><div><div class="tt">Утренняя гимнастика</div><div class="ss"><span class="dotlive"></span>11:11 мск · <span id="ltx">'+liveTxt(lt)+'</span></div></div><button class="rem'+(rem?' on':'')+'" data-act="remind" aria-label="Напомнить">'+I('bell')+'</button>';
  $('needs').innerHTML=T.map(function(t){var nw=t.v.some(function(v){return v.n});return '<button class="nd" data-topic="'+t.id+'"><img src="'+t.img+'" alt="" loading="lazy"><b>'+t.t+'</b><span>'+t.v.length+' видео</span>'+(nw?'<span class="new">НОВОЕ</span>':'')+'</button>'}).join('');
@@ -799,7 +800,7 @@ document.addEventListener('click',function(e){
  if(a==='pp'){if(au.paused)au.play().catch(function(){});else au.pause();return}
  if(a==='back15'){au.currentTime=Math.max(0,au.currentTime-15);return}
  if(a==='fwd15'){au.currentTime=au.currentTime+15;return}
- if(a==='giftdone'){save('gift',1);hap('ok');closeSheet();toast('Записала 🤍 Следующий шаг: эфир в понедельник');return}
+ if(a==='giftdone'){save('gift',1);hap('ok');closeSheet();toast('Записала 🤍 Дальше моя история, 5 минут');return}
 });
 
 /* ---------- старт ---------- */
