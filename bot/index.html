@@ -64,18 +64,21 @@ img,video{display:block}
 .lead{padding:8px 20px 0;color:var(--muted)}
 
 /* шапка главной: спираль ДНК */
-.hero{position:relative;height:410px;overflow:hidden;color:#fff}
+.hero{position:relative;height:470px;overflow:hidden;color:#fff}
+.hq{margin-top:14px;max-width:300px;font:italic 400 19px/1.3 R,serif;text-shadow:0 1px 14px rgba(0,0,0,.45)}
+.hq span{display:block;margin-top:6px;font:500 13px var(--sans);font-style:normal;opacity:.9}
+#home .step{margin-top:-120px;position:relative;z-index:3}
 .hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,30,32,.35) 0%,rgba(10,30,32,0) 28%,rgba(10,30,32,.05) 55%,rgba(246,241,232,.6) 86%,var(--bg) 100%)}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,30,32,.2) 0%,rgba(10,30,32,0) 40%,rgba(246,241,232,.55) 84%,var(--bg) 100%),linear-gradient(100deg,rgba(10,30,32,.62) 0%,rgba(10,30,32,.35) 45%,rgba(10,30,32,0) 75%)}
 .hero .tp2{position:absolute;left:20px;right:20px;top:calc(14px + var(--safe));z-index:2;display:flex;justify-content:space-between;align-items:center}
 .hero .tp2 .brand{color:#fff;text-shadow:0 1px 12px rgba(0,0,0,.3)}
 .hero .gr{position:absolute;left:20px;right:20px;top:calc(76px + var(--safe));z-index:2}
-.hero .gr .d{font:600 12px var(--sans);letter-spacing:.12em;text-transform:uppercase;opacity:.92;text-shadow:0 1px 10px rgba(0,0,0,.3)}
+.hero .gr .d{font:600 13px var(--sans);letter-spacing:.12em;text-transform:uppercase;opacity:.92;text-shadow:0 1px 10px rgba(0,0,0,.3)}
 .hero .gr h1{font:italic 400 40px/1.02 R,serif;margin-top:8px;text-shadow:0 2px 20px rgba(0,0,0,.3)}
 .wish{margin:-104px 14px 0;position:relative;z-index:3;padding:18px 18px 16px;border-radius:24px;display:flex;gap:14px;align-items:flex-start}
 .wish img{width:44px;height:44px;border-radius:50%;object-fit:cover;object-position:center 20%;flex:none;box-shadow:0 0 0 2px #fff}
 .wish q{display:block;font:italic 400 19px/1.3 R,serif;color:#3a3125;quotes:"«" "»"}
-.wish span{display:block;font:500 13px var(--sans);color:var(--muted);margin-top:6px}
+.wish span{display:block;font:500 14px var(--sans);color:var(--muted);margin-top:6px}
 .backbtn{display:inline-flex;align-items:center;gap:4px;margin:0 14px 10px;height:36px;padding:0 14px 0 8px;border-radius:18px;background:#fff;box-shadow:0 0 0 1px var(--line) inset;font:600 15px var(--sans);color:var(--gold-d)}
 .backbtn .i{width:18px;height:18px;transform:rotate(180deg)}
 /* окно покупки */
@@ -141,7 +144,7 @@ img,video{display:block}
 .cal span{font:600 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--gold-l)}
 .cal b{font:italic 400 28px/1 R,serif}
 .live .tt{font:600 16px/1.25 var(--sans)}
-.live .ss{font:400 13.5px var(--sans);color:var(--muted);margin-top:3px;font-variant-numeric:tabular-nums}
+.live .ss{font:400 14.5px var(--sans);color:var(--muted);margin-top:3px;font-variant-numeric:tabular-nums}
 .live .rem{margin-left:auto;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--gold-bg);color:var(--gold-d);flex:none}
 .live .rem.on{background:var(--gold);color:#fff}
 .live .dotlive{display:inline-block;width:7px;height:7px;border-radius:50%;background:#E5533F;margin-right:6px;box-shadow:0 0 0 3px rgba(229,83,63,.2)}
@@ -151,7 +154,7 @@ img,video{display:block}
 .rowc .im{position:relative;width:96px;height:64px;border-radius:14px;overflow:hidden;flex:none;background:#e9e1d1}
 .rowc .im img{width:100%;height:100%;object-fit:cover}
 .rowc .tt{font:600 15.5px/1.25 var(--sans);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.rowc .ss{font:400 13px var(--sans);color:var(--muted);margin-top:3px}
+.rowc .ss{font:400 14.5px var(--sans);color:var(--muted);margin-top:3px}
 .rowc .pl{margin-left:auto;width:40px;height:40px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;flex:none}
 .rowc .pl .i{width:17px;height:17px}
 .mbar{height:4px;border-radius:2px;background:#EADFC9;margin-top:8px;overflow:hidden}.mbar i{display:block;height:100%;background:var(--gold)}
@@ -163,7 +166,7 @@ img,video{display:block}
 .nd:active img{transform:scale(1.05)}
 .nd:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 35%,rgba(8,20,20,.75))}
 .nd b{position:absolute;left:14px;right:12px;bottom:28px;z-index:2;font:700 16.5px/1.2 var(--sans)}
-.nd span{position:absolute;left:14px;bottom:11px;z-index:2;font:500 12px var(--sans);opacity:.85}
+.nd span{position:absolute;left:14px;bottom:11px;z-index:2;font:500 13.5px var(--sans);opacity:.85}
 .nd .new{position:absolute;left:auto;bottom:auto;right:10px;top:10px;z-index:2;font:700 10.5px var(--sans);letter-spacing:.06em;padding:4px 7px;border-radius:6px;background:#fff;color:var(--gold-d);opacity:1}
 
 /* библиотека */
@@ -178,11 +181,11 @@ img,video{display:block}
 .vc{flex:none;width:226px;scroll-snap-align:start}
 .vc .im{position:relative;height:128px;border-radius:18px;overflow:hidden;box-shadow:0 10px 24px rgba(60,45,15,.12);background:#e9e1d1}
 .vc .im img{width:100%;height:100%;object-fit:cover}
-.badge{position:absolute;left:8px;top:8px;z-index:2;display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:99px;font:600 11px/1 var(--sans);color:#fff;background:rgba(10,20,20,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.badge{position:absolute;left:8px;top:8px;z-index:2;display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:99px;font:600 12px/1 var(--sans);color:#fff;background:rgba(10,20,20,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .badge .i{width:12px;height:12px}
 .badge.new{background:#fff;color:var(--gold-d)}
-.vc .tt{font:500 15px/1.28 var(--sans);margin-top:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.vc .ss{font:400 13px var(--sans);color:var(--muted);margin-top:3px}
+.vc .tt{font:500 15.5px/1.28 var(--sans);margin-top:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.vc .ss{font:400 14px var(--sans);color:var(--muted);margin-top:3px}
 .shelf-h{display:flex;justify-content:space-between;align-items:center;padding:26px 20px 12px}
 .shelf-h b{font:700 19px/1.2 var(--sans)}
 .shelf-h a{font:500 15px var(--sans);color:var(--gold);cursor:pointer}
@@ -192,8 +195,11 @@ img,video{display:block}
 .row .im{position:relative;width:92px;height:62px;border-radius:14px;overflow:hidden;flex:none;background:#e9e1d1}
 .row .im img{width:100%;height:100%;object-fit:cover}
 .row .tt{font:500 15.5px/1.28 var(--sans);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.row .ss{font:400 13px var(--sans);color:var(--muted);margin-top:4px}
+.row .ss{font:400 14.5px var(--sans);color:var(--muted);margin-top:4px}
 .empty{padding:28px 18px;text-align:center;color:var(--muted)}
+.lhd{padding:18px 20px 0;font:600 14px var(--sans);color:var(--muted);letter-spacing:.02em}
+.row .im{width:112px!important;height:64px!important}
+.row+.row:before{left:142px!important}
 
 /* таинства */
 .thero{position:relative;margin:16px 14px 0;height:360px;border-radius:30px;overflow:hidden;color:#fff}
@@ -204,6 +210,8 @@ img,video{display:block}
 .thero h2{font:italic 400 34px/1.02 R,serif;margin:8px 0 12px}
 .pill{display:inline-flex;align-items:center;gap:10px;padding:9px 14px;border-radius:99px;font:600 14.5px var(--sans);font-variant-numeric:tabular-nums}
 .pill b{font:italic 400 22px/1 R,serif;color:var(--gold-l)}
+.rub{display:inline-block;font:600 .55em/1 var(--sans);font-style:normal;margin-left:.2em;-webkit-text-fill-color:#D9B36A;color:#D9B36A;background:none;vertical-align:.12em}
+.pop .pr b .rub{-webkit-text-fill-color:var(--gold-d);color:var(--gold-d)}
 .pill .i{width:16px;height:16px;color:var(--gold-l)}
 .doors{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 14px 6px;scrollbar-width:none}
 .dr{flex:none;width:84%;scroll-snap-align:center;border-radius:26px;overflow:hidden;background:var(--card);box-shadow:0 1px 0 var(--line),0 12px 30px rgba(80,60,20,.08);text-align:left}
@@ -213,16 +221,22 @@ img,video{display:block}
 .dr .b{padding:16px 18px 18px}
 .dr .k{font:600 11.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
 .dr h3{font:700 19px/1.2 var(--sans);margin:6px 0 8px}
-.dr p{color:var(--ink2);font-size:15.5px}
+.dr p{color:var(--ink2);font-size:16px}
 .dr .watch{display:flex;align-items:center;gap:8px;margin-top:12px;font:600 15px var(--sans);color:var(--gold-d)}
 .dr .watch .i{width:18px;height:18px}
+.seg{display:flex;gap:6px;margin:0 14px 12px;padding:4px;border-radius:16px;background:#EDE4D3}
+.seg button{flex:1;height:38px;border-radius:12px;font:600 14px var(--sans);color:var(--ink2);text-align:center;transition:.25s}
+.seg button.on{background:#fff;color:var(--gold-d);box-shadow:0 2px 8px rgba(60,45,15,.12)}
+.swipe{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;font:500 14px var(--sans);color:var(--muted)}
+.swipe .i{width:16px;height:16px;color:var(--gold);animation:nudge2 1.6s ease-in-out infinite}
+@keyframes nudge2{50%{transform:translateX(6px)}}
 .ddots{display:flex;justify-content:center;gap:6px;margin-top:10px}
 .ddots i{width:7px;height:7px;border-radius:50%;background:#D9CDB4;transition:.3s}
 .ddots i.on{width:20px;border-radius:4px;background:var(--gold)}
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 14px}
 .tile{padding:16px;display:flex;flex-direction:column;gap:10px}
 .tile .i{width:26px;height:26px;color:var(--gold)}
-.tile b{font:600 15px/1.25 var(--sans)}
+.tile b{font:600 16px/1.25 var(--sans)}
 .how{margin:0 14px;padding:4px 18px}
 .hw{display:flex;gap:14px;padding:14px 0;align-items:center}
 .hw+.hw{border-top:1px solid var(--line)}
@@ -262,16 +276,20 @@ img,video{display:block}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 14px 0}
 .sti{padding:16px 8px;text-align:center}
 .sti b{display:block;font:700 28px/1 var(--sans);color:var(--gold-d);letter-spacing:-.02em}
-.sti span{display:block;font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.25}
+.sti span{display:block;font-size:13.5px;color:var(--muted);margin-top:4px;line-height:1.25}
 .mlist{margin:0 14px;overflow:hidden}
 .mi{display:flex;gap:14px;align-items:center;padding:13px 16px;width:100%;position:relative}
 .mi+.mi:before{content:"";position:absolute;left:68px;right:0;top:0;height:1px;background:var(--line)}
 .mi .ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex:none;color:#fff;font:700 12px var(--sans);letter-spacing:.02em}
 .mi .ic .i{width:21px;height:21px}
 .mi .tt{font:500 16px/1.25 var(--sans)}
-.mi .ss{font:400 13.5px var(--sans);color:var(--muted);margin-top:1px}
+.mi .ss{font:400 14.5px var(--sans);color:var(--muted);margin-top:1px}
 .mi .ar{margin-left:auto;color:#C2B7A2}
 .mi .ar .i{width:16px;height:16px}
+.socs{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin:0 14px;padding:14px 8px}
+.socs button{display:flex;flex-direction:column;align-items:center;gap:8px;padding:8px 0;font:500 13.5px var(--sans);color:var(--ink2);text-align:center}
+.socs .ic{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;color:#fff;font:700 13px var(--sans)}
+.socs .ic .i{width:24px;height:24px}
 .g-gold{background:linear-gradient(145deg,#D2A453,#9A6E2C)}
 .g-tg{background:linear-gradient(145deg,#37AEE2,#1E96C8)}
 .g-yt{background:linear-gradient(145deg,#F2463A,#C8251A)}
@@ -283,7 +301,7 @@ img,video{display:block}
 
 /* таббар */
 .tabbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));width:calc(100% - 28px);max-width:452px;height:66px;border-radius:33px;display:flex;justify-content:space-around;align-items:center;z-index:40;padding:0 6px;transition:transform .4s var(--ease)}
-.tb{flex:1;height:52px;border-radius:26px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font:500 11px var(--sans);color:#8B8E87;transition:.3s var(--ease)}
+.tb{flex:1;height:52px;border-radius:26px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font:500 12px var(--sans);color:#8B8E87;transition:.3s var(--ease)}
 .tb .i{width:24px;height:24px}
 .tb.on{color:var(--gold-d);background:rgba(175,129,57,.12)}
 body.sheet-open .tabbar{transform:translate(-50%,160%)}
@@ -384,13 +402,10 @@ body.sheet-open .fb{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
 <section class="screen on" id="home">
  <div class="hero"><video src="v/hero-v.mp4" poster="v/hero-v.jpg" muted loop playsinline autoplay></video>
   <div class="tp2"><div class="brand">Миры Рая</div><button class="me" data-tab="me" id="meava">Р</button></div>
-  <div class="gr"><div class="d" id="date"></div><h1 id="hello">Добрый день</h1></div></div>
- <div class="wish glass" id="wish"></div>
- <div class="h2"><b>Для тебя сейчас</b></div>
+  <div class="gr"><div class="d" id="date"></div><h1 id="hello">Добрый день</h1><div class="hq" id="wish"></div></div></div>
  <div class="step rise" id="step"></div>
  <div id="livewrap"><div class="h2"><b>Ближайший эфир</b><a data-act="sched">Расписание</a></div>
  <div class="live card" id="live"></div></div>
- <div id="contwrap"><div class="h2"><b>Продолжить</b></div><div id="cont"></div></div>
  <div class="h2"><b>Что тебе сейчас нужно?</b></div>
  <div class="needs" id="needs"></div>
 </section>
@@ -399,7 +414,7 @@ body.sheet-open .fb{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
 <section class="screen" id="lib">
  <button class="backbtn" data-tab="home"><svg class="i"><use href="#p-caret-right"/></svg>Главная</button>
  <div class="h1">Библиотека</div>
- <div class="lead">Видео Каэммы по твоему запросу. Новые сверху.</div>
+ <div class="lead">Новые видео Каэммы и плейлисты по темам.</div>
  <label class="search"><svg class="i"><use href="#p-magnifying-glass"/></svg><input id="q" type="search" placeholder="Найти видео" autocomplete="off"></label>
  <div class="topics" id="topics"></div>
  <div id="list"></div>
@@ -414,9 +429,10 @@ body.sheet-open .fb{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
  <div id="sell">
   <button class="rowc card" style="margin-top:12px" data-act="promo"><span class="im"><img src="v/promo-cover.jpg" alt=""></span><span><span class="tt" style="display:block">Начни с промо-урока</span><span class="ss" style="display:block">5 минут · моя история и что за тремя дверями</span></span><span class="pl"><svg class="i"><use href="#p-play"/></svg></span></button>
  </div>
- <div class="h2"><b id="dtitle">Три двери</b><a id="dhint">листай</a></div>
+ <div class="h2"><b id="dtitle">Три двери</b></div>
+ <div class="seg" id="seg"><button class="on" data-door="0">I · Сила</button><button data-door="1">II · Жизнь</button><button data-door="2">III · Двойник</button></div>
  <div class="doors" id="doors"></div>
- <div class="ddots" id="ddots"><i class="on"></i><i></i><i></i></div>
+ <div class="swipe" id="swipe">Листай карточки вправо <svg class="i"><use href="#p-arrow-right"/></svg></div>
  <div id="sell2">
   <div class="h2"><b>Что ты получишь</b></div>
   <div class="tiles">
@@ -455,19 +471,19 @@ body.sheet-open .fb{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
  <div id="minewrap"></div>
  <div id="favsec"><div class="h2"><b>Сохранённые</b></div><div class="car" id="favs"></div></div>
  <div id="recsec"><div class="h2"><b>Недавно смотрела</b></div><div class="car" id="recent"></div></div>
- <div class="h2"><b>Задать вопрос</b></div>
+ <div class="h2"><b>На связи</b></div>
  <div class="mlist card">
   <button class="mi" data-act="ask"><span class="ic g-gold"><svg class="i"><use href="#p-chat-circle"/></svg></span><div><div class="tt">Написать в поддержку</div><div class="ss">Ответим в Telegram</div></div><span class="ar"><svg class="i"><use href="#p-caret-right"/></svg></span></button>
   <button class="mi" data-act="reviews"><span class="ic g-ink"><svg class="i"><use href="#p-chats-circle"/></svg></span><div><div class="tt">Отзывы женщин</div><div class="ss">Канал с отзывами</div></div><span class="ar"><svg class="i"><use href="#p-caret-right"/></svg></span></button>
  </div>
  <div class="h2"><b>Каэмма в соцсетях</b></div>
- <div class="mlist card">
-  <button class="mi" data-url="tg:https://t.me/Kaemma144"><span class="ic g-tg"><svg class="i"><use href="#p-telegram-logo"/></svg></span><div><div class="tt">Telegram-канал</div><div class="ss">Гимнастика и эфиры</div></div><span class="ar"><svg class="i"><use href="#p-caret-right"/></svg></span></button>
-  <button class="mi" data-url="https://www.youtube.com/@Kaemma144"><span class="ic g-yt"><svg class="i"><use href="#p-youtube-logo"/></svg></span><div><div class="tt">YouTube</div><div class="ss">Инициации и прямые эфиры</div></div><span class="ar"><svg class="i"><use href="#p-caret-right"/></svg></span></button>
-  <button class="mi" data-url="https://www.instagram.com/kaemma_144"><span class="ic g-ig"><svg class="i"><use href="#p-instagram-logo"/></svg></span><div><div class="tt">Instagram</div><div class="ss">@kaemma_144</div></div><span class="ar"><svg class="i"><use href="#p-caret-right"/></svg></span></button>
-  <button class="mi" data-url="https://www.tiktok.com/@kaemma144"><span class="ic g-tt">TT</span><div><div class="tt">TikTok</div><div class="ss">@kaemma144</div></div><span class="ar"><svg class="i"><use href="#p-caret-right"/></svg></span></button>
-  <button class="mi" data-url="https://vk.com/dnkkod"><span class="ic g-vk">VK</span><div><div class="tt">ВКонтакте</div><div class="ss">ДНК Код Красоты и Молодости</div></div><span class="ar"><svg class="i"><use href="#p-caret-right"/></svg></span></button>
-  <button class="mi" data-url="https://max.ru/join/arQuS-9YRsUogasTjPlt54jMtg64TuOHcoyO5lBOxD4"><span class="ic g-max">MAX</span><div><div class="tt">MAX</div><div class="ss">Канал Каэммы</div></div><span class="ar"><svg class="i"><use href="#p-caret-right"/></svg></span></button>
+ <div class="socs card">
+  <button data-url="tg:https://t.me/Kaemma144"><span class="ic g-tg"><svg class="i"><use href="#p-telegram-logo"/></svg></span>Telegram</button>
+  <button data-url="https://www.youtube.com/@Kaemma144"><span class="ic g-yt"><svg class="i"><use href="#p-youtube-logo"/></svg></span>YouTube</button>
+  <button data-url="https://www.instagram.com/kaemma_144"><span class="ic g-ig"><svg class="i"><use href="#p-instagram-logo"/></svg></span>Instagram</button>
+  <button data-url="https://www.tiktok.com/@kaemma144"><span class="ic g-tt">TT</span>TikTok</button>
+  <button data-url="https://vk.com/dnkkod"><span class="ic g-vk">VK</span>ВКонтакте</button>
+  <button data-url="https://max.ru/join/arQuS-9YRsUogasTjPlt54jMtg64TuOHcoyO5lBOxD4"><span class="ic g-max">MAX</span>MAX</button>
  </div>
 </section>
 
@@ -582,16 +598,16 @@ function C(id,t,m,img){return {k:'t',id:id,t:t,m:m,img:img||kp()}}
 var STREAMS=[Y('zDTOFKjkopI','Утренняя омолаживающая гимнастика · Тело Света','Эфир · 19 октября',{x:1,n:1}),Y('qTW-7ZO5v6A','Утренняя омолаживающая гимнастика · Тело Света','Эфир · 12 октября',{x:1,n:1}),Y('5s4JSj5nJHk','Утренняя омолаживающая гимнастика · Тело Света','Эфир · 5 октября',{x:1})];
 var GYM=[C(1310,'Тело Света. Утренняя Китайская Омолаживающая Гимнастика','Канал · 17 августа · 47 мин','v/tg/1310.jpg'),C(1283,'Китайская Омолаживающая Гимнастика с Каэммой','Канал · 3 августа · 44 мин'),C(1186,'Китайская гимнастика. Почему желания остаются нереализованными','Канал · 4 мая · 45 мин'),C(1176,'Утренняя гимнастика. Выйти из зажатости и вернуться в ощущение опоры','Канал · 27 апреля · 62 мин'),C(1138,'Гимнастика. Сегодня было сильное поле','Канал · 13 апреля · 51 мин'),C(1090,'Комплекс китайской гимнастики для пробуждения тела','Канал · 16 марта · 59 мин'),C(1078,'Храм Тела. Китайская омолаживающая гимнастика','Канал · 9 марта · 50 мин'),C(1065,'Храм Тела. Комплекс, с которого начался мой переход','Канал · 2 марта · 60 мин'),C(843,'Омолаживающая гимнастика: переподключение тела и сознания','Канал · 29.09.2025 · 58 мин'),C(746,'Гимнастика Пробуждённого Тела','Канал · 28.07.2025 · 53 мин')];
 var T=[
- {id:'telo',t:'Тело и молодость',img:'v/n-telo.jpg',v:[Y('5coH5Stc4eU','Новое тело уже создано. Что не позволяет в него перейти?','YouTube · 2 месяца назад',{n:1}),Y('3RWs6Y1AWk8','Фасции: новая запись. Перепиши тело изнутри','YouTube · 5 месяцев назад'),Y('W4YNwFGNYVA','Мне Можно Быть. Инициация Опоры и Формы Тела','YouTube · 8 месяцев назад'),Y('R2SILN9aZCg','«Тело - Храм». Основа Женской Устойчивости','YouTube · 8 месяцев назад'),Y('8TaRFZbwYfY','Тело, в котором хочется жить','YouTube · 9 месяцев назад'),Y('IP-GsZEXEzI','Точка, где начинается омоложение тела','YouTube · 9 месяцев назад'),Y('I18t-FJUOYM','Ваше тело начнёт стройнеть и молодеть, когда вы сделаете вот это','YouTube · 10 месяцев назад'),Y('IDtoWgpfJP0','Инициация «Вечно Молодое Красивое Тело»','YouTube · 99 тыс. просмотров'),Y('Arupb8Pd8Ww','Сеанс Световой Космической Хирургии','YouTube · 112 тыс. просмотров'),Y('qCt8vUr3bLU','Город Света. Грааль Омоложения','YouTube · 69 тыс. просмотров'),Y('6glXwA5t3gQ','Омолаживающая Плазма Миров Рая','YouTube · 40 тыс. просмотров')]},
+ {id:'init',t:'Инициации',img:'v/n-init.jpg',v:[Y('HCLF4M7uSgc','Семь спиралей Храма ЭльЛита. Коронация Тела Света','YouTube · 10 октября',{n:1}),Y('SrBfO29uPHQ','Инициация с Каэммой в прямом эфире','Эфир · 3 октября',{x:1,n:1}),Y('acvlCO8pm2Q','Инициация «Частота Блаженства и Наслаждения»','YouTube · 2 недели назад',{n:1}),Y('-rLPDVdQG8o','Инициация «Тело Наслаждения». Миры Рая уже здесь','YouTube · 3 недели назад'),Y('a3giAANKF0I','Россыпь Бриллиантов. Твоя Новая Реальность','YouTube · 11 месяцев назад'),Y('UInQQ4YCLNg','Инициация «Квантовый скачок в Совершенную Реальность»','YouTube · 12 тыс. просмотров'),Y('SXHcOrO782A','Инициация Счастливой Жизни','YouTube · 33 тыс. просмотров')]},
  {id:'love',t:'Любовь и мужчина',img:'v/n-love.jpg',v:[Y('QVP7WOSoACg','Трон Женщины и Трон Мужчины. Как впустить своего мужчину','YouTube · 4 месяца назад'),Y('iSiAizJZyno','Женский Магнетизм. Расширение Сосуда','YouTube · 7 месяцев назад'),Y('VSAj4yA9-eI','Внутренний мужчина. Возвращение опоры','YouTube · 9 месяцев назад'),Y('35MQoPVRSRE','Любовь сладкая, как мёд','YouTube · 10 месяцев назад'),Y('WJNmbVE9L-I','Обесценивание. Проклятие одиночества от мамы и папы','YouTube · 11 месяцев назад'),Y('1KQSnt5_ZAo','Практика «Магия Любви»','YouTube · 11 месяцев назад'),C(786,'Код Сердца и Красавица Душа','Канал · 25.08.2025 · 64 мин'),Y('ZtGHUdDnNgc','Выход из всех Кармических Отношений и Встреча с Подлинным Мужчиной','YouTube · 402 тыс. просмотров'),Y('JXe9HxwEQ-8','Практика «Я Ценная. Я Нужная. Я Важная»','YouTube · 51 тыс. просмотров'),Y('05SXQQ98WS4','Портал Женской Сверхсилы. Магнетизм и Сексуальность','YouTube · 1 год назад')]},
+ {id:'telo',t:'Тело и молодость',img:'v/n-telo.jpg',v:[Y('5coH5Stc4eU','Новое тело уже создано. Что не позволяет в него перейти?','YouTube · 2 месяца назад',{n:1}),Y('3RWs6Y1AWk8','Фасции: новая запись. Перепиши тело изнутри','YouTube · 5 месяцев назад'),Y('W4YNwFGNYVA','Мне Можно Быть. Инициация Опоры и Формы Тела','YouTube · 8 месяцев назад'),Y('R2SILN9aZCg','«Тело - Храм». Основа Женской Устойчивости','YouTube · 8 месяцев назад'),Y('8TaRFZbwYfY','Тело, в котором хочется жить','YouTube · 9 месяцев назад'),Y('IP-GsZEXEzI','Точка, где начинается омоложение тела','YouTube · 9 месяцев назад'),Y('I18t-FJUOYM','Ваше тело начнёт стройнеть и молодеть, когда вы сделаете вот это','YouTube · 10 месяцев назад'),Y('IDtoWgpfJP0','Инициация «Вечно Молодое Красивое Тело»','YouTube · 99 тыс. просмотров'),Y('Arupb8Pd8Ww','Сеанс Световой Космической Хирургии','YouTube · 112 тыс. просмотров'),Y('qCt8vUr3bLU','Город Света. Грааль Омоложения','YouTube · 69 тыс. просмотров'),Y('6glXwA5t3gQ','Омолаживающая Плазма Миров Рая','YouTube · 40 тыс. просмотров')]},
  {id:'money',t:'Деньги',img:'v/n-money.jpg',v:[Y('UPP_mm9xHGI','Активация Денежного Потока и Новой Судьбы','YouTube · 4 месяца назад'),Y('ZuRlI2nkNyU','Квантовый скачок из Коридора Ожидания в жизнь, где деньги и масштаб','YouTube · 5 месяцев назад'),Y('oOPO52cpB-M','Квантовый Переход в Деньги. Дыхательная Практика','YouTube · 5 месяцев назад'),Y('ckSCPYNrXUc','Принятие из Высших Сфер Роскоши, Изобилия и Денег','YouTube · 90 тыс. просмотров'),Y('Lxo22LtKos4','Настройка на Исполнение Желаний','YouTube · 38 тыс. просмотров')]},
  {id:'calm',t:'Спокойствие',img:'v/n-calm.jpg',v:[Y('hE_4wORrefo','Почему вам постоянно кажется, что чего-то не хватает','YouTube · 3 месяца назад'),Y('FraAgrJeZtE','Почему реальность не меняется, даже если вы очень стараетесь','YouTube · 3 месяца назад'),Y('kPLzfvNboVY','Мастер-Клетка. Кто на самом деле управляет твоей жизнью','YouTube · 6 месяцев назад'),Y('7olj2RJcMFo','Храм Безвременья. Инициация снятия стресса, тревоги и спешки','YouTube · 7 месяцев назад'),Y('X-9-5PlZpps','Нервная система женщины. Магнетизм и Восстановление Энергии','YouTube · 7 месяцев назад'),Y('QbMNl8NygVg','«Владычица Нервной Системы». Инициация для восстановления','YouTube · 11 месяцев назад'),C(1353,'Кто сегодня ведёт: ум или Высшее Я','Канал · 1 сентября · 8 мин'),C(1165,'Мечта стала реальностью, но тело не выдержало','Канал · 22 апреля · 47 мин'),C(1100,'«Неужели это правда моя жизнь?»','Канал · 23 марта · 29 мин')]},
- {id:'utro',t:'Утро и гимнастика',img:'v/n-utro.jpg',v:STREAMS.concat(GYM,[Y('Tx8Gg93nuYM','Омолаживающая Китайская Гимнастика','YouTube · 29 тыс. просмотров'),Y('dcn-xak4bUg','Утро Сверхчеловека','YouTube · 84 тыс. просмотров')])},
- {id:'init',t:'Инициации',img:'v/n-init.jpg',v:[Y('HCLF4M7uSgc','Семь спиралей Храма ЭльЛита. Коронация Тела Света','YouTube · 10 октября',{n:1}),Y('SrBfO29uPHQ','Инициация с Каэммой в прямом эфире','Эфир · 3 октября',{x:1,n:1}),Y('acvlCO8pm2Q','Инициация «Частота Блаженства и Наслаждения»','YouTube · 2 недели назад',{n:1}),Y('-rLPDVdQG8o','Инициация «Тело Наслаждения». Миры Рая уже здесь','YouTube · 3 недели назад'),Y('a3giAANKF0I','Россыпь Бриллиантов. Твоя Новая Реальность','YouTube · 11 месяцев назад'),Y('UInQQ4YCLNg','Инициация «Квантовый скачок в Совершенную Реальность»','YouTube · 12 тыс. просмотров'),Y('SXHcOrO782A','Инициация Счастливой Жизни','YouTube · 33 тыс. просмотров')]}
+ {id:'utro',t:'Утро и гимнастика',img:'v/n-utro.jpg',v:STREAMS.concat(GYM,[Y('Tx8Gg93nuYM','Омолаживающая Китайская Гимнастика','YouTube · 29 тыс. просмотров'),Y('dcn-xak4bUg','Утро Сверхчеловека','YouTube · 84 тыс. просмотров')])}
 ];
 var BYKEY={};T.forEach(function(t){t.v.forEach(function(v){BYKEY[v.k+':'+v.id]=v})});
 var PDAY=STREAMS.concat(GYM);
-var NEWEST=['y:zDTOFKjkopI','y:HCLF4M7uSgc','y:qTW-7ZO5v6A','y:SrBfO29uPHQ','y:acvlCO8pm2Q','y:5s4JSj5nJHk','y:-rLPDVdQG8o','y:5coH5Stc4eU'];
+var NEWEST=['zDTOFKjkopI','qTW-7ZO5v6A','HCLF4M7uSgc','5s4JSj5nJHk','acvlCO8pm2Q','SrBfO29uPHQ','-rLPDVdQG8o','5coH5Stc4eU','hE_4wORrefo','FraAgrJeZtE','QVP7WOSoACg','UPP_mm9xHGI','3RWs6Y1AWk8','ZuRlI2nkNyU','oOPO52cpB-M','kPLzfvNboVY','7olj2RJcMFo','iSiAizJZyno','X-9-5PlZpps','W4YNwFGNYVA','R2SILN9aZCg','8TaRFZbwYfY','VSAj4yA9-eI','IP-GsZEXEzI'].map(function(id){return 'y:'+id});
 var DOORS=[{n:'I',v:'v/t1h.mp4',p:'v/t1h.jpg',k:'Таинство I · Первичный Код',h:'Забрать свою силу обратно',t:'Ты увидишь пирамиду, в которой живёт ум, и заберёшь свои части домой: «Сила моя ко мне. Деньги мои ко мне. Любовь моя ко мне».'},{n:'II',v:'v/t2h.mp4',p:'v/t2h.jpg',k:'Таинство II · Выкуп Жизни',h:'Жить так, как хочешь ты',t:'Красота, новизна и один вопрос «а как бы я хотела?». Ничего придумывать не надо, этот вопрос и есть тот мир.'},{n:'III',v:'v/t3h.mp4',p:'v/t3h.jpg',k:'Таинство III · Совершенный Двойник',h:'Перестать верить отражениям',t:'Вокруг около пятидесяти зеркал. Здесь ты получишь выбор и простой алгоритм на момент, когда сжалось.'}];
 var REMIND='https://t.me/KaemmaBot?start=dl-1792409259577';
 var Q=['Это всего лишь кадр, и он никак не решает за всю мою остальную жизнь','Сила моя ко мне. Деньги мои ко мне. Любовь моя ко мне','А как бы я хотела?','Вдох: я вспомнила себя. Выдох: я никуда не спешу','Женщина женщине - Дом','Тебе осталось сделать всего один шаг, и я с нетерпением жду тебя за первой дверью'];
@@ -610,6 +626,7 @@ function plural(n,a,b,c){n=Math.abs(n)%100;var m=n%10;return n>10&&n<20?c:m>1&&m
 var TT=72*3600*1000;
 function left(){return (+ST.tt_start||Date.now())+TT-Date.now()}
 function priceTxt(){return left()>0?'3 000':'5 000'}
+function rub(){return priceTxt()+'<span class="rub">₽</span>'}
 function leftTxt(l){var d=Math.floor(l/864e5),h=Math.floor(l%864e5/36e5),m=Math.floor(l%36e5/6e4),s=Math.floor(l%6e4/1e3);return (d?d+' д ':'')+String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')}
 function track(k){var a=J('opened');var i=a.indexOf(k);if(i>=0)a.splice(i,1);a.unshift(k);save('opened',JSON.stringify(a.slice(0,60)));if(BYKEY[k]&&BYKEY[k].x)save('efir',1)}
 /* путь: 0 подарок, 1 эфир, 2 промо-урок, 3 Таинства, 4 купила */
@@ -631,7 +648,7 @@ function renderHome(){
  var h=new Date().getHours(),g=h<5?'Доброй ночи':h<12?'Доброе утро':h<18?'Добрый день':'Добрый вечер';
  $('hello').innerHTML=esc(g)+(name?',<br>'+esc(name):'');
  $('date').textContent=new Date().toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'});
- $('wish').innerHTML='<img src="v/k.jpg" alt=""><div><q>'+esc(Q[doy%Q.length])+'</q><span>Каэмма · мысль дня</span></div>';
+ $('wish').innerHTML='«'+esc(Q[doy%Q.length])+'»<span>Каэмма · мысль дня</span>';
  var s=stage(),L=['Подарок','Эфир','Промо-урок','Таинства'],IC=['gift','calendar-blank','play','sparkle'];
  var lt=nextLive(),X,rem=ST.remind==='1';
  if(s===0){var pos=+ST.gift_pos||0;X={m:'<video src="v/gift-lotus.mp4" poster="v/gift-lotus.jpg" muted loop playsinline autoplay></video>',k:'Подарок для тебя',h:'Первая Инициация',p:'Около часа, моим голосом. В ней мы собираем тебя целой.',c:'<button class="cta" data-act="gift">'+I('play')+(pos>30?'Продолжить с '+fmt(pos):'Слушать подарок')+'</button>'+(pos>30?'<div class="pbar"><i style="width:'+Math.min(100,pos/GIFT_LEN*100)+'%"></i></div>':'')}}
@@ -643,23 +660,19 @@ function renderHome(){
  $('livewrap').style.display=s===1?'none':'';
  var d=new Date(lt+3*36e5);
  $('live').innerHTML='<div class="cal"><span>'+['вс','пн','вт','ср','чт','пт','сб'][d.getUTCDay()]+'</span><b>'+d.getUTCDate()+'</b></div><div><div class="tt">Утренняя гимнастика</div><div class="ss"><span class="dotlive"></span>11:11 мск · <span id="ltx">'+liveTxt(lt)+'</span></div></div><button class="rem'+(rem?' on':'')+'" data-act="remind" aria-label="Напомнить">'+I('bell')+'</button>';
- var cont='',pos2=+ST.gift_pos||0;
- if(ST.gift!=='1'&&pos2>30&&s!==0)cont+='<button class="rowc card" data-act="gift"><span class="im"><img src="v/gift-lotus.jpg" alt=""></span><span style="flex:1"><span class="tt" style="display:block">Первая Инициация</span><span class="ss" style="display:block">Осталось '+Math.max(1,Math.round((GIFT_LEN-pos2)/60))+' мин</span><span class="mbar" style="display:block"><i style="width:'+Math.min(100,pos2/GIFT_LEN*100)+'%"></i></span></span><span class="pl">'+I('play')+'</span></button>';
- var last=J('opened').map(function(k){return BYKEY[k]}).filter(Boolean)[0];
- if(last)cont+='<button class="rowc card" style="margin-top:10px" data-v="'+key(last)+'"><span class="im"><img src="'+last.img+'" alt=""></span><span><span class="tt" style="display:block">'+esc(last.t)+'</span><span class="ss" style="display:block">Ты смотрела недавно</span></span><span class="pl">'+I('play')+'</span></button>';
- $('contwrap').style.display=cont?'':'none';$('cont').innerHTML=cont;
  $('needs').innerHTML=T.map(function(t){var nw=t.v.some(function(v){return v.n});return '<button class="nd" data-topic="'+t.id+'"><img src="'+t.img+'" alt="" loading="lazy"><b>'+t.t+'</b><span>'+t.v.length+' видео</span>'+(nw?'<span class="new">НОВОЕ</span>':'')+'</button>'}).join('');
 }
 function renderSched(){var lt=nextLive(),out='';for(var i=0;i<4;i++){var t=lt+i*7*864e5,d=new Date(t+3*36e5);out+='<div class="ev"><div class="day"><b>'+d.getUTCDate()+'</b><span>'+['вс','пн','вт','ср','чт','пт','сб'][d.getUTCDay()]+'</span></div><div><div class="tt">Утренняя омолаживающая гимнастика</div><div class="ss">11:11 · прямой эфир на YouTube · для всех</div></div></div>'}out+='<div class="ev"><div class="day"><b>·</b><span>скоро</span></div><div><div class="tt">Вечерний эфир <span class="soon">скоро</span></div><div class="ss">день и время объявим</div></div></div>';$('schedopen').innerHTML=out}
 
 /* ---------- БИБЛИОТЕКА ---------- */
-var curT='all';
-function renderTopics(){$('topics').innerHTML='<button class="tp'+(curT==='all'?' on':'')+'" data-topic="all">Все</button>'+T.map(function(t){return '<button class="tp'+(curT===t.id?' on':'')+'" data-topic="'+t.id+'">'+t.t+'</button>'}).join('')}
+var curT='new';
+function renderTopics(){$('topics').innerHTML='<button class="tp'+(curT==='new'?' on':'')+'" data-topic="new">Новые видео</button>'+T.map(function(t){return '<button class="tp'+(curT===t.id?' on':'')+'" data-topic="'+t.id+'">'+t.t+'</button>'}).join('');var on=$('topics').querySelector('.on');if(on&&on.scrollIntoView)on.scrollIntoView({inline:'center',block:'nearest'})}
 function renderList(){
- var q=($('q').value||'').trim().toLowerCase(),html='';
- if(curT==='all'&&!q){$('list').innerHTML='<div class="shelf-h"><b>Новое</b></div><div class="car">'+NEWEST.map(function(k){return BYKEY[k]}).filter(Boolean).map(cardHTML).join('')+'</div>'+T.map(function(t){return '<div class="shelf-h"><b>'+t.t+'</b><a data-topic="'+t.id+'">Все '+t.v.length+'</a></div><div class="car">'+t.v.slice(0,10).map(cardHTML).join('')+'</div>'}).join('');return}
- T.forEach(function(t){if(curT!=='all'&&curT!==t.id)return;var vs=t.v.filter(function(v){return !q||v.t.toLowerCase().indexOf(q)>=0});if(!vs.length)return;html+=(curT==='all'||q?'<div class="shelf-h" style="padding:18px 18px 4px"><b style="font-size:21px">'+t.t+'</b></div>':'')+vs.map(rowHTML).join('')});
- $('list').innerHTML='<div class="list card">'+(html||'<div class="empty">Ничего не нашлось. Попробуй другое слово.</div>')+'</div>';
+ var q=($('q').value||'').trim().toLowerCase(),vs,head='';
+ if(q){var seen={};vs=[];T.forEach(function(t){t.v.forEach(function(v){var k=key(v);if(!seen[k]&&v.t.toLowerCase().indexOf(q)>=0){seen[k]=1;vs.push(v)}})});head='Найдено: '+vs.length}
+ else if(curT==='new'){vs=NEWEST.map(function(k){return BYKEY[k]}).filter(Boolean);head='Последние видео на YouTube'}
+ else{var t=T.filter(function(x){return x.id===curT})[0];vs=t?t.v:[];head=t?t.t+' · '+vs.length+' видео':''}
+ $('list').innerHTML='<div class="lhd">'+head+'</div><div class="list card">'+(vs.length?vs.map(rowHTML).join(''):'<div class="empty">Ничего не нашлось. Попробуй другое слово.</div>')+'</div>';
 }
 $('q').addEventListener('input',renderList);
 
@@ -668,22 +681,24 @@ function renderTainstva(){
  var b=ST.bought==='1',l=left();
  $('ttitle').textContent=b?'Мои Таинства':'Три Таинства';
  $('tk').textContent=b?'Доступ 3 месяца':'В записи · доступ 3 месяца';
- $('tpill').innerHTML=b?I('check')+'Ты внутри':'<b>'+priceTxt()+' ₽</b>'+(l>0?I('hourglass-medium')+'<span id="tpt">ещё '+leftTxt(l)+'</span>':'доступ 3 месяца');
+ $('tpill').innerHTML=b?I('check')+'Ты внутри':'<b>'+rub()+'</b>'+(l>0?I('hourglass-medium')+'<span id="tpt">ещё '+leftTxt(l)+'</span>':'доступ 3 месяца');
  $('sell').style.display=b?'none':'';$('sell2').style.display=b?'none':'';
- $('dtitle').textContent=b?'Твои двери':'Три двери';$('dhint').textContent='листай';
+ $('dtitle').textContent=b?'Твои двери':'Три двери';
  $('doors').innerHTML=DOORS.map(function(d,i){return '<button class="dr"'+(b?' data-lesson="'+i+'"':'')+'><div class="m"><video data-src="'+d.v+'" poster="'+d.p+'" muted loop playsinline></video><div class="n">'+d.n+'</div></div><div class="b"><div class="k">'+d.k+'</div><h3>'+d.h+'</h3><p>'+d.t+'</p>'+(b?'<div class="watch">'+I('play-circle')+'Смотреть урок</div>':'')+'</div></button>'}).join('');
- observeDoors();
+ observeDoors();peekDoors();
  if(b){$('mine').innerHTML='<div class="h2"><b>Ещё для тебя</b></div><div class="mlist card"><button class="mi" data-act="cabinet"><span class="ic g-gold">'+I('key')+'</span><div><div class="tt">Кабинет GetCourse</div><div class="ss">Все уроки и Инициации</div></div><span class="ar">'+I('caret-right')+'</span></button><button class="mi" data-act="ask"><span class="ic g-ink">'+I('chat-circle')+'</span><div><div class="tt">Вопрос по Таинствам</div><div class="ss">Поддержка ответит в Telegram</div></div><span class="ar">'+I('caret-right')+'</span></button></div>';return}
  $('mine').innerHTML='';
- $('price').innerHTML='<div class="k">Персональная цена</div><div class="v"><b>'+priceTxt()+' ₽</b>'+(l>0?'<s>5 000 ₽</s>':'')+'</div>'+(l>0?'<div class="timer">'+I('hourglass-medium')+'<span id="tmr">Цена держится ещё '+leftTxt(l)+'</span></div>':'')+'<div class="note">Плюс кабинет на GetCourse, доступ 3 месяца. Оплата картой на защищённой странице.</div>';
+ $('price').innerHTML='<div class="k">Персональная цена</div><div class="v"><b>'+rub()+'</b>'+(l>0?'<s>5 000 ₽</s>':'')+'</div>'+(l>0?'<div class="timer">'+I('hourglass-medium')+'<span id="tmr">Цена держится ещё '+leftTxt(l)+'</span></div>':'')+'<div class="note">Плюс кабинет на GetCourse, доступ 3 месяца. Оплата картой на защищённой странице.</div>';
 }
 $('revs').innerHTML=REV.map(function(r){return '<div class="rv card"><p>«'+esc(r[0])+'»</p><b>'+esc(r[1])+'</b></div>'}).join('');
-$('doors').addEventListener('scroll',function(){var d=$('doors'),w=d.firstElementChild?d.firstElementChild.offsetWidth+12:1,i=Math.round(d.scrollLeft/w);[].forEach.call($('ddots').children,function(x,j){x.classList.toggle('on',j===i)})},{passive:true});
+$('doors').addEventListener('scroll',function(){var d=$('doors'),w=d.firstElementChild?d.firstElementChild.offsetWidth+12:1,i=Math.round(d.scrollLeft/w);[].forEach.call($('seg').children,function(x,j){x.classList.toggle('on',j===i)});if(i>0)$('swipe').style.visibility='hidden'},{passive:true});
+function goDoor(i){var d=$('doors'),c=d.children[i];if(c)d.scrollTo({left:c.offsetLeft-14,behavior:'smooth'})}
+function peekDoors(){if(ST.peek)return;var d=$('doors');setTimeout(function(){d.scrollTo({left:90,behavior:'smooth'});setTimeout(function(){d.scrollTo({left:0,behavior:'smooth'})},700)},900);save('peek',1)}
 var io='IntersectionObserver' in window?new IntersectionObserver(function(es){es.forEach(function(e){var v=e.target;if(e.isIntersecting){if(!v.src&&v.dataset.src)v.src=v.dataset.src;v.play().catch(function(){})}else v.pause()})},{threshold:.35}):null;
 function observeDoors(){if(io)document.querySelectorAll('.dr video').forEach(function(v){io.observe(v)})}
 
 /* окно покупки для закрытой двери */
-function openPop(i){var d=DOORS[i],l=left();$('popc').innerHTML='<div class="im"><img src="'+d.p+'" alt=""><u>'+I('lock-simple')+'</u></div><div class="k">'+d.k+'</div><h3>'+d.h+'</h3><p>'+d.t+'</p><p style="margin-top:8px">Эта дверь откроется в Трёх Таинствах вместе с Инициацией.</p><div class="pr"><b>'+priceTxt()+' ₽</b>'+(l>0?'<span>· цена держится ещё '+leftTxt(l).replace(/:\d\d$/,'')+'</span>':'')+'</div><button class="cta gold" data-act="buy">'+I('sparkle')+'Войти в Три Таинства</button><button class="ghost" data-act="popmore">Посмотреть, что внутри</button>';$('pop').classList.add('on');hap()}
+function openPop(i){var d=DOORS[i],l=left();$('popc').innerHTML='<div class="im"><img src="'+d.p+'" alt=""><u>'+I('lock-simple')+'</u></div><div class="k">'+d.k+'</div><h3>'+d.h+'</h3><p>'+d.t+'</p><p style="margin-top:8px">Эта дверь откроется в Трёх Таинствах вместе с Инициацией.</p><div class="pr"><b>'+rub()+'</b>'+(l>0?'<span>· цена держится ещё '+leftTxt(l).replace(/:\d\d$/,'')+'</span>':'')+'</div><button class="cta gold" data-act="buy">'+I('sparkle')+'Войти в Три Таинства</button><button class="ghost" data-act="popmore">Посмотреть, что внутри</button>';$('pop').classList.add('on');hap()}
 function closePop(){$('pop').classList.remove('on')}
 function renderHalls(){var h=ST.hall;$('halls').innerHTML=HALLS.map(function(x,i){return '<button class="hl'+(h==String(i)?' on':'')+'" data-hall="'+i+'">'+x[0]+'</button>'}).join('');var a=$('hans');if(h!=null&&HALLS[+h]){a.innerHTML=esc(HALLS[+h][1])+'<small>Каэмма</small>';a.classList.add('on')}else a.classList.remove('on')}
 
@@ -694,7 +709,8 @@ function renderMe(){
  $('prof').innerHTML='<div class="avw"><svg viewBox="0 0 76 76"><circle cx="38" cy="38" r="35" stroke="#EADFC9"/><circle cx="38" cy="38" r="35" stroke="#B0823A" stroke-linecap="round" stroke-dasharray="220" stroke-dashoffset="'+(220*(1-Math.min(s,4)/4))+'"/></svg>'+ava+'</div><div><b>'+esc(nm)+'</b><span>'+(s>=4?'Три Таинства открыты':'В Мирах Рая с '+new Date(+ST.first||Date.now()).toLocaleDateString('ru-RU',{day:'numeric',month:'long'}))+'</span></div>';
  var days=Math.max(1,Math.floor((Date.now()-(+ST.first||Date.now()))/864e5)+1),op=J('opened').length,fv=J('fav').length;
  $('stats').innerHTML='<div class="sti card"><b>'+days+'</b><span>'+plural(days,'день','дня','дней')+'<br>в Мирах Рая</span></div><div class="sti card"><b>'+op+'</b><span>'+plural(op,'практика','практики','практик')+'<br>открыто</span></div><div class="sti card"><b>'+fv+'</b><span>сохранено</span></div>';
- var extra='<div class="h2"><b>Мои напоминания</b></div><div class="mlist card"><button class="mi" data-act="remind"><span class="ic g-gold">'+I('bell')+'</span><div><div class="tt">Гимнастика по понедельникам</div><div class="ss">'+(ST.remind==='1'?'Включено · бот напишет за час':'Нажми, и бот напомнит за час')+'</div></div><span class="ar">'+I('caret-right')+'</span></button></div>'+(ST.hall!=null&&HALLS[+ST.hall]?'<div class="h2"><b>Мой отклик на подарок</b></div><div class="card" style="margin:0 14px;padding:18px"><div style="font:600 12px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--gold)">'+HALLS[+ST.hall][0]+'</div><p style="margin-top:8px;font:italic 400 18px/1.35 R,serif;color:#3a3125">'+esc(HALLS[+ST.hall][1])+'</p></div>':'');
+ var hall=ST.hall!=null&&HALLS[+ST.hall]?HALLS[+ST.hall]:null;
+ var extra='<div class="h2"><b>Моё</b></div><div class="mlist card"><button class="mi" data-act="remind"><span class="ic g-gold">'+I('bell')+'</span><div><div class="tt">Напоминание об эфире</div><div class="ss">'+(ST.remind==='1'?'Включено · бот напишет за час':'Нажми, и бот напомнит за час')+'</div></div><span class="ar">'+I('caret-right')+'</span></button>'+(hall?'<button class="mi" data-act="gift"><span class="ic g-ink">'+I('heart')+'</span><div><div class="tt">Мой отклик: '+hall[0]+'</div><div class="ss" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">'+esc(hall[1])+'</div></div><span class="ar">'+I('caret-right')+'</span></button>':'')+'</div>';
  $('minewrap').innerHTML=extra+(s>=4?'<div class="h2"><b>Мои Таинства</b></div><button class="rowc card" data-tab="tainstva"><span class="im"><img src="v/t2.jpg" alt=""></span><span><span class="tt" style="display:block">Три двери</span><span class="ss" style="display:block">Уроки, Инициации, группа</span></span><span class="pl">'+I('play')+'</span></button>':'<div class="h2"><b>Для тебя сейчас</b></div><button class="rowc card" data-tab="home"><span class="im"><img src="'+['v/gift-lotus.jpg','v/gym.jpg','v/promo-cover.jpg','v/t1.jpg'][s]+'" alt=""></span><span><span class="tt" style="display:block">'+['Первая Инициация','Утренняя гимнастика','Что было дальше со мной','Три Таинства'][s]+'</span><span class="ss" style="display:block">'+(s===3&&left()>0?'3 000 ₽ · ещё '+leftTxt(left()).replace(/:\d\d$/,''):['Около часа, моим голосом','Каждый понедельник в 11:11','5 минут, моя история','Три двери в Миры Рая'][s])+'</span></span><span class="pl">'+I('arrow-right')+'</span></button>');
  var f=J('fav').map(function(k){return BYKEY[k]}).filter(Boolean);
  $('favsec').style.display=f.length?'':'none';$('favs').innerHTML=f.map(cardHTML).join('');
@@ -737,12 +753,13 @@ function openVideo(k){
 
 /* ---------- клики ---------- */
 document.addEventListener('click',function(e){
- var b=e.target.closest('[data-tab],[data-act],[data-topic],[data-v],[data-fav],[data-url],[data-lesson],[data-lock],[data-hall],.fq');if(!b)return;
+ var b=e.target.closest('[data-tab],[data-act],[data-topic],[data-v],[data-fav],[data-url],[data-lesson],[data-lock],[data-hall],[data-door],.fq');if(!b)return;
  if(b.classList.contains('fq')&&!b.dataset.act){hap('sel');b.classList.toggle('on');return}
  if(b.dataset.tab){hap('sel');if(document.body.classList.contains('sheet-open'))closeSheet();show(b.dataset.tab);return}
- if(b.dataset.topic){hap('sel');curT=b.dataset.topic;if(cur!=='lib')show('lib');else{renderTopics();renderList();window.scrollTo({top:0,behavior:'smooth'})}return}
+ if(b.dataset.topic){hap('sel');curT=b.dataset.topic;$('q').value='';if(cur!=='lib')show('lib');else{renderTopics();renderList();window.scrollTo({top:0,behavior:'smooth'})}return}
  if(b.dataset.v){hap();if(document.body.classList.contains('sheet-open')&&b.closest('.sheet')===null)closeSheet();openVideo(b.dataset.v);return}
  if(b.dataset.lock){openPop(+b.dataset.lock);return}
+ if(b.dataset.door!=null){hap('sel');goDoor(+b.dataset.door);return}
  if(b.dataset.hall!=null){hap('ok');save('hall',b.dataset.hall);if(ST.gift!=='1')save('gift',1);renderHalls();return}
  if(b.dataset.url){hap();var u=b.dataset.url;if(u.indexOf('tg:')===0)openTg(u.slice(3));else openUrl(u);return}
  if(b.dataset.lesson!=null){hap();var L=LESSONS[+b.dataset.lesson];openUrl(L||CABINET);return}
@@ -779,7 +796,7 @@ function boot(){
  if(scr==='gift'||scr==='gift-more'){show('home');openGift();if(scr==='gift-more')setTimeout(function(){$('player').scrollTop=9999},300)}
  else if(scr==='lib'||scr==='praktiki')show('lib');else if(scr==='tainstva')show('tainstva');else if(scr==='me'||scr==='kabinet')show('me');else if(scr==='sched'){show('home');renderSched();openSheet('sched')}else if(scr==='intro'){$('intro').classList.add('on');show('home')}else show('home');
 }
-var KEYS=['gift','gift_pos','efir','promo','bought','tt_start','intro','fav','opened','first','remind','hall'];
+var KEYS=['gift','gift_pos','efir','promo','bought','tt_start','intro','fav','opened','first','remind','hall','peek'];
 KEYS.forEach(function(k){var v=lsG(k);if(v!=null)ST[k]=v});
 if(cloud){try{tg.CloudStorage.getItems(KEYS,function(err,res){if(!err&&res)KEYS.forEach(function(k){if(res[k])ST[k]=res[k]});boot()})}catch(e){boot()}}else boot();
 </script>
