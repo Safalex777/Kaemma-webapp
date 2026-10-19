@@ -360,12 +360,10 @@ body.sheet-open .tabbar{transform:translate(-50%,160%)}
 .subsbtn{position:fixed;right:14px;top:calc(12px + var(--safe));z-index:65;height:38px;padding:0 14px;border-radius:19px;display:flex;align-items:center;gap:7px;color:#fff;font:600 15px var(--sans);background:rgba(11,23,22,.55);box-shadow:0 0 0 1px rgba(255,255,255,.2) inset,0 6px 18px rgba(0,0,0,.18);transition:background .3s,color .3s}
 .subsbtn .aa{font:600 13px var(--sans);letter-spacing:-.02em;opacity:.9}
 .subsbtn.on{background:rgba(246,227,176,.92);color:#3a2a10}
-.subs{flex:1;display:flex;align-items:center;justify-content:center;min-height:180px;padding:90px 4px 18px;text-align:center;pointer-events:none}
-.subs p{max-width:340px;padding:14px 20px;border-radius:22px;background:rgba(11,23,22,.38);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 0 0 1px rgba(255,255,255,.12) inset;font:600 21px/1.42 var(--sans);color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.35);opacity:0;transform:translateY(8px);filter:blur(4px);transition:opacity .7s var(--ease),transform .7s var(--ease),filter .7s var(--ease)}
-.subs p.in{opacity:1;transform:none;filter:none}
-.subs p:empty{display:none}
-.subs p i{font-style:normal;opacity:.55;transition:opacity .35s ease}
-.subs p i.s{opacity:1}
+.subs{flex:1;position:relative;min-height:200px;margin:90px -4px 18px;pointer-events:none}
+.subs p{position:absolute;left:0;right:0;top:50%;margin:0 auto;max-width:360px;text-align:center;font:600 31px/1.25 var(--sans);letter-spacing:-.01em;text-wrap:balance;color:#fff;text-shadow:0 2px 16px rgba(0,0,0,.45),0 0 3px rgba(0,0,0,.25);opacity:0;transform:translateY(-44%);transition:opacity .55s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+.subs p.in{opacity:.86;transform:translateY(-50%)}
+.subs p.out{opacity:0;transform:translateY(-56%);transition:opacity .45s ease,transform .6s ease}
 .subs.off{visibility:hidden}
 .pscreen{position:relative;z-index:3;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 24px calc(26px + env(safe-area-inset-bottom,0px));max-width:480px;margin:0 auto}
 .voice{display:flex;align-items:center;gap:10px;font:500 15px var(--sans)}
@@ -562,7 +560,7 @@ body.sheet-open .fb{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
  <button class="x dglass" data-act="close"><svg class="i"><use href="#p-caret-right"/></svg>Назад</button>
  <button class="subsbtn dglass" id="subsbtn" data-act="subs"><span class="aa">Аа</span>Слова</button>
  <div class="pscreen">
-  <div class="subs" id="subs" aria-live="polite"><p id="subsp"></p></div>
+  <div class="subs" id="subs" aria-live="polite"><p id="subsa"></p><p id="subsb"></p></div>
   <div class="voice"><img src="v/k.jpg" alt="">Голос Каэммы · подарок</div>
   <h2>Первая Инициация</h2>
   <div class="s">Слушай в наушниках, можно прилечь. Ничего не нужно понимать умом: я держу поток.</div>
@@ -826,16 +824,25 @@ function upd(){var d=au.duration||GIFT_LEN,c=au.currentTime||0,p=c/d;seek.value=
 var lastSave=0;
 au.addEventListener('timeupdate',function(){upd();var t=Math.floor(au.currentTime);if(Math.abs(t-lastSave)>=5){lastSave=t;save('gift_pos',t)}});
 au.addEventListener('play',function(){$('pp').classList.add('playing')});
-/* субтитры подарка: фразы [начало мс, конец мс, [[слово, начало мс], ...]] из v/gift-subs.json */
-var SUBS=null,subI=-1,subRaf=0;
+/* субтитры подарка: фразы [начало мс, конец мс, [[слово, начало мс], ...]] из v/gift-subs.json,
+   на экране куски не длиннее 5 слов, смена мягкая: новый кусок проявляется, старый растворяется */
+var SUBS=null,subI=-1,subRaf=0,subLayer=0;
 function subsOn(){return ST.subs==='1'}
 function subsUI(){$('subsbtn').classList.toggle('on',subsOn());$('subs').classList.toggle('off',!subsOn());if(subsOn())loadSubs();subTick(true)}
-function loadSubs(){if(SUBS)return;SUBS=[];fetch('v/gift-subs.json?v=1').then(function(r){return r.json()}).then(function(d){SUBS=d;subI=-1;subTick(true)}).catch(function(){SUBS=null})}
+function chunkSubs(d){var SH=/^(и|а|но|в|во|на|с|со|к|ко|по|до|от|из|у|о|об|за|для|что|как|не|ни|я|ты|он|она|мы|то|же|бы|ли|где|когда|который|которая|которой|которое|свой|свою|твой|твою|моя|мой|эта|это|этот|при|под|над|между|без|через|если|чтобы|или|тебя|себя|тебе|своё|своей)$/i,out=[];
+ d.forEach(function(p){var w=p[2],cur=[],parts=[];
+  for(var k=0;k<w.length;k++){cur.push(w[k]);var left=w.length-k-1,t=w[k][0];
+   var brk=(cur.length>=2&&/[,:;.!?…]$/.test(t)&&left!==1)||cur.length>=5||(cur.length>=4&&left===1);
+   if(brk&&left>0){while(cur.length>1&&SH.test(cur[cur.length-1][0])&&!/[,:;.!?…]$/.test(cur[cur.length-1][0])){k--;cur.pop()}parts.push(cur);cur=[]}}
+  if(cur.length)parts.push(cur);
+  parts.forEach(function(part,j){var nx=parts[j+1];out.push([part[0][1],nx?nx[0][1]:p[1],part.map(function(x){return x[0]}).join(' ')])})});
+ return out}
+function loadSubs(){if(SUBS)return;SUBS=[];fetch('v/gift-subs.json?v=2').then(function(r){return r.json()}).then(function(d){SUBS=chunkSubs(d);subI=-1;subTick(true)}).catch(function(){SUBS=null})}
 function subFind(ms){var lo=0,hi=SUBS.length-1,r=-1;while(lo<=hi){var m=(lo+hi)>>1;if(SUBS[m][0]<=ms){r=m;lo=m+1}else hi=m-1}return r}
-function subTick(force){if(!subsOn()||!SUBS||!SUBS.length)return;var ms=(au.currentTime||0)*1000,i=subFind(ms),p=$('subsp');
- if(i>=0&&ms>SUBS[i][1]+1500)i=-1;
- if(i!==subI||force){subI=i;p.classList.remove('in');setTimeout(function(){if(subI!==i)return;p.innerHTML=i<0?'':SUBS[i][2].map(function(w){return '<i data-t="'+w[1]+'">'+esc(w[0])+'</i>'}).join(' ');if(i>=0)requestAnimationFrame(function(){p.classList.add('in')})},i<0?0:260)}
- var ws=p.children;for(var k=0;k<ws.length;k++){var on=+ws[k].dataset.t<=ms+120;if(on!==ws[k].classList.contains('s'))ws[k].classList.toggle('s',on)}}
+function subShow(text){var a=$(subLayer?'subsb':'subsa'),b=$(subLayer?'subsa':'subsb');a.classList.remove('in');a.classList.add('out');if(!text){return}subLayer=1-subLayer;b.classList.remove('out','in');b.textContent=text;void b.offsetWidth;b.classList.add('in')}
+function subTick(force){if(!subsOn()||!SUBS||!SUBS.length){if(force){$('subsa').className='';$('subsb').className=''}return}var ms=(au.currentTime||0)*1000,i=subFind(ms);
+ if(i>=0&&ms>SUBS[i][1]+1200)i=-1;
+ if(i!==subI||force){subI=i;subShow(i<0?'':SUBS[i][2])}}
 function subLoop(){subTick();if(!au.paused)subRaf=requestAnimationFrame(subLoop)}
 au.addEventListener('play',function(){cancelAnimationFrame(subRaf);subRaf=requestAnimationFrame(subLoop)});
 au.addEventListener('seeked',function(){subTick(true)});
