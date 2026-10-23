@@ -463,6 +463,7 @@ body.sheet-open .fb{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
   <div class="tp2"><div class="brand">Миры Рая</div><button class="me" data-tab="me" id="meava">Р</button></div>
   <div class="gr"><div class="d" id="date"></div><h1 id="hello">Добрый день</h1><div class="hq" id="wish"></div><div id="hk" style="margin-top:14px"></div></div></div>
  <div class="step rise" id="step"></div>
+ <div id="daywrap" style="display:none"><div class="h2" id="dayh"></div><div class="list card" id="day" style="margin-top:0"></div></div>
  <div id="livewrap"><div class="h2"><b>Ближайший эфир</b><a data-act="sched">Расписание</a></div>
  <div class="live card" id="live"></div></div>
  <div class="h2"><b>Что тебе сейчас нужно?</b></div>
@@ -673,6 +674,32 @@ var T=[
 var BYKEY={};T.forEach(function(t){t.v.forEach(function(v){BYKEY[v.k+':'+v.id]=v})});
 var PDAY=STREAMS.concat(GYM);
 var NEWEST=['HCLF4M7uSgc','acvlCO8pm2Q','-rLPDVdQG8o','5coH5Stc4eU','hE_4wORrefo','FraAgrJeZtE','QVP7WOSoACg','UPP_mm9xHGI','3RWs6Y1AWk8','ZuRlI2nkNyU','oOPO52cpB-M','kPLzfvNboVY','7olj2RJcMFo','iSiAizJZyno','X-9-5PlZpps','W4YNwFGNYVA','R2SILN9aZCg','8TaRFZbwYfY','VSAj4yA9-eI','IP-GsZEXEzI'].map(function(id){return 'y:'+id});
+/* день и свежие видео: daily.json - план на месяц (tools/make-daily.mjs),
+   feed.json - новые видео YouTube и канала, каждый день из GitHub Actions (tools/update-feed.py) */
+var DAILY=null,MON=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+function today(){return new Date(Date.now()+3*36e5).toISOString().slice(0,10)}
+function dmy(s){var p=s.split('-');return +p[2]+' '+MON[p[1]-1]+(+p[0]!==new Date().getFullYear()?' '+p[0]:'')}
+function addFeed(items){
+ var utro=T.filter(function(t){return t.id==='utro'})[0],fresh=[];
+ items.slice().reverse().forEach(function(i){
+  var k=i.k+':'+i.id,v=BYKEY[k],gym=/гимнастик/i.test(i.t);
+  if(!v){
+   var t=i.t.replace(/\s*•\s*\d+\s+[а-я]+\s*$/i,'').replace(/\s*\|\s*/g,' · ');
+   var m=(i.k==='y'?(gym?'Эфир':'YouTube'):'Канал')+' · '+dmy(i.d)+(i.min?' · '+i.min+' мин':'');
+   v=i.k==='y'?Y(i.id,t,m,gym?{x:1}:{}):C(+i.id,t,m,'v/tg/'+i.id+'.jpg');
+   BYKEY[k]=v;
+   if(gym){utro.v.unshift(v);if(i.k==='y')STREAMS.unshift(v)}
+  }
+  if(Date.now()-Date.parse(i.d)<14*864e5)v.n=1;
+  fresh.unshift(k);
+ });
+ NEWEST=fresh.concat(NEWEST.filter(function(k){return fresh.indexOf(k)<0}));
+}
+function loadDay(){
+ var d=today();
+ fetch('daily.json?d='+d).then(function(r){return r.json()}).then(function(j){DAILY=j;if(cur==='home')renderDay()}).catch(function(){});
+ fetch('feed.json?d='+d+'-'+new Date().getHours()).then(function(r){return r.json()}).then(function(j){addFeed(j.items||[]);if(cur==='home')renderDay();if(cur==='lib')renderList()}).catch(function(){});
+}
 var DOORS=[{n:'I',v:'v/t1h.mp4',p:'v/t1h.jpg',k:'Таинство I · Корона Всемогущества',h:'Забрать свою силу обратно',t:'Ты увидишь пирамиду, в которой живёт ум, и заберёшь свои части домой: «Сила моя ко мне. Деньги мои ко мне. Любовь моя ко мне».'},{n:'II',v:'v/t2h.mp4',p:'v/t2h.jpg',k:'Таинство II · Путешествие в Миры Рая',h:'Жить так, как хочешь ты',t:'Красота, новизна и один вопрос «а как бы я хотела?». Ничего придумывать не надо, этот вопрос и есть тот мир.'},{n:'III',v:'v/t3h.mp4',p:'v/t3h.jpg',k:'Таинство III · Выбор своего Мира',h:'Перестать верить отражениям',t:'Вокруг около пятидесяти зеркал. Здесь ты получишь выбор и простой алгоритм на момент, когда сжалось.'}];
 var KRUG={k01:'https://storage2.bothelp.io/kaemma144/dd/ddd9/ddd918fe884f8f655fd980edee300d9d/krug_01.mp4',k02:'https://storage2.bothelp.io/kaemma144/76/76bd/76bd61e66516a2816f774d1b80f15a70/krug_02.mp4',k03:'https://storage2.bothelp.io/kaemma144/5e/5ec5/5ec556c42a5e81ea84b3192debcce869/krug_03.mp4',k04:'https://storage2.bothelp.io/kaemma144/35/357f/357f809cde8dc856167ddf4aa695e313/krug_04.mp4',k09:'https://storage2.bothelp.io/kaemma144/c4/c49a/c49a757ef32fab3e43757043b585bf4f/krug_09.mp4'};
 function krug(k,title,sub,cls){cls=(cls||'card2').replace('pulse','');var seen=J('krugs').indexOf(k)>=0,cp=cls.split('"');cp[0]+=(seen?' seen':' pulse');cls=cp.join('"');return '<button class="kc '+cls+'" data-krug="'+k+'"><span class="kv"><img src="v/krug/'+k+'.jpg" alt=""><i>'+I('play')+'</i></span><span><b>'+title+'</b><span>'+sub+'</span></span></button>'}
@@ -720,7 +747,7 @@ function renderHome(){
  if(u.photo_url)$('meava').innerHTML='<img src="'+esc(u.photo_url)+'" alt="">';else $('meava').textContent=(name||'Р').charAt(0);
  var h=new Date().getHours(),g=h<5?'Доброй ночи':h<12?'Доброе утро':h<18?'Добрый день':'Добрый вечер';
  $('hello').innerHTML=esc(g)+(name?',<br>'+esc(name):'');
- $('wish').textContent='«'+Q[doy%Q.length]+'»';
+ renderDay();
  $('hk').innerHTML=ST.gift!=='1'?krug('k01','Каэмма встречает тебя','Нажми, я скажу тебе пару слов','light pulse'):'';
  $('date').textContent=new Date().toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'});
  var s=stage(),L=['Подарок','Эфир','Промо-урок','Таинства'],IC=['gift','calendar-blank','play','sparkle'];
@@ -738,6 +765,16 @@ function renderHome(){
 }
 function renderSched(){var lt=nextLive(),out='';for(var i=0;i<4;i++){var t=lt+i*7*864e5,d=new Date(t+3*36e5);out+='<div class="ev"><div class="day"><b>'+d.getUTCDate()+'</b><span>'+['вс','пн','вт','ср','чт','пт','сб'][d.getUTCDay()]+'</span></div><div><div class="tt">Утренняя омолаживающая гимнастика</div><div class="ss">11:11 · прямой эфир на YouTube · для всех</div></div></div>'}out+='<div class="ev"><div class="day"><b>·</b><span>скоро</span></div><div><div class="tt">Вечерний эфир <span class="soon">скоро</span></div><div class="ss">день и время объявим</div></div></div>';$('schedopen').innerHTML=out}
 
+/* слова и практика дня; без daily.json или после конца плана - по кругу */
+function dayPlan(){var d=DAILY&&DAILY.days[today()];if(d&&BYKEY[d.p])return d;var w=DAILY&&DAILY.words||Q,ks=Object.keys(BYKEY);return {w:d?d.w:w[doy%w.length],p:ks[doy*7%ks.length]}}
+function renderDay(){
+ var d=dayPlan(),v=BYKEY[d.p],t=v&&T.filter(function(x){return x.v.indexOf(v)>=0})[0];
+ $('wish').textContent='«'+d.w+'»';
+ $('daywrap').style.display=v?'':'none';if(!v)return;
+ $('dayh').innerHTML='<b>Практика дня</b>'+(t?'<a data-topic="'+t.id+'">'+t.t+'</a>':'');
+ $('day').innerHTML=rowHTML(v);
+}
+
 /* ---------- БИБЛИОТЕКА ---------- */
 var curT='all';
 function renderTopics(){$('topics').innerHTML='<button class="tp'+(curT==='all'?' on':'')+'" data-topic="all">Все</button><button class="tp'+(curT==='new'?' on':'')+'" data-topic="new">Новые видео</button>'+T.map(function(t){return '<button class="tp'+(curT===t.id?' on':'')+'" data-topic="'+t.id+'">'+t.t+'</button>'}).join('');var on=$('topics').querySelector('.on');if(on&&on.scrollIntoView)on.scrollIntoView({inline:'center',block:'nearest'})}
@@ -747,7 +784,7 @@ function renderList(){
  var NEWV=NEWEST.map(function(k){return BYKEY[k]}).filter(Boolean);
  if(!q&&curT==='all'){$('list').innerHTML=giftCard()+'<div class="shelf-h"><b>Новые видео</b><a data-topic="new">Все '+NEWV.length+'</a></div><div class="car">'+NEWV.slice(0,10).map(cardHTML).join('')+'</div>'+T.map(function(t){return '<div class="shelf-h"><b>'+t.t+'</b><a data-topic="'+t.id+'">Все '+t.v.length+'</a></div><div class="car">'+t.v.slice(0,10).map(cardHTML).join('')+'</div>'}).join('');return}
  if(q){var seen={};vs=[];T.forEach(function(t){t.v.forEach(function(v){var k=key(v);if(!seen[k]&&v.t.toLowerCase().indexOf(q)>=0){seen[k]=1;vs.push(v)}})});head='Найдено: '+vs.length}
- else if(curT==='new'){vs=NEWV;head='Новые видео на YouTube'}
+ else if(curT==='new'){vs=NEWV;head='Новые видео'}
  else{var t=T.filter(function(x){return x.id===curT})[0];vs=t?t.v:[];head=t?t.t+' · '+vs.length+' видео':''}
  $('list').innerHTML='<div class="lhd">'+head+'</div><div class="list card">'+(vs.length?vs.map(rowHTML).join(''):'<div class="empty">Ничего не нашлось. Попробуй другое слово.</div>')+'</div>';
 }
@@ -899,7 +936,7 @@ document.addEventListener('click',function(e){
 });
 
 /* ---------- старт ---------- */
-function boot(){
+function boot(){loadDay();
 if(cuid&&ST.cuid!==cuid)save('cuid',cuid);
  if(flags.indexOf('k')>=0&&ST.bought!=='1')save('bought',1);
  if(flags.indexOf('g')>=0&&ST.gift!=='1')save('gift',1);
