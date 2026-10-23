@@ -1,0 +1,26 @@
+# Каждый день подтягивает свежие видео YouTube и Telegram-канала в приложение «Миры Рая» (bot/feed.json).
+# Слова и практика дня берутся приложением из bot/daily.json по дате, их обновлять не нужно.
+name: Свежие видео
+on:
+  schedule:
+    - cron: '0 3 * * *'   # 06:00 по Москве
+    - cron: '0 17 * * *'  # 20:00 по Москве, после вечерних видео
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+jobs:
+  feed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 bot/tools/update-feed.py
+      - name: Сохранить и выложить
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git add bot/feed.json bot/v/yt bot/v/tg
+          git diff --cached --quiet && exit 0
+          git -c user.name='Свежие видео' -c user.email='actions@github.com' commit -m "Свежие видео $(date +%d.%m)"
+          git push
+          gh api -X POST repos/${{ github.repository }}/pages/builds || true
