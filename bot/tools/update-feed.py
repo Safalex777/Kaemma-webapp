@@ -1,8 +1,9 @@
 """Собирает bot/feed.json: свежие видео YouTube-канала и видео-посты Telegram-канала Каэммы.
 Запускается каждый день из .github/workflows/daily.yml, можно и руками: python3 bot/tools/update-feed.py
-YouTube: RSS канала, Shorts пропускаем. Telegram: публичная лента t.me/s, видео от 10 минут (клипы не берём).
+YouTube: два списка канала, которые YouTube ведёт сам: UULF - обычные видео, UULV - эфиры (live: true).
+Shorts (список UUSH) не берём совсем. Telegram: публичная лента t.me/s, видео от 10 минут (клипы не берём).
 Обложки сохраняются в v/yt/<id>.jpg и v/tg/<номер>.jpg. Если площадка не ответила, старые записи остаются."""
-import datetime, html, json, pathlib, re, urllib.error, urllib.request
+import datetime, html, json, pathlib, re, urllib.request
 
 D = pathlib.Path(__file__).resolve().parent.parent
 FEED = D / 'feed.json'
@@ -10,6 +11,9 @@ YT_CHANNEL = 'UC13b2gT33MFeIK6W4nM1cbQ'
 TG_CHANNEL = 'Kaemma144'
 TG_MIN_SEC = 10 * 60
 KEEP = 40
+FRESH_DAYS = 30
+# закрытое содержание практик в открытое приложение не попадает (правила проекта)
+CLOSED = re.compile(r'[\u16a0-\u16ff]|рун[аыу ]|чакр|аджн|вишудх|сахасрар|шишковид|ананд|меркаб|анх', re.I)
 UA = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/126 Safari/537.36',
       'Accept-Language': 'ru'}
 
@@ -17,23 +21,6 @@ UA = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit
 def get(url):
     with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=30) as r:
         return r.read()
-
-
-class NoRedirect(urllib.request.HTTPRedirectHandler):
-    def redirect_request(self, *a, **k):
-        return None
-
-
-def is_short(vid):
-    """True - Shorts, False - обычное видео, None - YouTube ответил непонятно."""
-    try:
-        r = urllib.request.build_opener(NoRedirect).open(
-            urllib.request.Request('https://www.youtube.com/shorts/' + vid, headers=UA, method='HEAD'), timeout=20)
-        return r.status == 200
-    except urllib.error.HTTPError as e:
-        return False if e.code in (301, 302, 303) else None
-    except Exception:
-        return None
 
 
 def save_img(url, name):
@@ -48,21 +35,28 @@ def save_img(url, name):
 
 
 def youtube(known):
-    xml = get('https://www.youtube.com/feeds/videos.xml?channel_id=' + YT_CHANNEL).decode()
+    out = []
+    for kind, live in (('UULF', False), ('UULV', True)):
+        out += youtube_list(known, kind + YT_CHANNEL[2:], live)
+    return out
+
+
+def youtube_list(known, playlist, live):
+    xml = get('https://www.youtube.com/feeds/videos.xml?playlist_id=' + playlist).decode()
     out = []
     for e in xml.split('<entry>')[1:]:
         vid = re.search(r'<yt:videoId>([^<]+)', e).group(1)
         if 'y:' + vid in known:
             out.append(known['y:' + vid])
             continue
-        if is_short(vid) is not False:
-            continue
         title = html.unescape(re.search(r'<title>([^<]*)', e).group(1)).strip()
         day = re.search(r'<published>([^<]+)', e).group(1)[:10]
+        if day < SINCE or CLOSED.search(title):
+            continue
         if not (save_img(f'https://i.ytimg.com/vi/{vid}/sddefault.jpg', f'yt/{vid}.jpg')
                 or save_img(f'https://i.ytimg.com/vi/{vid}/hqdefault.jpg', f'yt/{vid}.jpg')):
             continue
-        out.append({'k': 'y', 'id': vid, 't': title, 'd': day})
+        out.append({'k': 'y', 'id': vid, 't': title, 'd': day, 'live': live})
     return out
 
 
@@ -97,12 +91,15 @@ def telegram(known):
         if sec < TG_MIN_SEC or not thumb or not title or not save_img(thumb.group(1), f'tg/{num}.jpg'):
             continue
         day = re.search(r'datetime="([^"]+)"', p).group(1)[:10]
+        if day < SINCE or CLOSED.search(title):
+            continue
         out.append({'k': 't', 'id': num, 't': title, 'd': day, 'min': round(sec / 60)})
     return out
 
 
+SINCE = (datetime.date.today() - datetime.timedelta(days=FRESH_DAYS)).isoformat()
 old = json.loads(FEED.read_text()) if FEED.exists() else {'items': []}
-known = {i['k'] + ':' + str(i['id']): i for i in old['items']}
+known = {i['k'] + ':' + str(i['id']): i for i in old['items'] if i['k'] == 't' or 'live' in i}
 items = dict(known)
 for name, fn in (('YouTube', youtube), ('Telegram', telegram)):
     try:

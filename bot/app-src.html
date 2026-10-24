@@ -679,21 +679,27 @@ var NEWEST=['HCLF4M7uSgc','acvlCO8pm2Q','-rLPDVdQG8o','5coH5Stc4eU','hE_4wORrefo
 var DAILY=null,MON=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 function today(){return new Date(Date.now()+3*36e5).toISOString().slice(0,10)}
 function dmy(s){var p=s.split('-');return +p[2]+' '+MON[p[1]-1]+(+p[0]!==new Date().getFullYear()?' '+p[0]:'')}
+/* «Новые видео» - только обычные видео канала, эфиры (live) своей полкой «Эфиры», шортсов в ленте нет */
+var LIVES=Object.keys(BYKEY).filter(function(k){return BYKEY[k].x});
 function addFeed(items){
- var utro=T.filter(function(t){return t.id==='utro'})[0],fresh=[];
+ var utro=T.filter(function(t){return t.id==='utro'})[0],fresh=[],lives=[],gyms=[];
  items.slice().reverse().forEach(function(i){
   var k=i.k+':'+i.id,v=BYKEY[k],gym=/гимнастик/i.test(i.t);
   if(!v){
    var t=i.t.replace(/\s*•\s*\d+\s+[а-я]+\s*$/i,'').replace(/\s*\|\s*/g,' · ');
-   var m=(i.k==='y'?(gym?'Эфир':'YouTube'):'Канал')+' · '+dmy(i.d)+(i.min?' · '+i.min+' мин':'');
-   v=i.k==='y'?Y(i.id,t,m,gym?{x:1}:{}):C(+i.id,t,m,'v/tg/'+i.id+'.jpg');
+   var m=(i.k==='y'?(i.live?'Эфир':'YouTube'):'Канал')+' · '+dmy(i.d)+(i.min?' · '+i.min+' мин':'');
+   v=i.k==='y'?Y(i.id,t,m,i.live?{x:1}:{}):C(+i.id,t,m,'v/tg/'+i.id+'.jpg');
    BYKEY[k]=v;
-   if(gym){utro.v.unshift(v);if(i.k==='y')STREAMS.unshift(v)}
   }
+  if(gym&&i.live)gyms.unshift(v);
   if(Date.now()-Date.parse(i.d)<14*864e5)v.n=1;
-  fresh.unshift(k);
+  (i.live?lives:fresh).unshift(k);
  });
- NEWEST=fresh.concat(NEWEST.filter(function(k){return fresh.indexOf(k)<0}));
+ NEWEST=fresh.concat(NEWEST.filter(function(k){return fresh.indexOf(k)<0&&lives.indexOf(k)<0}));
+ LIVES=lives.concat(LIVES.filter(function(k){return lives.indexOf(k)<0}));
+ /* последние гимнастики по дате: «Посмотреть прошлый эфир» и начало темы «Утро и гимнастика» */
+ STREAMS=gyms.concat(STREAMS.filter(function(v){return gyms.indexOf(v)<0}));
+ utro.v=gyms.concat(utro.v.filter(function(v){return gyms.indexOf(v)<0}));
 }
 function loadDay(){
  var d=today();
@@ -777,14 +783,15 @@ function renderDay(){
 
 /* ---------- БИБЛИОТЕКА ---------- */
 var curT='all';
-function renderTopics(){$('topics').innerHTML='<button class="tp'+(curT==='all'?' on':'')+'" data-topic="all">Все</button><button class="tp'+(curT==='new'?' on':'')+'" data-topic="new">Новые видео</button>'+T.map(function(t){return '<button class="tp'+(curT===t.id?' on':'')+'" data-topic="'+t.id+'">'+t.t+'</button>'}).join('');var on=$('topics').querySelector('.on');if(on&&on.scrollIntoView)on.scrollIntoView({inline:'center',block:'nearest'})}
+function renderTopics(){$('topics').innerHTML='<button class="tp'+(curT==='all'?' on':'')+'" data-topic="all">Все</button><button class="tp'+(curT==='new'?' on':'')+'" data-topic="new">Новые видео</button><button class="tp'+(curT==='live'?' on':'')+'" data-topic="live">Эфиры</button>'+T.map(function(t){return '<button class="tp'+(curT===t.id?' on':'')+'" data-topic="'+t.id+'">'+t.t+'</button>'}).join('');var on=$('topics').querySelector('.on');if(on&&on.scrollIntoView)on.scrollIntoView({inline:'center',block:'nearest'})}
 function giftCard(){var pos=+ST.gift_pos||0,done=ST.gift==='1';return '<button class="giftc" data-act="gift"><img src="v/gift-lotus.jpg" alt=""><span class="gk">Твой подарок</span><span class="gt">Первая Инициация</span><span class="gs">'+(done?'Прослушана · можно слушать снова':pos>30?'Продолжить с '+fmt(pos):'Около часа, моим голосом')+'</span><span class="gp">'+I('play')+'</span></button>'}
 function renderList(){
  var q=($('q').value||'').trim().toLowerCase(),vs,head='';
- var NEWV=NEWEST.map(function(k){return BYKEY[k]}).filter(Boolean);
- if(!q&&curT==='all'){$('list').innerHTML=giftCard()+'<div class="shelf-h"><b>Новые видео</b><a data-topic="new">Все '+NEWV.length+'</a></div><div class="car">'+NEWV.slice(0,10).map(cardHTML).join('')+'</div>'+T.map(function(t){return '<div class="shelf-h"><b>'+t.t+'</b><a data-topic="'+t.id+'">Все '+t.v.length+'</a></div><div class="car">'+t.v.slice(0,10).map(cardHTML).join('')+'</div>'}).join('');return}
+ var NEWV=NEWEST.map(function(k){return BYKEY[k]}).filter(function(v){return v&&!v.x}),LIVEV=LIVES.map(function(k){return BYKEY[k]}).filter(Boolean);
+ if(!q&&curT==='all'){$('list').innerHTML=giftCard()+'<div class="shelf-h"><b>Новые видео</b><a data-topic="new">Все '+NEWV.length+'</a></div><div class="car">'+NEWV.slice(0,10).map(cardHTML).join('')+'</div><div class="shelf-h"><b>Эфиры</b><a data-topic="live">Все '+LIVEV.length+'</a></div><div class="car">'+LIVEV.slice(0,10).map(cardHTML).join('')+'</div>'+T.map(function(t){return '<div class="shelf-h"><b>'+t.t+'</b><a data-topic="'+t.id+'">Все '+t.v.length+'</a></div><div class="car">'+t.v.slice(0,10).map(cardHTML).join('')+'</div>'}).join('');return}
  if(q){var seen={};vs=[];T.forEach(function(t){t.v.forEach(function(v){var k=key(v);if(!seen[k]&&v.t.toLowerCase().indexOf(q)>=0){seen[k]=1;vs.push(v)}})});head='Найдено: '+vs.length}
  else if(curT==='new'){vs=NEWV;head='Новые видео'}
+ else if(curT==='live'){vs=LIVEV;head='Эфиры · '+vs.length}
  else{var t=T.filter(function(x){return x.id===curT})[0];vs=t?t.v:[];head=t?t.t+' · '+vs.length+' видео':''}
  $('list').innerHTML='<div class="lhd">'+head+'</div><div class="list card">'+(vs.length?vs.map(rowHTML).join(''):'<div class="empty">Ничего не нашлось. Попробуй другое слово.</div>')+'</div>';
 }
