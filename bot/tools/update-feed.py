@@ -12,8 +12,8 @@ TG_CHANNEL = 'Kaemma144'
 TG_MIN_SEC = 10 * 60
 KEEP = 40
 FRESH_DAYS = 30
-# закрытое содержание практик в открытое приложение не попадает (правила проекта)
-CLOSED = re.compile(r'[\u16a0-\u16ff]|рун[аыу ]|чакр|аджн|вишудх|сахасрар|шишковид|ананд|меркаб|анх', re.I)
+# в приложении можно всё, что открыто на канале, руны и закрытые термины тоже (Саша, 25.10); анх и меркаба нет никогда
+CLOSED = re.compile(r'меркаб|\bанх|\bангх', re.I)
 UA = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/126 Safari/537.36',
       'Accept-Language': 'ru'}
 
