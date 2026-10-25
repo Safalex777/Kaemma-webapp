@@ -29,7 +29,7 @@ button,a{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text
 @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
 /* фон: спираль ДНК в бассейне, как шапка главной в приложении */
-.bgv{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%;background:#0E2A2C url(bg.jpg) center 35%/cover;transform:scale(1.35);transform-origin:50% 40%}
+.bgv{position:fixed;inset:0;pointer-events:none;width:100%;height:100%;object-fit:cover;object-position:center 35%;background:#0E2A2C url(bg.jpg) center 35%/cover;transform:scale(1.35);transform-origin:50% 40%}
 .shade{position:fixed;inset:0;background:radial-gradient(120% 70% at 50% 48%,rgba(6,24,26,.62),rgba(6,24,26,.38) 70%),linear-gradient(180deg,rgba(6,24,26,.15),rgba(6,24,26,.55))}
 
 /* всё по центру экрана */
@@ -39,7 +39,7 @@ button,a{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text
 /* кружок Каэммы, как в приложении */
 .krug{position:relative;width:224px;height:224px;border-radius:50%;padding:4px;background:conic-gradient(#F6E3B0,#C99A48,#F6E3B0,#C99A48,#F6E3B0);box-shadow:0 18px 40px rgba(0,0,0,.35);transition:width .45s var(--ease),height .45s var(--ease);animation:kpulse 2.4s ease-out infinite}
 @keyframes kpulse{0%{box-shadow:0 0 0 0 rgba(232,204,142,.55),0 18px 40px rgba(0,0,0,.35)}100%{box-shadow:0 0 0 18px rgba(232,204,142,0),0 18px 40px rgba(0,0,0,.35)}}
-.krug video{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;background:#2a3a38 url(krug.jpg) center/cover;box-shadow:0 0 0 2px #fff}
+.krug canvas{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;background:#2a3a38 url(krug.jpg) center/cover;box-shadow:0 0 0 2px #fff}
 .krug .pr{position:absolute;inset:-7px;width:calc(100% + 14px);height:calc(100% + 14px);transform:rotate(-90deg);pointer-events:none;opacity:0;transition:opacity .3s}
 .krug .pr circle{fill:none;stroke:#FFF3D2;stroke-width:3;stroke-linecap:round}
 .krug.on .pr{opacity:1}
@@ -131,7 +131,7 @@ h1{margin-top:18px;font:italic 400 38px/1.04 R,serif;padding:0 .08em .06em;backg
  <symbol id="p-compass" viewBox="0 0 256 256"><path d="M128,26A102,102,0,1,0,230,128,102.12,102.12,0,0,0,128,26Zm0,192a90,90,0,1,1,90-90A90.1,90.1,0,0,1,128,218ZM172.53,74.66l-64,32a6,6,0,0,0-2.69,2.69l-32,64A6,6,0,0,0,80,182a6.1,6.1,0,0,0,2.68-.63l64-32a6,6,0,0,0,2.69-2.69l32-64a6,6,0,0,0-8.05-8.05Zm-30,63.86L93.42,162.58l24.06-49.1,49.1-24.06Z"/></symbol>
 </svg>
 
-<video class="bgv" src="bg.mp4" poster="bg.jpg" muted loop playsinline autoplay preload="auto"></video>
+<video class="bgv" src="bg.mp4" poster="bg.jpg" muted loop playsinline webkit-playsinline autoplay preload="auto" disablepictureinpicture></video>
 <div class="shade"></div>
 
 <div class="pt" aria-hidden="true">
@@ -149,7 +149,8 @@ h1{margin-top:18px;font:italic 400 38px/1.04 R,serif;padding:0 .08em .06em;backg
 <main class="c">
  <div class="kk rise">Каэмма · Миры Рая</div>
  <div class="rise"><button class="krug" id="krug" type="button" aria-label="Послушать Каэмму">
-  <video id="kv" src="krug.mp4" poster="krug.jpg" muted loop playsinline autoplay preload="auto"></video>
+  <canvas id="kc" width="300" height="300"></canvas>
+  <audio id="ka" src="krug.m4a" preload="auto"></audio>
   <svg class="pr" viewBox="0 0 100 100"><circle id="prc" cx="50" cy="50" r="48" pathLength="100" stroke-dasharray="0 100"/></svg>
   <span class="snd"><svg class="i"><use href="#p-play"/></svg></span>
  </button></div>
@@ -313,27 +314,54 @@ h1{margin-top:18px;font:italic 400 38px/1.04 R,serif;padding:0 .08em .06em;backg
     copy('@' + BOT, function(ok){ if (ok) el.textContent = '@' + BOT + ' скопировано'; });
   });
 
-  // кружок: без звука крутится по кругу, по нажатию Каэмма говорит со звуком
-  var krug = document.getElementById('krug'), kv = document.getElementById('kv'), prc = document.getElementById('prc');
+  // кружок: рисуем кадры на холсте и отдельно играем звук. Тег <video> в браузере TikTok на iPhone
+  // открывается во весь экран, холст и <audio> так не делают. Кадры: k/s0..s9.jpg, сетка 6×6 по 300 px, 12 кадров в секунду.
+  var krug = document.getElementById('krug'), kc = document.getElementById('kc'), ka = document.getElementById('ka'), prc = document.getElementById('prc');
+  var ctx = kc.getContext('2d'), FPS = 12, FRAMES = 358, PER = 36, COLS = 6, W = 300;
+  var sheets = [], shown = -1;
+  function sheet(n){
+    if (!sheets[n]) { sheets[n] = new Image(); sheets[n].src = 'k/s' + n + '.jpg'; }
+    return sheets[n];
+  }
+  function loadAll(){ for (var n = 0; n * PER < FRAMES; n++) sheet(n); }
+  function draw(f){
+    f = Math.max(0, Math.min(FRAMES - 1, f));
+    if (f === shown) return;
+    var img = sheet(Math.floor(f / PER)), k = f % PER;
+    if (!img.complete || !img.naturalWidth) return;          // лист ещё грузится - держим прошлый кадр
+    ctx.drawImage(img, (k % COLS) * W, Math.floor(k / COLS) * W, W, W, 0, 0, W, W);
+    shown = f;
+  }
+  var t0 = performance.now();
+  function frame(now){
+    if (krug.classList.contains('on')) {
+      draw(Math.floor(ka.currentTime * FPS));
+      if (ka.duration) prc.setAttribute('stroke-dasharray', (ka.currentTime / ka.duration * 100).toFixed(1) + ' 100');
+    } else {
+      draw(Math.floor((now - t0) / 1000 * FPS) % PER);     // без звука: первые 3 секунды по кругу
+    }
+    requestAnimationFrame(frame);
+  }
+  sheet(0).onload = function(){ draw(0); };
+  setTimeout(function(){ sheet(1); }, 1500);   // следующий лист заранее, чтобы начало шло плавно
+  requestAnimationFrame(frame);
+
   krug.addEventListener('click', function(){
     if (krug.classList.contains('on')) {
-      if (kv.paused) kv.play(); else kv.pause();
+      if (ka.paused) ka.play(); else ka.pause();
       return;
     }
+    loadAll();
     krug.classList.add('on');
     document.getElementById('kcap').classList.add('hide');
-    kv.loop = false; kv.muted = false; kv.currentTime = 0;
-    var p = kv.play(); if (p && p.catch) p.catch(function(){});
+    try { ka.currentTime = 0; } catch (e) {}
+    var p = ka.play(); if (p && p.catch) p.catch(function(){});
     log.push({t: Math.round(performance.now()), why: 'krug', url: 'play'}); report();
   });
-  kv.addEventListener('timeupdate', function(){
-    if (!krug.classList.contains('on') || !kv.duration) return;
-    prc.setAttribute('stroke-dasharray', (kv.currentTime / kv.duration * 100).toFixed(1) + ' 100');
-  });
-  kv.addEventListener('ended', function(){
+  ka.addEventListener('ended', function(){
     krug.classList.remove('on');
-    kv.muted = true; kv.loop = true; kv.play();
     prc.setAttribute('stroke-dasharray', '0 100');
+    t0 = performance.now();
     btn.classList.remove('glow'); void btn.offsetWidth; btn.classList.add('glow');
   });
 
