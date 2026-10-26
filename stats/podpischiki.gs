@@ -65,10 +65,17 @@ function podpSnimok() {
   if (sh.getLastRow()) {
     sh.getRange(1, 1, sh.getLastRow(), 2).getValues().forEach(function (r) { old[String(r[0])] = String(r[1]); });
   }
-  var rows = [], days = {}, total = 0;
+  var rows = [], days = {}, src = {}, total = 0;
+  var cut60 = Utilities.formatDate(new Date(Date.now() - 60 * 864e5), PODP_TZ, 'yyyy-MM-dd');
   subs.forEach(function (s) {
     var d = Utilities.formatDate(podpDate(s.createdAt), PODP_TZ, 'yyyy-MM-dd');
     days[d] = (days[d] || 0) + 1;
+    if (d >= cut60) {
+      // откуда пришёл: метка источника на ссылке в бота (utm), для недельной аналитики
+      var k = String(s.utmSource || s.utmMedium || '').trim().toLowerCase().slice(0, 20) || '?';
+      src[d] = src[d] || {};
+      src[d][k] = (src[d][k] || 0) + 1;
+    }
     if (s.subscribed === false) {
       var id = String(s.id);
       // при самом первом снимке не знаем, когда человек отписался
@@ -84,7 +91,7 @@ function podpSnimok() {
   var fresh = {};
   Object.keys(days).forEach(function (d) { if (d >= cut) fresh[d] = days[d]; });
   if (first) props.setProperty('PODP_SINCE', now);
-  props.setProperties({ PODP_NEW: JSON.stringify(fresh), PODP_TOTAL: String(total), PODP_LAST: now });
+  props.setProperties({ PODP_NEW: JSON.stringify(fresh), PODP_SRC: JSON.stringify(src), PODP_TOTAL: String(total), PODP_LAST: now });
   // страховка: если цепочка сводок оборвалась, ставим следующую
   var has = ScriptApp.getProjectTriggers().some(function (t) { return t.getHandlerFunction() === 'podpSvodka'; });
   if (!has) podpDalshe();

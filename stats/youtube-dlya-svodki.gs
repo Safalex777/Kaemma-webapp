@@ -55,11 +55,43 @@ function ytSobrat() {
   ];
   rows.forEach(function (r) { out.push([String(r[0]), r[1], r[2], r[3], r[4]]); });
   out.push(['', '', '', '', '']);
+  // неделя для недельной аналитики: 7 последних дней, за которые YouTube уже отдал данные
+  if (rows.length) {
+    var end = String(rows[rows.length - 1][0]);
+    var start = Utilities.formatDate(new Date(new Date(end + 'T12:00:00Z').getTime() - 6 * 864e5), 'UTC', 'yyyy-MM-dd');
+    out.push(['Неделя', start, end, '', '']);
+    try {
+      var types = {};
+      (YouTubeAnalytics.Reports.query({ ids: 'channel==MINE', startDate: start, endDate: end, metrics: 'views',
+        dimensions: 'creatorContentType' }).rows || []).forEach(function (r) {
+        // YouTube пишет тип то SHORTS / VIDEO_ON_DEMAND, то shorts / videoOnDemand: приводим к одному виду
+        var t = String(r[0]).toLowerCase().replace(/_/g, '');
+        types[t] = (types[t] || 0) + r[1];
+      });
+      out.push(['Неделя: Shorts', types.shorts || 0, '', '', '']);
+      out.push(['Неделя: длинные', types.videoondemand || 0, '', '', '']);
+      out.push(['Неделя: эфиры', types.livestream || 0, '', '', '']);
+      out.push(['Неделя: типы', JSON.stringify(types), '', '', '']);
+    } catch (e) { Logger.log('Shorts/длинные: ' + e); }
+    try {
+      var avg = YouTubeAnalytics.Reports.query({ ids: 'channel==MINE', startDate: start, endDate: end,
+        metrics: 'averageViewPercentage' }).rows || [[0]];
+      out.push(['Неделя: досмотр %', Math.round(avg[0][0]), '', '', '']);
+    } catch (e) { Logger.log('досмотр: ' + e); }
+    try {
+      var top = YouTubeAnalytics.Reports.query({ ids: 'channel==MINE', startDate: start, endDate: end, metrics: 'views',
+        dimensions: 'video', sort: '-views', maxResults: 1 }).rows || [];
+      if (top.length) {
+        var v = YouTube.Videos.list('snippet', { id: top[0][0] }).items[0];
+        out.push(['Неделя: лучшее видео', v ? v.snippet.title : top[0][0], top[0][1], '', '']);
+      }
+    } catch (e) { Logger.log('лучшее видео: ' + e); }
+    out.push(['', '', '', '', '']);
+  }
   out.push(['Месяц', 'Просмотры', 'Минуты просмотра', 'Подписались', 'Отписались']);
   months.forEach(function (r) { out.push([String(r[0]), r[1], r[2], r[3], r[4]]); });
   sh.clearContents();
-  sh.getRange(1, 1, out.length, 1).setNumberFormat('@');
-  sh.getRange(1, 2).setNumberFormat('@');
+  sh.getRange(1, 1, out.length, 5).setNumberFormat('@'); // всё текстом, чтобы таблица не превращала даты в свои
   sh.getRange(1, 1, out.length, 5).setValues(out);
 }
 

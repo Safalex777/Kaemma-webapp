@@ -1,23 +1,26 @@
 /**
- * Аналитика каналов раз в день в тему «Аналитика» группы «Владычица НС». Продаж здесь нет, они в «доходах».
+ * Аналитика каналов в тему «Аналитика» группы «Владычица НС». Продаж здесь нет, они в «доходах».
  * Живёт отдельным файлом «Общая сводка» в проекте «Уведомления о продажах» (аккаунт safalex777),
  * копия кода: webapp/stats/obshchaya-svodka.gs. Все имена с приставкой obsh, продажи и подписчиков не трогает.
  *
- * Вид: по каждой площадке абзацы «Сутки», «Неделя», «Месяц» (30 дней), у каждого сравнение с прошлым таким же сроком.
- * 3-го числа отдельным сообщением итоги прошлого месяца (к 3-му YouTube досылает статистику за конец месяца).
+ * Три сообщения:
+ *   каждый день 21:30 - коротко: по площадке сутки, неделя, месяц со стрелками к прошлому такому же сроку;
+ *   понедельник 10:00 - итоги прошлой недели: главное, откуда пришли в бот, лучший пост и видео, Shorts/длинные;
+ *   3-го числа 21:30 - итоги прошлого месяца (к 3-му YouTube досылает статистику за конец месяца).
  *
  * Откуда цифры:
  *   бот - свойства PODP_* и лист «_подписчики» (их ведёт файл «Подписчики»), покупки - лист «Заказы»;
- *   Telegram-канал - открытые страницы t.me/Kaemma144 и t.me/s/Kaemma144;
+ *   Telegram-канал - открытые страницы t.me/Kaemma144 (подписчики) и t.me/s/Kaemma144 (посты, просмотры, реакции);
  *   YouTube - таблица «YouTube для сводки» в аккаунте kaemma144 (открыта на чтение), её заполняет
- *     скрипт «YouTube для сводки»: общее число как в YouTube, по дням и месяцам из аналитики (с задержкой 2-3 дня).
- * Каждый вечер цифры пишутся на скрытый лист «_аналитика», по нему считаются изменения Telegram и просмотры YouTube за сутки.
- * Время: каждая отправка ставит разовый триггер на следующие 21:30 по Москве.
- * Запустить один раз obshUstanovit(). Посмотреть текст без отправки: obshProba() и obshProbaMesyac() (текст в журнале).
+ *     скрипт «YouTube для сводки»: общее число как в YouTube, дни, неделя и месяцы из аналитики (с задержкой 2-3 дня).
+ * Каждый вечер цифры пишутся на скрытый лист «_аналитика»: по нему считаются прирост Telegram и просмотры YouTube за сутки.
+ * Время: каждая отправка ставит разовый триггер на следующую.
+ * Запустить один раз obshUstanovit(). Посмотреть без отправки: obshProba(), obshProbaNedelya(), obshProbaMesyac().
  */
 var OBSH_CHAT = '-1004351530139';
 var OBSH_THREAD = 216;
 var OBSH_HOUR = 21, OBSH_MIN = 30;
+var OBSH_NED_HOUR = 10;
 var OBSH_ITOG_DAY = 3;
 var OBSH_TZ = 'Europe/Moscow';
 var OBSH_TG = 'Kaemma144';
@@ -26,9 +29,14 @@ var OBSH_LIST = '_аналитика';
 var OBSH_KEYS = ['tg', 'yt', 'ytv'];
 var OBSH_MONTHS = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
 var OBSH_MONTHS_IM = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'];
+var OBSH_SRC = { tiktok: 'TikTok', tt: 'TikTok', youtube: 'YouTube', yt: 'YouTube', instagram: 'Instagram', ig: 'Instagram',
+  inst: 'Instagram', vk: 'VK', telegram: 'Telegram', tg: 'Telegram', site: 'сайт', getcourse: 'сайт', '?': 'без метки' };
+
+// ---------- расписание ----------
 
 function obshUstanovit() {
   obshDalshe();
+  obshNedDalshe();
   obshProba();
 }
 
@@ -41,42 +49,223 @@ function obshSvodka() {
   }
 }
 
+function obshNedelya() {
+  try {
+    obshSend(obshNedTekst());
+  } finally {
+    obshNedDalshe();
+  }
+}
+
 function obshProba() { Logger.log(obshTekst(false)); }
+function obshProbaNedelya() { Logger.log(obshNedTekst()); }
 function obshProbaMesyac() { Logger.log(obshItogi()); }
 
 function obshSend(text) {
   var tok = PropertiesService.getScriptProperties().getProperty('BOT_TOKEN');
   var r = UrlFetchApp.fetch('https://api.telegram.org/bot' + tok + '/sendMessage', {
     method: 'post', contentType: 'application/json', muteHttpExceptions: true,
-    payload: JSON.stringify({ chat_id: OBSH_CHAT, message_thread_id: OBSH_THREAD, text: text, parse_mode: 'HTML' })
+    payload: JSON.stringify({ chat_id: OBSH_CHAT, message_thread_id: OBSH_THREAD, text: text, parse_mode: 'HTML',
+      disable_web_page_preview: true })
   });
-  if (!JSON.parse(r.getContentText()).ok) throw new Error('Telegram не принял аналитику (ответ ' + r.getResponseCode() + ')');
+  if (!JSON.parse(r.getContentText()).ok) throw new Error('Telegram не принял аналитику (ответ ' + r.getContentText().slice(0, 200) + ')');
 }
 
-function obshDalshe() {
+/** Разовый триггер fn на ближайшее время hour:min по Москве (Москва всегда UTC+3); weekday - только этот день недели (1 = пн). */
+function obshPostavit(fn, hour, min, weekday) {
   ScriptApp.getProjectTriggers().forEach(function (t) {
-    if (t.getHandlerFunction() === 'obshSvodka') ScriptApp.deleteTrigger(t);
+    if (t.getHandlerFunction() === fn) ScriptApp.deleteTrigger(t);
   });
   var msk = new Date(Date.now() + 3 * 3600e3);
-  for (var k = 0; k < 2; k++) {
-    var t = Date.UTC(msk.getUTCFullYear(), msk.getUTCMonth(), msk.getUTCDate() + k, OBSH_HOUR - 3, OBSH_MIN);
-    if (t > Date.now() + 5 * 60e3) {
-      ScriptApp.newTrigger('obshSvodka').timeBased().at(new Date(t)).create();
-      return;
-    }
+  for (var k = 0; k < 8; k++) {
+    var t = Date.UTC(msk.getUTCFullYear(), msk.getUTCMonth(), msk.getUTCDate() + k, hour - 3, min);
+    if (t <= Date.now() + 5 * 60e3) continue;
+    if (weekday && new Date(t + 3 * 3600e3).getUTCDay() !== weekday) continue;
+    ScriptApp.newTrigger(fn).timeBased().at(new Date(t)).create();
+    return;
   }
 }
 
-function obshDay(k) { return Utilities.formatDate(new Date(Date.now() - k * 864e5), OBSH_TZ, 'yyyy-MM-dd'); }
+function obshDalshe() { obshPostavit('obshSvodka', OBSH_HOUR, OBSH_MIN); }
+function obshNedDalshe() { obshPostavit('obshNedelya', OBSH_NED_HOUR, 0, 1); }
 
-/** Сумма по дням из словаря {день: число} за дни с from по to включительно. */
-function obshSum(map, from, to) {
-  var n = 0;
-  Object.keys(map).forEach(function (d) { if (d >= from && d <= to) n += Number(map[d]) || 0; });
-  return n;
+// ---------- каждый день ----------
+
+function obshTekst(zapisat) {
+  var now = new Date();
+  var today = obshDay(0);
+  var tg = obshTelegram();
+  var yt = obshYoutube();
+  var hist = obshIstoriya(today, { tg: tg.subs, yt: yt.subs, ytv: yt.viewsTotal }, zapisat);
+  var b = obshBot();
+  var rows = ['📊 <b>Аналитика · ' + Number(Utilities.formatDate(now, OBSH_TZ, 'd')) + ' ' +
+    OBSH_MONTHS[Number(Utilities.formatDate(now, OBSH_TZ, 'M')) - 1] + '</b>'];
+
+  // бот: итог = новые минус отписки (пока отписки не известны за весь срок - только новые)
+  var bp = function (k, shift) { return b.per(obshDay(k - 1 + shift), obshDay(shift)); };
+  var bv = function (p) { return p.out === null ? p.n : p.n - p.out; };
+  var bTxt = function (k) {
+    var c = bp(k, 0), p = bp(k, k);
+    var same = (c.out === null) === (p.out === null);
+    return obshZ(bv(c)) + (k > 1 && same ? obshStr(bv(c), bv(p)) : '');
+  };
+  rows.push('', '🤖 <b>Бот</b> · ' + obshN(b.total));
+  rows.push('Сутки ' + bTxt(1) + ' · Неделя ' + bTxt(7) + ' · Месяц ' + bTxt(30));
+  var n7 = bp(7, 0).n, pok = obshPokupki(obshDay(6), today);
+  if (n7) rows.push('Покупок за неделю: ' + pok + ' (' + Math.round(pok / n7 * 100) + ' % от новых)');
+
+  // Telegram
+  rows.push('', '✈️ <b>Telegram</b> · ' + (tg.subs ? obshN(tg.subs) : 'страница не ответила'));
+  if (tg.subs) {
+    var start = Object.keys(hist).sort()[0] || today;
+    var tTxt = function (k) {
+      var v = obshRazn(hist, 'tg', tg.subs, 0, k);
+      if (v === null) return 'с ' + obshDm(obshDayFrom(start, k));
+      return obshZ(v) + (k > 1 ? obshStr(v, obshRazn(hist, 'tg', null, k, 2 * k)) : '');
+    };
+    rows.push('Сутки ' + tTxt(1) + ' · Неделя ' + tTxt(7) + ' · Месяц ' + tTxt(30));
+    var r7 = obshTgPeriod(tg.posts, 7, 0), r7p = obshTgPeriod(tg.posts, 7, 7);
+    if (r7.reach) rows.push('Охват поста: ' + obshN(r7.reach) + (r7p.reach ? obshStr(r7.reach, r7p.reach) + ' (было ' + obshN(r7p.reach) + ')' : ''));
+  }
+
+  // YouTube
+  rows.push('', '▶️ <b>YouTube</b> · ' + (yt.subs ? obshN(yt.subs) : 'нет доступа к таблице'));
+  if (yt.days.length) {
+    var last = yt.days[yt.days.length - 1];
+    var v1 = obshRazn(hist, 'ytv', yt.viewsTotal, 0, 1);
+    rows.push('Сутки: ' + obshN(v1 !== null ? v1 : last[1]) + ' просм. · ' + obshZ(last[3] - last[4]) + ' подп.');
+    var yTxt = function (k) {
+      var c = obshYtSum(yt.days.slice(-k)), p = yt.days.length >= 2 * k ? obshYtSum(yt.days.slice(-2 * k, -k)) : null;
+      return obshN(c.views) + ' просм.' + (p ? obshStr(c.views, p.views) : '') + ' · ' + obshZ(c.subs) + ' подп.' +
+        (p ? obshStr(c.subs, p.subs) : '');
+    };
+    rows.push('Неделя: ' + yTxt(7));
+    rows.push('Месяц: ' + yTxt(30));
+    rows.push('<i>YouTube по ' + obshDm(last[0]) + (v1 !== null ? ', просмотры за сутки сегодняшние' : '') + '</i>');
+  }
+  return rows.join('\n');
 }
 
-function obshDannye() {
+// ---------- понедельник: итоги недели ----------
+
+function obshNedTekst() {
+  var from = obshDay(7), to = obshDay(1); // прошлая неделя пн-вс
+  var b = obshBot(), tg = obshTelegram(), yt = obshYoutube();
+  var rows = ['📈 <b>Итоги недели · ' + obshDm(from) + '-' + obshDm(to) + '</b>', '', '⭐ <b>Главное</b>'];
+
+  // главное: самый сильный рост и самое сильное падение к позапрошлой неделе
+  var bc = b.per(from, to), bpv = b.per(obshDay(14), obshDay(8));
+  var tc = obshTgPeriod(tg.posts, 7, 1), tpv = obshTgPeriod(tg.posts, 7, 8);
+  var w = yt.days.length >= 14 ? obshYtSum(yt.days.slice(-7)) : null, wp = w ? obshYtSum(yt.days.slice(-14, -7)) : null;
+  var cand = [
+    { name: 'Бот', what: 'новых', now: bc.n, was: bpv.n, znak: true },
+    { name: 'Telegram', what: 'охват поста', now: tc.reach, was: tpv.reach },
+    { name: 'YouTube', what: 'просмотров', now: w && w.views, was: wp && wp.views },
+    { name: 'YouTube', what: 'подписчиков', now: w && w.subs, was: wp && wp.subs, znak: true, abs: true }
+  ].filter(function (c) { return c.now !== null && c.now !== undefined && c.was; });
+  cand.forEach(function (c) { c.ch = c.abs ? (c.now - c.was) / Math.max(Math.abs(c.was), 10) : c.now / c.was - 1; });
+  var up = cand.filter(function (c) { return c.ch >= 0.1; }).sort(function (a, z) { return z.ch - a.ch; })[0];
+  var down = cand.filter(function (c) { return c.ch <= -0.1; }).sort(function (a, z) { return a.ch - z.ch; })[0];
+  var line = function (c, arrow) {
+    var val = c.znak ? obshZ(c.now) : obshN(c.now), was = c.znak ? obshZ(c.was) : obshN(c.was);
+    var how = !c.abs && c.now / c.was >= 2 ? ', в ' + String(Math.round(c.now / c.was * 10) / 10).replace('.', ',') + ' раза больше' :
+      ', было ' + was;
+    return arrow + ' ' + c.name + ': ' + c.what + ' ' + val + how;
+  };
+  if (up) rows.push(line(up, '🔼'));
+  if (down) rows.push(line(down, '🔽'));
+  if (!up && !down) rows.push('➖ без резких перемен к прошлой неделе');
+  if (yt.best) rows.push('🏆 Лучшее видео: «' + obshKor(yt.best.title, 50) + '» ' + obshTys(yt.best.views));
+  if (tc.best) rows.push('🏆 Лучший пост: «' + obshKor(tc.best.text, 50) + '» ' + obshN(tc.best.views));
+
+  // бот: откуда пришли
+  rows.push('', '🤖 <b>Бот</b>: ' + obshZ(bc.n) + ' новых' + (bc.out !== null ? ', отписались ' + bc.out : ''));
+  var src = {};
+  Object.keys(b.src).forEach(function (d) {
+    if (d < from || d > to) return;
+    Object.keys(b.src[d]).forEach(function (k) {
+      var name = OBSH_SRC[k] || k;
+      src[name] = (src[name] || 0) + b.src[d][k];
+    });
+  });
+  var names = Object.keys(src).sort(function (a, z) { return src[z] - src[a]; });
+  if (names.length && !(names.length === 1 && names[0] === 'без метки')) {
+    rows.push('Откуда: ' + names.slice(0, 6).map(function (k) { return k + ' ' + src[k]; }).join(' · '));
+  } else if (names.length) {
+    rows.push('Откуда: на ссылках в бот нет меток источника');
+  }
+  var pok = obshPokupki(from, to);
+  if (bc.n) rows.push('Покупок: ' + pok + ' (' + Math.round(pok / bc.n * 100) + ' % от новых)');
+
+  // Telegram
+  rows.push('', '✈️ <b>Telegram</b>: ' + tc.posts + ' постов · ' + obshN(tc.reactions) + ' реакций');
+  if (tc.reach) rows.push('Охват поста: ' + obshN(tc.reach) + (tpv.reach ? obshStr(tc.reach, tpv.reach) + ' (было ' + obshN(tpv.reach) + ')' : '') +
+    (tg.subs ? ' · ' + Math.round(tc.reach / tg.subs * 100) + ' % подписчиков' : ''));
+
+  // YouTube
+  if (yt.week) {
+    rows.push('', '▶️ <b>YouTube</b> (' + obshDm(yt.week.start) + '-' + obshDm(yt.week.end) + ')');
+    if (yt.week.shorts !== undefined) rows.push('Shorts ' + obshN(yt.week.shorts) + ' просм. · длинные ' + obshN(yt.week.long) +
+      (yt.week.live ? ' · эфиры ' + obshN(yt.week.live) : ''));
+    rows.push((yt.week.avg ? 'Досмотр ' + yt.week.avg + ' % · ' : '') + 'вышло ' + yt.new7 + ' видео и Shorts');
+  }
+  return rows.join('\n');
+}
+
+// ---------- 3-го числа: итоги месяца ----------
+
+function obshItogi() {
+  var msk = new Date(Date.now() + 3 * 3600e3);
+  var ym = function (k) { return Utilities.formatDate(new Date(Date.UTC(msk.getUTCFullYear(), msk.getUTCMonth() - k, 1)), 'UTC', 'yyyy-MM'); };
+  var name = function (s) { return OBSH_MONTHS_IM[Number(s.slice(5, 7)) - 1]; };
+  var cur = ym(1), prev = ym(2);
+  var b = obshBot();
+  var rows = ['🏆 <b>Итоги: ' + name(cur) + ' ' + cur.slice(0, 4) + '</b>', ''];
+
+  var botM = {};
+  Object.keys(b.newByDay).forEach(function (d) { botM[d.slice(0, 7)] = (botM[d.slice(0, 7)] || 0) + b.newByDay[d]; });
+  delete botM[ym(0)];
+  rows.push('🤖 <b>Бот</b>: ' + obshZ(botM[cur] || 0) + ' новых' + obshBylo(botM[cur] || 0, botM[prev], true, name(prev)) +
+    obshLuchshiy(botM, cur));
+
+  var hist = obshIstoriya(obshDay(0), {}, false);
+  var tgM = function (s) {
+    var days = Object.keys(hist).filter(function (x) { return x.slice(0, 7) === s && hist[x].tg; }).sort();
+    return days.length > 1 ? hist[days[days.length - 1]].tg - hist[days[0]].tg : null;
+  };
+  var tc = tgM(cur);
+  var tgp = obshTelegram().posts;
+  var reachM = function (s) {
+    var v = tgp.filter(function (p) { return p.day.slice(0, 7) === s; }).map(function (p) { return p.views; });
+    return v.length ? obshMed(v) : 0;
+  };
+  rows.push('✈️ <b>Telegram</b>: ' + (tc === null ? 'подписчики: история с 26.10' : obshZ(tc) + ' подписчиков' + obshBylo(tc, tgM(prev), true, name(prev))) +
+    (reachM(cur) ? ' · охват поста ' + obshN(reachM(cur)) + obshBylo(reachM(cur), reachM(prev) || null, false, name(prev)) : ''));
+
+  var yt = obshYoutube(), ytS = {}, ytV = {};
+  yt.months.forEach(function (x) { ytS[x[0]] = x[3] - x[4]; ytV[x[0]] = x[1]; });
+  if (ytV[cur] !== undefined) {
+    rows.push('▶️ <b>YouTube</b>: ' + obshZ(ytS[cur]) + ' подп.' + obshBylo(ytS[cur], ytS[prev], true, name(prev)) +
+      ' · ' + obshN(ytV[cur]) + ' просм.' + obshBylo(ytV[cur], ytV[prev], false, name(prev)) + obshLuchshiy(ytV, cur));
+  } else {
+    rows.push('▶️ <b>YouTube</b>: статистика за месяц ещё не пришла');
+  }
+  return rows.join('\n');
+}
+
+/** « · 🥇 лучший месяц за год» среди последних 12 целых месяцев. */
+function obshLuchshiy(map, cur) {
+  var y = Number(cur.slice(0, 4)), m = Number(cur.slice(5, 7));
+  var from = (m === 12 ? y : y - 1) + '-' + ('0' + (m % 12 + 1)).slice(-2);
+  var keys = Object.keys(map).filter(function (k) { return k >= from && k <= cur; });
+  if (keys.length < 2) return '';
+  var best = keys.reduce(function (a, k) { return map[k] > map[a] ? k : a; }, keys[0]);
+  return best === cur ? ' · 🥇 лучший месяц за год' : '';
+}
+
+// ---------- данные ----------
+
+function obshBot() {
   var props = PropertiesService.getScriptProperties();
   var sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('_подписчики');
   var outs = {};
@@ -86,160 +275,90 @@ function obshDannye() {
       if (v !== 'base') outs[v.slice(0, 10)] = (outs[v.slice(0, 10)] || 0) + 1;
     });
   }
+  var newByDay = JSON.parse(props.getProperty('PODP_NEW') || '{}');
+  var since = (props.getProperty('PODP_SINCE') || '9999').slice(0, 10);
   return {
-    botNew: JSON.parse(props.getProperty('PODP_NEW') || '{}'),
-    botOut: outs,
-    botSince: (props.getProperty('PODP_SINCE') || '9999').slice(0, 10),
-    botTotal: Number(props.getProperty('PODP_TOTAL') || 0)
-  };
-}
-
-function obshTekst(zapisat) {
-  var now = new Date();
-  var today = obshDay(0);
-  var tg = obshTelegram();
-  var yt = obshYoutube();
-  var hist = obshIstoriya(today, { tg: tg.subs, yt: yt.subs, ytv: yt.viewsTotal }, zapisat);
-  var d = obshDannye();
-  var S = '☀️ <b>Сутки</b>', W = '📅 <b>Неделя</b>', M = '🗓 <b>Месяц</b>';
-  var rows = ['📊 <b>Аналитика каналов · ' + Number(Utilities.formatDate(now, OBSH_TZ, 'd')) + ' ' +
-    OBSH_MONTHS[Number(Utilities.formatDate(now, OBSH_TZ, 'M')) - 1] + '</b>'];
-
-  // бот: сутки - сегодняшний день, неделя - 7 дней по сегодня, месяц - 30 дней; shift - сдвиг назад для сравнения
-  var botPer = function (k, shift) {
-    var from = obshDay(k - 1 + shift), to = obshDay(shift);
-    var out = from > d.botSince ? obshSum(d.botOut, from, to) : null; // отписки известны только за полные дни после первого снимка
-    return { n: obshSum(d.botNew, from, to), out: out };
-  };
-  var botBlock = function (title, p, prev, prevName) {
-    var r = ['', title, 'Новых: +' + p.n + (prev ? obshBylo(p.n, prev.n, false, prevName) : '')];
-    if (p.out !== null) {
-      r.push('Отписались: ' + p.out);
-      r.push('Итог: ' + obshZ(p.n - p.out) + (prev && prev.out !== null ? obshBylo(p.n - p.out, prev.n - prev.out, true, prevName) : ''));
+    total: Number(props.getProperty('PODP_TOTAL') || 0),
+    newByDay: newByDay,
+    src: JSON.parse(props.getProperty('PODP_SRC') || '{}'),
+    // новые и отписки за дни from..to; отписки известны только за полные дни после первого снимка
+    per: function (from, to) {
+      return { n: obshSum(newByDay, from, to), out: from > since ? obshSum(outs, from, to) : null };
     }
-    return r;
   };
-  rows.push('', '', '🤖 <b>Бот @KaemmaBot</b>', 'Сейчас подписаны: ' + obshN(d.botTotal));
-  rows = rows.concat(botBlock(S, botPer(1, 0), botPer(1, 1), 'вчера'));
-  var b7 = botPer(7, 0);
-  rows = rows.concat(botBlock(W, b7, botPer(7, 7), 'прошлая неделя'));
-  var pok = obshPokupki(obshDay(6), today);
-  if (b7.n) rows.push('Покупки: ' + pok + ' на ' + b7.n + ' новых (' + Math.round(pok / b7.n * 100) + ' %)');
-  rows = rows.concat(botBlock(M, botPer(30, 0), botPer(30, 30), 'прошлые 30 дней'));
-
-  // Telegram
-  rows.push('', '', '✈️ <b>Telegram-канал</b>');
-  if (tg.subs) {
-    rows.push('Сейчас подписчиков: ' + obshN(tg.subs));
-    if (tg.median) rows.push('Охват поста: ' + obshN(tg.median) + ' (' + Math.round(tg.median / tg.subs * 100) + ' % подписчиков)');
-    var tgPer = function (k) { return obshRazn(hist, 'tg', tg.subs, 0, k); };
-    var tgPrev = function (k) { return obshRazn(hist, 'tg', null, k, 2 * k); };
-    var tgLine = function (k, prevName) {
-      var v = tgPer(k);
-      return 'Прирост: ' + (v === null ? 'копится, история с 26.10' : obshZ(v) + obshBylo(v, tgPrev(k), true, prevName));
-    };
-    rows.push('', S, tgLine(1, 'вчера'), 'Постов: ' + tg.posts1);
-    rows.push('', W, tgLine(7, 'прошлая неделя'), 'Постов: ' + tg.posts7);
-    rows.push('', M, tgLine(30, 'прошлые 30 дней'));
-  } else {
-    rows.push('⚠️ страница канала не ответила');
-  }
-
-  // YouTube
-  rows.push('', '', '▶️ <b>YouTube</b>');
-  if (yt.subs) rows.push('Сейчас подписчиков: ' + obshN(yt.subs));
-  if (yt.days.length) {
-    var v1 = obshRazn(hist, 'ytv', yt.viewsTotal, 0, 1);
-    var last = yt.days[yt.days.length - 1];
-    rows.push('', S);
-    if (v1 !== null) rows.push('Просмотры: ' + obshN(v1));
-    rows.push((v1 !== null ? 'По аналитике за ' : 'За ') + obshDm(last[0]) + ': ' + obshN(last[1]) + ' просмотров, подписчики ' +
-      obshZ(last[3] - last[4]) + ' (+' + last[3] + ' / -' + last[4] + ')');
-    var ytBlock = function (title, k, prevName) {
-      var c = obshYtSum(yt.days.slice(-k)), p = yt.days.length >= 2 * k ? obshYtSum(yt.days.slice(-2 * k, -k)) : null;
-      return ['', title,
-        'Подписчики: ' + obshZ(c.subs) + ' (+' + c.gain + ' / -' + c.lost + ')' + (p ? obshBylo(c.subs, p.subs, true, prevName) : ''),
-        'Просмотры: ' + obshN(c.views) + (p ? obshBylo(c.views, p.views, false, prevName) : ''),
-        'Часы просмотра: ' + obshN(c.min / 60) + (p ? obshBylo(Math.round(c.min / 60), Math.round(p.min / 60), false, prevName) : '')];
-    };
-    rows = rows.concat(ytBlock(W, 7, 'прошлая неделя'));
-    rows.push('Видео и Shorts: ' + yt.new7);
-    rows = rows.concat(ytBlock(M, 30, 'прошлые 30 дней'));
-    rows.push('', '<i>ℹ️ YouTube отдаёт статистику с задержкой 2-3 дня, неделя и месяц по ' + obshDm(last[0]) + '</i>');
-  } else if (!yt.subs) {
-    rows.push('⚠️ нет доступа к таблице «YouTube для сводки»');
-  }
-  rows.push('', '', '⏳ VK, Instagram, TikTok подключаем');
-  return rows.join('\n');
 }
 
-/** Итоги прошлого месяца: сравнение с позапрошлым и лучший месяц. */
-function obshItogi() {
-  var msk = new Date(Date.now() + 3 * 3600e3);
-  var ym = function (k) {
-    var t = new Date(Date.UTC(msk.getUTCFullYear(), msk.getUTCMonth() - k, 1));
-    return Utilities.formatDate(t, 'UTC', 'yyyy-MM');
-  };
-  var name = function (s) { return OBSH_MONTHS_IM[Number(s.slice(5, 7)) - 1]; };
-  var cur = ym(1), prev = ym(2);
-  var d = obshDannye();
-  var rows = ['🏆 <b>Итоги: ' + name(cur) + ' ' + cur.slice(0, 4) + '</b>', ''];
-
-  // бот: новые по месяцам из истории подписок
-  var botM = {};
-  Object.keys(d.botNew).forEach(function (day) { botM[day.slice(0, 7)] = (botM[day.slice(0, 7)] || 0) + d.botNew[day]; });
-  delete botM[ym(0)];
-  rows.push('🤖 <b>Бот</b>: +' + (botM[cur] || 0) + ' новых' + obshBylo(botM[cur] || 0, botM[prev], false, name(prev)) +
-    obshLuchshiy(botM, cur, 'новым в боте'));
-  var outCur = obshSum(d.botOut, cur + '-01', cur + '-31');
-  if (d.botSince <= cur + '-01') rows.push('   ушли за месяц: ' + outCur);
-
-  // Telegram: разница между концом и началом месяца по истории
-  var hist = obshIstoriya(obshDay(0), {}, false);
-  var tgM = function (s) {
-    var days = Object.keys(hist).filter(function (x) { return x.slice(0, 7) === s && hist[x].tg; }).sort();
-    return days.length > 1 ? hist[days[days.length - 1]].tg - hist[days[0]].tg : null;
-  };
-  var tc = tgM(cur), tp = tgM(prev);
-  rows.push('✈️ <b>Telegram</b>: ' + (tc === null ? 'история копится с 26 октября' : obshZ(tc) + ' подписчиков' + obshBylo(tc, tp, true, name(prev))));
-
-  // YouTube: целые месяцы из аналитики
-  var yt = obshYoutube();
-  var ytS = {}, ytV = {};
-  yt.months.forEach(function (x) { ytS[x[0]] = x[3] - x[4]; ytV[x[0]] = x[1]; });
-  if (ytV[cur] !== undefined) {
-    rows.push('▶️ <b>YouTube</b>: ' + obshZ(ytS[cur]) + ' подписчиков' + obshBylo(ytS[cur], ytS[prev], true, name(prev)));
-    rows.push('   просмотры ' + obshN(ytV[cur]) + obshBylo(ytV[cur], ytV[prev], false, name(prev)) + obshLuchshiy(ytV, cur, 'просмотрам'));
-  } else {
-    rows.push('▶️ <b>YouTube</b>: статистика за месяц ещё не пришла');
-  }
-  return rows.join('\n');
-}
-
-/** «🥇 лучший месяц за год» или «лучший был …». */
-function obshLuchshiy(map, cur, what) {
-  // последние 12 целых месяцев, считая отчётный
-  var y = Number(cur.slice(0, 4)), m = Number(cur.slice(5, 7));
-  var from = (m === 12 ? y : y - 1) + '-' + ('0' + (m % 12 + 1)).slice(-2);
-  var keys = Object.keys(map).filter(function (k) { return k >= from && k <= cur; });
-  var best = null;
-  keys.forEach(function (k) { if (best === null || map[k] > map[best]) best = k; });
-  if (!best || keys.length < 2) return '';
-  return best === cur ? '\n   🥇 лучший месяц за год по ' + what :
-    '\n   лучший за год: ' + OBSH_MONTHS_IM[Number(best.slice(5, 7)) - 1] + ' ' + best.slice(0, 4) + ' (' + obshN(map[best]) + ')';
-}
-
-function obshYtSum(days) {
-  var r = { views: 0, min: 0, subs: 0, gain: 0, lost: 0 };
-  days.forEach(function (x) { r.views += x[1]; r.min += x[2]; r.gain += x[3]; r.lost += x[4]; r.subs += x[3] - x[4]; });
+/** Посты канала за ~60 дней со страниц t.me/s: день, просмотры, реакции, начало текста. */
+function obshTelegram() {
+  var r = { subs: 0, posts: [] };
+  var opt = { muteHttpExceptions: true, headers: { 'Accept-Language': 'ru' } };
+  try {
+    var page = UrlFetchApp.fetch('https://t.me/' + OBSH_TG, opt).getContentText();
+    var m = page.match(/tgme_page_extra">([\d\s ]+)\s*(subscribers|подписчик)/);
+    if (m) r.subs = Number(m[1].replace(/\D/g, ''));
+    var before = '', oldest = Date.now();
+    for (var i = 0; i < 10 && Date.now() - oldest < 62 * 864e5; i++) {
+      var s = UrlFetchApp.fetch('https://t.me/s/' + OBSH_TG + (before ? '?before=' + before : ''), opt).getContentText();
+      var blocks = s.split('tgme_widget_message_wrap').slice(1);
+      if (!blocks.length) break;
+      blocks.forEach(function (bl) {
+        var t = bl.match(/datetime="([^"]+)"/), v = bl.match(/tgme_widget_message_views">([^<]+)</);
+        if (!t || !v) return;
+        var when = new Date(t[1]).getTime();
+        oldest = Math.min(oldest, when);
+        var reac = 0;
+        bl.replace(/class="tgme_reaction"[^]*?([\d.,]+K?)<\/span>/g, function (_, n) { reac += obshChislo(n); });
+        var txt = (bl.match(/tgme_widget_message_text[^>]*>([^]*?)<\/div>/) || [])[1] || '';
+        txt = txt.replace(/<br\s*\/?>/g, ' ').replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"')
+          .replace(/&#39;/g, "'").replace(/&amp;/g, '&').replace(/&lt;/g, '‹').replace(/&gt;/g, '›').replace(/\s+/g, ' ').trim();
+        r.posts.push({ when: when, day: Utilities.formatDate(new Date(when), OBSH_TZ, 'yyyy-MM-dd'),
+          views: obshChislo(v[1]), reactions: reac, text: txt || 'пост без текста' });
+      });
+      var more = s.match(/data-before="(\d+)"/);
+      if (!more || more[1] === before) break;
+      before = more[1];
+    }
+  } catch (e) { Logger.log('Telegram: ' + e); }
   return r;
 }
 
-/** « 🔼 (было 47)» для недели или « 🔼 (сентябрь +12)» для месяца; znak - писать ли плюс у прошлого числа. */
-function obshBylo(now, was, znak, label) {
-  if (was === null || was === undefined) return '';
-  var arrow = now > was ? ' 🔼' : now < was ? ' 🔽' : ' ➖';
-  return arrow + ' (' + (label || 'было') + ' ' + (znak ? obshZ(was) : obshN(was)) + ')';
+/** Посты за k дней, закончившиеся shift дней назад: число, реакции, охват (середина просмотров, без постов моложе суток), лучший. */
+function obshTgPeriod(posts, k, shift) {
+  var to = Date.now() - shift * 864e5, from = to - k * 864e5;
+  var p = posts.filter(function (x) { return x.when > from && x.when <= to; });
+  var ripe = p.filter(function (x) { return Date.now() - x.when > 864e5; }).map(function (x) { return x.views; });
+  var best = p.reduce(function (a, x) { return !a || x.views > a.views ? x : a; }, null);
+  return { posts: p.length, reactions: p.reduce(function (a, x) { return a + x.reactions; }, 0),
+    reach: ripe.length ? obshMed(ripe) : 0, best: best };
+}
+
+function obshYoutube() {
+  var r = { subs: 0, viewsTotal: 0, new7: 0, days: [], months: [], week: null, best: null };
+  try {
+    var v = SpreadsheetApp.openById(OBSH_YT_TABLICA).getSheetByName('YouTube').getDataRange().getValues();
+    v.forEach(function (x) {
+      var k = String(x[0]);
+      if (/^Подписчики/.test(k)) r.subs = Number(x[1]) || 0;
+      if (/^Просмотры за всё время/.test(k)) r.viewsTotal = Number(x[1]) || 0;
+      if (/^Видео за 7 дней/.test(k)) r.new7 = Number(x[1]) || 0;
+      if (k === 'Неделя') r.week = { start: String(x[1]), end: String(x[2]) };
+      if (r.week && k === 'Неделя: Shorts') r.week.shorts = Number(x[1]) || 0;
+      if (r.week && k === 'Неделя: длинные') r.week.long = Number(x[1]) || 0;
+      if (r.week && k === 'Неделя: эфиры') r.week.live = Number(x[1]) || 0;
+      if (r.week && k === 'Неделя: досмотр %') r.week.avg = Number(x[1]) || 0;
+      if (k === 'Неделя: лучшее видео') r.best = { title: String(x[1]), views: Number(x[2]) || 0 };
+      var row = [k, Number(x[1]), Number(x[2]), Number(x[3]), Number(x[4])];
+      if (/^\d{4}-\d\d-\d\d$/.test(k)) r.days.push(row);
+      if (/^\d{4}-\d\d$/.test(k)) r.months.push(row);
+    });
+  } catch (e) { Logger.log('YouTube: ' + e); }
+  return r;
+}
+
+function obshYtSum(days) {
+  var r = { views: 0, min: 0, subs: 0 };
+  days.forEach(function (x) { r.views += x[1]; r.min += x[2]; r.subs += x[3] - x[4]; });
+  return r;
 }
 
 function obshPokupki(from, to) {
@@ -253,49 +372,6 @@ function obshPokupki(from, to) {
     if (sum && d >= from && d <= to) n++;
   });
   return n;
-}
-
-function obshTelegram() {
-  var r = { subs: 0, median: 0, posts1: 0, posts7: 0 };
-  var opt = { muteHttpExceptions: true, headers: { 'Accept-Language': 'ru' } };
-  try {
-    var page = UrlFetchApp.fetch('https://t.me/' + OBSH_TG, opt).getContentText();
-    var m = page.match(/tgme_page_extra">([\d\s ]+)\s*(subscribers|подписчик)/);
-    if (m) r.subs = Number(m[1].replace(/\D/g, ''));
-    var s = UrlFetchApp.fetch('https://t.me/s/' + OBSH_TG, opt).getContentText();
-    var views = [];
-    s.replace(/tgme_widget_message_views">([^<]+)</g, function (_, v) {
-      var n = parseFloat(v.replace(',', '.'));
-      if (/K/i.test(v)) n *= 1000;
-      if (/M/i.test(v)) n *= 1e6;
-      views.push(Math.round(n));
-    });
-    var last = views.slice(-10).sort(function (a, b) { return a - b; });
-    if (last.length) r.median = last[Math.floor(last.length / 2)];
-    s.replace(/<time datetime="([^"]+)"/g, function (_, t) {
-      var age = Date.now() - new Date(t).getTime();
-      if (age < 864e5) r.posts1++;
-      if (age < 7 * 864e5) r.posts7++;
-    });
-  } catch (e) { Logger.log('Telegram: ' + e); }
-  return r;
-}
-
-function obshYoutube() {
-  var r = { subs: 0, viewsTotal: 0, new7: 0, days: [], months: [] };
-  try {
-    var v = SpreadsheetApp.openById(OBSH_YT_TABLICA).getSheetByName('YouTube').getDataRange().getValues();
-    v.forEach(function (x) {
-      var k = String(x[0]);
-      if (/^Подписчики/.test(k)) r.subs = Number(x[1]) || 0;
-      if (/^Просмотры за всё время/.test(k)) r.viewsTotal = Number(x[1]) || 0;
-      if (/^Видео за 7 дней/.test(k)) r.new7 = Number(x[1]) || 0;
-      var row = [k, Number(x[1]), Number(x[2]), Number(x[3]), Number(x[4])];
-      if (/^\d{4}-\d\d-\d\d$/.test(k)) r.days.push(row);
-      if (/^\d{4}-\d\d$/.test(k)) r.months.push(row);
-    });
-  } catch (e) { Logger.log('YouTube: ' + e); }
-  return r;
 }
 
 /** Скрытый лист «_аналитика»: день и цифры площадок на вечер. */
@@ -328,6 +404,17 @@ function obshIstoriya(today, vals, zapisat) {
   return hist;
 }
 
+// ---------- мелочи ----------
+
+function obshDay(k) { return Utilities.formatDate(new Date(Date.now() - k * 864e5), OBSH_TZ, 'yyyy-MM-dd'); }
+function obshDayFrom(d, k) { return Utilities.formatDate(new Date(new Date(d + 'T12:00:00Z').getTime() + k * 864e5), 'UTC', 'yyyy-MM-dd'); }
+
+function obshSum(map, from, to) {
+  var n = 0;
+  Object.keys(map).forEach(function (d) { if (d >= from && d <= to) n += Number(map[d]) || 0; });
+  return n;
+}
+
 /** Разница значения между днём «a дней назад» (или now) и днём «b дней назад»; null, если истории нет. */
 function obshRazn(hist, key, now, a, b) {
   var to = now !== null && a === 0 ? now : (hist[obshDay(a)] || {})[key];
@@ -335,6 +422,27 @@ function obshRazn(hist, key, now, a, b) {
   return to && from ? to - from : null;
 }
 
+/** Стрелка к прошлому такому же сроку: « 🔼» / « 🔽» / ничего, если прошлого нет. */
+function obshStr(now, was) {
+  if (was === null || was === undefined) return '';
+  return now > was ? ' 🔼' : now < was ? ' 🔽' : ' ➖';
+}
+
+/** « 🔼 (сентябрь +12)» для итогов месяца. */
+function obshBylo(now, was, znak, label) {
+  if (was === null || was === undefined) return '';
+  return obshStr(now, was) + ' (' + label + ' ' + (znak ? obshZ(was) : obshN(was)) + ')';
+}
+
+function obshMed(arr) { var a = arr.slice().sort(function (x, y) { return x - y; }); return a[Math.floor(a.length / 2)]; }
+function obshChislo(v) {
+  var n = parseFloat(String(v).replace(',', '.'));
+  if (/K/i.test(v)) n *= 1000;
+  if (/M/i.test(v)) n *= 1e6;
+  return Math.round(n) || 0;
+}
+function obshKor(t, n) { t = String(t); return t.length > n ? t.slice(0, n - 1).replace(/\s+\S*$/, '') + '…' : t; }
+function obshTys(n) { return n >= 1000 ? String(Math.round(n / 100) / 10).replace('.', ',') + ' тыс.' : String(n); }
 function obshDm(d) { return d.slice(8, 10) + '.' + d.slice(5, 7); }
 function obshZ(n) { return n > 0 ? '+' + obshN(n) : n < 0 ? '-' + obshN(-n) : '0'; }
 function obshN(n) { return String(Math.round(Number(n))).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
