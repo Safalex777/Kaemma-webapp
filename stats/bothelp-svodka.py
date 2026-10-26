@@ -48,7 +48,7 @@ def bothelp_subscribers():
     hdr = {'Authorization': 'Bearer ' + tok, 'Accept': 'application/json'}
     subs, after = [], None
     while True:
-        url = 'https://api.bothelp.io/v1/subscribers' + ('?after=%d' % after if after else '')
+        url = 'https://api.bothelp.io/v1/subscribers/' + ('?after=%d' % after if after else '')
         page = http(url, headers=hdr)
         data = page.get('data') or []
         subs += data
