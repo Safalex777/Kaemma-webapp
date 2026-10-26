@@ -36,7 +36,7 @@ function ytSobrat() {
     if (dims) { p.dimensions = dims; p.sort = dims; }
     return YouTubeAnalytics.Reports.query(p).rows || [];
   };
-  var rows = query(day(45), day(0), 'day');
+  var rows = query(day(75), day(0), 'day'); // 75 дней: месяц и прошлые 30 дней для сравнения
   var m0 = new Date(Date.now() + 3 * 3600e3);
   // по месяцам YouTube отдаёт только целые месяцы, обе даты - первые числа: год назад ... прошлый месяц
   var months = query(Utilities.formatDate(new Date(Date.UTC(m0.getUTCFullYear() - 1, m0.getUTCMonth(), 1)), 'UTC', 'yyyy-MM-dd'),

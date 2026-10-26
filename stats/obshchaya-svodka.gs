@@ -3,7 +3,7 @@
  * Живёт отдельным файлом «Общая сводка» в проекте «Уведомления о продажах» (аккаунт safalex777),
  * копия кода: webapp/stats/obshchaya-svodka.gs. Все имена с приставкой obsh, продажи и подписчиков не трогает.
  *
- * Вид: по каждой площадке сутки, неделя (с прошлой неделей для сравнения), месяц = 30 дней.
+ * Вид: по каждой площадке абзацы «Сутки», «Неделя», «Месяц» (30 дней), у каждого сравнение с прошлым таким же сроком.
  * 3-го числа отдельным сообщением итоги прошлого месяца (к 3-му YouTube досылает статистику за конец месяца).
  *
  * Откуда цифры:
@@ -101,56 +101,75 @@ function obshTekst(zapisat) {
   var yt = obshYoutube();
   var hist = obshIstoriya(today, { tg: tg.subs, yt: yt.subs, ytv: yt.viewsTotal }, zapisat);
   var d = obshDannye();
-  var rows = ['📊 <b>Аналитика · ' + Number(Utilities.formatDate(now, OBSH_TZ, 'd')) + ' ' +
-    OBSH_MONTHS[Number(Utilities.formatDate(now, OBSH_TZ, 'M')) - 1] + '</b>', ''];
+  var S = '☀️ <b>Сутки</b>', W = '📅 <b>Неделя</b>', M = '🗓 <b>Месяц</b>';
+  var rows = ['📊 <b>Аналитика каналов · ' + Number(Utilities.formatDate(now, OBSH_TZ, 'd')) + ' ' +
+    OBSH_MONTHS[Number(Utilities.formatDate(now, OBSH_TZ, 'M')) - 1] + '</b>'];
 
-  // бот: сутки - сегодняшний день, неделя - 7 дней по сегодня, месяц - 30 дней
+  // бот: сутки - сегодняшний день, неделя - 7 дней по сегодня, месяц - 30 дней; shift - сдвиг назад для сравнения
   var botPer = function (k, shift) {
     var from = obshDay(k - 1 + shift), to = obshDay(shift);
-    var n = obshSum(d.botNew, from, to);
     var out = from > d.botSince ? obshSum(d.botOut, from, to) : null; // отписки известны только за полные дни после первого снимка
-    return { n: n, out: out };
+    return { n: obshSum(d.botNew, from, to), out: out };
   };
-  var b1 = botPer(1, 0), b7 = botPer(7, 0), b7p = botPer(7, 7), b30 = botPer(30, 0);
-  var botLine = function (p) {
-    return '+' + p.n + ' новых' + (p.out === null ? '' : ', отписались ' + p.out + ' → итог ' + obshZ(p.n - p.out));
+  var botBlock = function (title, p, prev, prevName) {
+    var r = ['', title, 'Новых: +' + p.n + (prev ? obshBylo(p.n, prev.n, false, prevName) : '')];
+    if (p.out !== null) {
+      r.push('Отписались: ' + p.out);
+      r.push('Итог: ' + obshZ(p.n - p.out) + (prev && prev.out !== null ? obshBylo(p.n - p.out, prev.n - prev.out, true, prevName) : ''));
+    }
+    return r;
   };
-  rows.push('🤖 <b>Бот</b> · подписаны ' + obshN(d.botTotal));
-  rows.push('Сутки: ' + botLine(b1));
-  rows.push('Неделя: ' + botLine(b7) + obshBylo(b7.n, b7p.n, false));
-  rows.push('Месяц: ' + botLine(b30));
+  rows.push('', '', '🤖 <b>Бот @KaemmaBot</b>', 'Сейчас подписаны: ' + obshN(d.botTotal));
+  rows = rows.concat(botBlock(S, botPer(1, 0), botPer(1, 1), 'вчера'));
+  var b7 = botPer(7, 0);
+  rows = rows.concat(botBlock(W, b7, botPer(7, 7), 'прошлая неделя'));
   var pok = obshPokupki(obshDay(6), today);
-  if (b7.n) rows.push('🛒 Покупки за неделю: ' + pok + ' на ' + b7.n + ' новых (' + Math.round(pok / b7.n * 100) + ' %)');
-  rows.push('');
+  if (b7.n) rows.push('Покупки: ' + pok + ' на ' + b7.n + ' новых (' + Math.round(pok / b7.n * 100) + ' %)');
+  rows = rows.concat(botBlock(M, botPer(30, 0), botPer(30, 30), 'прошлые 30 дней'));
 
   // Telegram
-  rows.push('✈️ <b>Telegram</b> · ' + (tg.subs ? 'подписчики ' + obshN(tg.subs) : 'страница канала не ответила'));
+  rows.push('', '', '✈️ <b>Telegram-канал</b>');
   if (tg.subs) {
-    var t1 = obshRazn(hist, 'tg', tg.subs, 0, 1), t7 = obshRazn(hist, 'tg', tg.subs, 0, 7);
-    var t7p = obshRazn(hist, 'tg', null, 7, 14), t30 = obshRazn(hist, 'tg', tg.subs, 0, 30);
-    rows.push('Сутки: ' + (t1 === null ? 'считаю с сегодня' : obshZ(t1)) + ' · постов ' + tg.posts1);
-    rows.push('Неделя: ' + (t7 === null ? 'копится' : obshZ(t7) + obshBylo(t7, t7p, true)) + ' · постов ' + tg.posts7 +
-      ' · охват поста ' + obshN(tg.median) + ' (' + Math.round(tg.median / tg.subs * 100) + ' %)');
-    rows.push('Месяц: ' + (t30 === null ? 'копится' : obshZ(t30)));
+    rows.push('Сейчас подписчиков: ' + obshN(tg.subs));
+    if (tg.median) rows.push('Охват поста: ' + obshN(tg.median) + ' (' + Math.round(tg.median / tg.subs * 100) + ' % подписчиков)');
+    var tgPer = function (k) { return obshRazn(hist, 'tg', tg.subs, 0, k); };
+    var tgPrev = function (k) { return obshRazn(hist, 'tg', null, k, 2 * k); };
+    var tgLine = function (k, prevName) {
+      var v = tgPer(k);
+      return 'Прирост: ' + (v === null ? 'копится, история с 26.10' : obshZ(v) + obshBylo(v, tgPrev(k), true, prevName));
+    };
+    rows.push('', S, tgLine(1, 'вчера'), 'Постов: ' + tg.posts1);
+    rows.push('', W, tgLine(7, 'прошлая неделя'), 'Постов: ' + tg.posts7);
+    rows.push('', M, tgLine(30, 'прошлые 30 дней'));
+  } else {
+    rows.push('⚠️ страница канала не ответила');
   }
-  rows.push('');
 
   // YouTube
-  rows.push('▶️ <b>YouTube</b> · ' + (yt.subs ? 'подписчики ' + obshN(yt.subs) : 'нет доступа к таблице «YouTube для сводки»'));
+  rows.push('', '', '▶️ <b>YouTube</b>');
+  if (yt.subs) rows.push('Сейчас подписчиков: ' + obshN(yt.subs));
   if (yt.days.length) {
     var v1 = obshRazn(hist, 'ytv', yt.viewsTotal, 0, 1);
     var last = yt.days[yt.days.length - 1];
-    rows.push('Сутки: ' + (v1 !== null ? obshN(v1) + ' просмотров' :
-      obshN(last[1]) + ' просм. · ' + obshZ(last[3] - last[4]) + ' подп. (за ' + obshDm(last[0]) + ')'));
-    var w = obshYtSum(yt.days.slice(-7)), wp = obshYtSum(yt.days.slice(-14, -7)), m = obshYtSum(yt.days.slice(-30));
-    rows.push('Неделя: ' + obshZ(w.subs) + ' подп.' + obshBylo(w.subs, wp.subs, true) + ' · ' + obshN(w.views) +
-      ' просм.' + obshBylo(w.views, wp.views, false));
-    rows.push('Месяц: ' + obshZ(m.subs) + ' подп. · ' + obshN(m.views) + ' просм. · ' + obshN(m.min / 60) + ' ч просмотра');
-    rows.push('Видео и Shorts за неделю: ' + yt.new7);
-    rows.push('<i>неделя и месяц YouTube по ' + obshDm(last[0]) + ': YouTube отдаёт статистику с задержкой</i>');
+    rows.push('', S);
+    if (v1 !== null) rows.push('Просмотры: ' + obshN(v1));
+    rows.push((v1 !== null ? 'По аналитике за ' : 'За ') + obshDm(last[0]) + ': ' + obshN(last[1]) + ' просмотров, подписчики ' +
+      obshZ(last[3] - last[4]) + ' (+' + last[3] + ' / -' + last[4] + ')');
+    var ytBlock = function (title, k, prevName) {
+      var c = obshYtSum(yt.days.slice(-k)), p = yt.days.length >= 2 * k ? obshYtSum(yt.days.slice(-2 * k, -k)) : null;
+      return ['', title,
+        'Подписчики: ' + obshZ(c.subs) + ' (+' + c.gain + ' / -' + c.lost + ')' + (p ? obshBylo(c.subs, p.subs, true, prevName) : ''),
+        'Просмотры: ' + obshN(c.views) + (p ? obshBylo(c.views, p.views, false, prevName) : ''),
+        'Часы просмотра: ' + obshN(c.min / 60) + (p ? obshBylo(Math.round(c.min / 60), Math.round(p.min / 60), false, prevName) : '')];
+    };
+    rows = rows.concat(ytBlock(W, 7, 'прошлая неделя'));
+    rows.push('Видео и Shorts: ' + yt.new7);
+    rows = rows.concat(ytBlock(M, 30, 'прошлые 30 дней'));
+    rows.push('', '<i>ℹ️ YouTube отдаёт статистику с задержкой 2-3 дня, неделя и месяц по ' + obshDm(last[0]) + '</i>');
+  } else if (!yt.subs) {
+    rows.push('⚠️ нет доступа к таблице «YouTube для сводки»');
   }
-  rows.push('');
-  rows.push('⏳ VK, Instagram, TikTok подключаем');
+  rows.push('', '', '⏳ VK, Instagram, TikTok подключаем');
   return rows.join('\n');
 }
 
@@ -211,8 +230,8 @@ function obshLuchshiy(map, cur, what) {
 }
 
 function obshYtSum(days) {
-  var r = { views: 0, min: 0, subs: 0 };
-  days.forEach(function (x) { r.views += x[1]; r.min += x[2]; r.subs += x[3] - x[4]; });
+  var r = { views: 0, min: 0, subs: 0, gain: 0, lost: 0 };
+  days.forEach(function (x) { r.views += x[1]; r.min += x[2]; r.gain += x[3]; r.lost += x[4]; r.subs += x[3] - x[4]; });
   return r;
 }
 
