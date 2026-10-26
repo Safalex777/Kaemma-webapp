@@ -18,7 +18,7 @@
  * Запустить один раз obshUstanovit(). Посмотреть без отправки: obshProba(), obshProbaNedelya(), obshProbaMesyac().
  */
 var OBSH_CHAT = '-1004351530139';
-var OBSH_THREAD = 216;
+var OBSH_THREAD = 221; // тема «Аналитика» (Саша, 26.10)
 var OBSH_HOUR = 21, OBSH_MIN = 30;
 var OBSH_NED_HOUR = 10;
 var OBSH_ITOG_DAY = 3;
@@ -58,6 +58,8 @@ function obshNedelya() {
 }
 
 function obshProba() { Logger.log(obshTekst(false)); }
+/** Пробная отправка в группу без записи истории и без сдвига расписания. */
+function obshTest() { obshSend(obshTekst(false)); }
 function obshProbaNedelya() { Logger.log(obshNedTekst()); }
 function obshProbaMesyac() { Logger.log(obshItogi()); }
 
