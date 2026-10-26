@@ -1,4 +1,6 @@
-"""Сводка по подписчикам бота @KaemmaBot (BotHelp) в рабочую Telegram-группу.
+"""Сводка по подписчикам бота @KaemmaBot (BotHelp) в рабочую Telegram-группу. ЗАПАСНОЙ ВАРИАНТ.
+С 26.10 сводка живёт в Google Apps Script «Уведомления о продажах» (файл «Подписчики», копия stats/podpischiki.gs):
+GitHub запускал расписание с опозданием на часы, поэтому workflow bothelp-svodka.yml выключен (Actions → Disable).
 Запускается из .github/workflows/bothelp-svodka.yml: каждый час тихий снимок, в 09:00, 15:00 и 21:00 по Москве отправка.
 Руками: python3 stats/bothelp-svodka.py snapshot | send | dry
 
