@@ -36,7 +36,11 @@ function ytSobrat() {
     if (dims) { p.dimensions = dims; p.sort = dims; }
     return YouTubeAnalytics.Reports.query(p).rows || [];
   };
-  var rows = query(day(40), day(0), 'day');
+  var rows = query(day(45), day(0), 'day');
+  var m0 = new Date(Date.now() + 3 * 3600e3);
+  // по месяцам YouTube отдаёт только целые месяцы, обе даты - первые числа: год назад ... прошлый месяц
+  var months = query(Utilities.formatDate(new Date(Date.UTC(m0.getUTCFullYear() - 1, m0.getUTCMonth(), 1)), 'UTC', 'yyyy-MM-dd'),
+    Utilities.formatDate(new Date(Date.UTC(m0.getUTCFullYear(), m0.getUTCMonth() - 1, 1)), 'UTC', 'yyyy-MM-dd'), 'month');
   var ss = SpreadsheetApp.openById(YT_TABLICA);
   var sh = ss.getSheetByName('YouTube') || ss.insertSheet('YouTube');
   var out = [
@@ -50,6 +54,9 @@ function ytSobrat() {
     ['День', 'Просмотры', 'Минуты просмотра', 'Подписались', 'Отписались']
   ];
   rows.forEach(function (r) { out.push([String(r[0]), r[1], r[2], r[3], r[4]]); });
+  out.push(['', '', '', '', '']);
+  out.push(['Месяц', 'Просмотры', 'Минуты просмотра', 'Подписались', 'Отписались']);
+  months.forEach(function (r) { out.push([String(r[0]), r[1], r[2], r[3], r[4]]); });
   sh.clearContents();
   sh.getRange(1, 1, out.length, 1).setNumberFormat('@');
   sh.getRange(1, 2).setNumberFormat('@');

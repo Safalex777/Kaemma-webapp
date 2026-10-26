@@ -79,7 +79,8 @@ function podpSnimok() {
   });
   sh.clearContents();
   if (rows.length) sh.getRange(1, 1, rows.length, 2).setNumberFormat('@').setValues(rows);
-  var cut = Utilities.formatDate(new Date(Date.now() - 40 * 864e5), PODP_TZ, 'yyyy-MM-dd');
+  // новые по дням за 400 дней: из них аналитика считает сутки, неделю, месяц и итоги месяцев
+  var cut = Utilities.formatDate(new Date(Date.now() - 400 * 864e5), PODP_TZ, 'yyyy-MM-dd');
   var fresh = {};
   Object.keys(days).forEach(function (d) { if (d >= cut) fresh[d] = days[d]; });
   if (first) props.setProperty('PODP_SINCE', now);
