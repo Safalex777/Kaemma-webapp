@@ -115,12 +115,15 @@ def text(state, now):
     week0 = today - datetime.timedelta(days=6)
     since = datetime.datetime.strptime(state['since'], '%Y-%m-%d %H:%M').replace(tzinfo=MSK)
 
+    partial = []
+
     def line(title, d1, d2):
         new, out = count(state, d1.isoformat(), d2.isoformat())
-        s = '%s: новых %d, отписались %d, итог %+d' % (title, new, out, new - out)
         if since > datetime.datetime.combine(d1, datetime.time(), MSK):
-            s += ' (отписки с %s %s)' % (dm(since), since.strftime('%H:%M'))
-        return s.replace('итог +0', 'итог 0')
+            # отписки за этот период известны не полностью: считаем их только с первого снимка
+            partial.append(1)
+            return '%s: новых %d, отписались ?' % (title, new)
+        return ('%s: новых %d, отписались %d, итог %+d' % (title, new, out, new - out)).replace('итог +0', 'итог 0')
 
     rows = ['📊 Подписчики бота @KaemmaBot',
             'на %s, %d %s' % (now.strftime('%H:%M'), now.day, MONTHS[now.month - 1]),
@@ -130,6 +133,8 @@ def text(state, now):
             line('7 дней, %s-%s' % (dm(week0), dm(today)), week0, today),
             '',
             'Сейчас подписаны: %s' % format(state.get('total', 0), ',').replace(',', ' ')]
+    if partial:
+        rows.append('? - отписки считаю с %s %s, дальше цифры будут полными' % (dm(since), since.strftime('%H:%M')))
     return '\n'.join(rows)
 
 
