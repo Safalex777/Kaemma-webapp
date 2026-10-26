@@ -16,8 +16,8 @@ STATE = pathlib.Path(os.environ.get('STATE_FILE', pathlib.Path(__file__).resolve
 MSK = datetime.timezone(datetime.timedelta(hours=3))
 # BotHelp отвечает 403 на запросы с подписью Python-urllib, поэтому своя подпись
 UA = 'Mozilla/5.0 (kaemma-svodka)'
-# тема «Бот» в рабочей группе «Владычица НС» (Саша, 26.10); TG_THREAD_ID в секретах может её заменить
-THREAD = os.environ.get('TG_THREAD_ID') or '216'
+# тема «Бот» в рабочей группе «Владычица НС» (Саша, 26.10); другая тема - поменять число здесь
+THREAD = '216'
 MONTHS = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
 
 
