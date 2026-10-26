@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F6F1E8">
+<title>Отзывы · Миры Рая</title>
+<!-- Отзывы из группы t.me/Kaemma144_otzyvy в стиле «Миров Рая» (../bot/).
+     Данные: data.json (docs/otzyvy/sbor/gruppa-razbor.py + ручная разметка razmetka.tsv),
+     фото: img/<id сообщения>.jpg, видео и голосовые: media/v<id>.mp4|.m4a|.jpg.
+     Шрифт, картинки тем, видео Таинств и иконки берём из ../bot/, чтобы всё было в одном стиле. -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+@font-face{font-family:R;src:url(../bot/fonts/roslindale-display-italic.woff2) format('woff2');font-display:swap}
+:root{
+ --bg:#F6F1E8;--card:#FFFDF9;--ink:#1E2928;--ink2:#3B4645;--muted:#7C807A;--line:rgba(30,41,40,.08);
+ --gold:#AF8139;--gold-d:#8A6326;--gold-l:#E8CC8E;--gold-bg:#F3E9D5;
+ --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+ --ease:cubic-bezier(.2,.8,.2,1);--safe:var(--tg-content-safe-area-inset-top,0px);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--ink);font:400 17px/1.45 var(--sans);-webkit-font-smoothing:antialiased;overscroll-behavior:none}
+body{max-width:480px;margin:0 auto;min-height:100vh}
+body.lock{overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:inherit}
+img,video{display:block}
+.i{width:22px;height:22px;fill:currentColor;flex:none}
+.card{background:var(--card);border-radius:24px;box-shadow:0 1px 0 var(--line),0 10px 28px rgba(80,60,20,.06)}
+.glass{background:rgba(255,253,249,.8);backdrop-filter:blur(24px) saturate(1.5);-webkit-backdrop-filter:blur(24px) saturate(1.5);box-shadow:0 8px 30px rgba(60,45,15,.14),inset 0 0 0 1px rgba(255,255,255,.7)}
+.dglass{background:rgba(255,255,255,.16);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 0 0 1px rgba(255,255,255,.25) inset}
+.rise{opacity:0;transform:translateY(14px);animation:rise .6s var(--ease) forwards;animation-delay:calc(var(--d,0) * 70ms)}
+@keyframes rise{to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes upp{from{transform:translateY(100%)}to{transform:none}}
+
+/* экраны */
+.screen{display:none;padding:calc(16px + var(--safe)) 0 130px;min-height:100vh}
+#home.screen{padding-top:0}
+.screen.on{display:block;animation:fade .4s var(--ease)}
+.brand{font:italic 400 25px R,serif;color:var(--gold-d)}
+.h2{display:flex;justify-content:space-between;align-items:baseline;padding:28px 20px 12px;gap:10px}
+.h2 b{font:700 21px/1.2 var(--sans);letter-spacing:-.01em}
+.h2 a{font:500 15px var(--sans);color:var(--gold);cursor:pointer;white-space:nowrap}
+.h1{padding:0 20px;font:700 32px/1.1 var(--sans);letter-spacing:-.02em}
+.lead{padding:8px 20px 0;color:var(--muted)}
+.backbtn{display:inline-flex;align-items:center;gap:4px;margin:0 14px 10px;height:36px;padding:0 14px 0 8px;border-radius:18px;background:#fff;box-shadow:0 0 0 1px var(--line) inset;font:600 15px var(--sans);color:var(--gold-d)}
+.backbtn .i{width:18px;height:18px;transform:rotate(180deg)}
+
+/* шапка */
+.hero{position:relative;height:440px;overflow:hidden;color:#fff}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:72% center}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,30,32,.25) 0%,rgba(10,30,32,0) 38%,rgba(246,241,232,.55) 82%,var(--bg) 100%),linear-gradient(100deg,rgba(10,30,32,.55) 0%,rgba(10,30,32,.2) 60%,rgba(10,30,32,0) 100%)}
+.hero .top{position:absolute;left:20px;right:20px;top:calc(14px + var(--safe));z-index:2}
+.hero .top .brand{color:#fff;text-shadow:0 1px 12px rgba(0,0,0,.3)}
+.hero .gr{position:absolute;left:20px;right:20px;top:calc(76px + var(--safe));z-index:2}
+.hero .gr .d{font:600 13px var(--sans);letter-spacing:.12em;text-transform:uppercase;opacity:.92;text-shadow:0 1px 10px rgba(0,0,0,.3)}
+.hero .gr h1{font:italic 400 44px/1.02 R,serif;margin-top:8px;text-shadow:0 2px 20px rgba(0,0,0,.3)}
+.hero .gr p{margin-top:10px;font:500 15px var(--sans);opacity:.95;text-shadow:0 1px 10px rgba(0,0,0,.35)}
+
+/* цитата в стекле */
+.wish{margin:-150px 14px 0;position:relative;z-index:3;padding:20px 18px 16px;border-radius:24px;overflow:hidden;touch-action:pan-y}
+.wish .k{font:600 12px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.wish .q{min-height:104px;display:flex;align-items:center;transition:opacity .35s var(--ease),transform .35s var(--ease)}
+.wish .q.out{opacity:0;transform:translateX(-14px)}
+.wish q{display:block;margin-top:8px;font:italic 400 22px/1.28 R,serif;color:#3a3125;quotes:"«" "»"}
+.wish .who{display:flex;align-items:center;gap:10px;margin-top:12px}
+.wish .who span{font:500 14px var(--sans);color:var(--muted)}
+.wish .dots{display:flex;gap:5px;margin-left:auto}
+.wish .dots i{width:6px;height:6px;border-radius:50%;background:#E3D8C3;transition:.3s}
+.wish .dots i.on{background:var(--gold);width:16px;border-radius:3px}
+
+/* темы-плитки как «Что тебе сейчас нужно?» */
+.needs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 14px}
+.nd{height:132px;border-radius:22px;overflow:hidden;position:relative;color:#fff;display:block;text-align:left}
+.nd img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.nd:active img{transform:scale(1.05)}
+.nd:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 35%,rgba(8,20,20,.75))}
+.nd b{position:absolute;left:14px;right:12px;bottom:28px;z-index:2;font:700 16.5px/1.2 var(--sans)}
+.nd span{position:absolute;left:14px;bottom:11px;z-index:2;font:500 13.5px var(--sans);opacity:.85}
+
+/* карусели */
+.car{display:flex;gap:10px;overflow-x:auto;padding:2px 14px 10px;scroll-snap-type:x mandatory;scroll-padding:14px;scrollbar-width:none}
+.car::-webkit-scrollbar,.topics::-webkit-scrollbar{display:none}
+.res{flex:none;width:72%;max-width:280px;min-height:150px;scroll-snap-align:start;padding:18px 18px 16px;display:flex;flex-direction:column;justify-content:space-between;text-align:left}
+#results{align-items:flex-start}
+.res q{font:italic 400 23px/1.22 R,serif;color:var(--ink);quotes:"«" "»"}
+.res .by{display:flex;align-items:center;gap:8px;margin-top:14px;font:500 14px var(--sans);color:var(--muted)}
+.res .by b{font:italic 400 19px R,serif;color:var(--gold)}
+.vid{flex:none;width:150px;scroll-snap-align:start;text-align:left}
+.vid .im{position:relative;height:200px;border-radius:20px;overflow:hidden;background:#13201f}
+.vid .im img{width:100%;height:100%;object-fit:cover}
+.vid .im:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 45%,rgba(8,20,20,.7))}
+.vid .pl{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;display:grid;place-items:center;color:#fff;z-index:2}
+.vid .pl .i{width:18px;height:18px;margin-left:2px}
+.vid .du{position:absolute;left:10px;bottom:10px;z-index:2;color:#fff;font:600 13px var(--sans)}
+.vid .tt{margin-top:8px;font:500 14.5px/1.25 var(--sans)}
+.vid .ss{font:400 13px var(--sans);color:var(--muted)}
+.shot{flex:none;width:150px;height:210px;border-radius:20px;overflow:hidden;scroll-snap-align:start;position:relative;background:#e9e1d1;box-shadow:0 0 0 1px var(--line) inset;text-align:left}
+.shot img{width:100%;height:100%;object-fit:cover;object-position:top}
+.shot:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,20,20,0) 20%,rgba(8,20,20,.78) 52%,rgba(8,20,20,.96))}
+.shot span{position:absolute;left:10px;right:10px;bottom:10px;z-index:2;color:#fff}
+.shot b{display:block;font:italic 400 17px/1.15 R,serif}
+.shot em{display:block;margin-top:4px;font:500 12px var(--sans);font-style:normal;opacity:.8}
+
+/* мост к Таинствам: как шапка экрана Таинств в «Мирах Рая» */
+.thero{position:relative;margin:28px 14px 0;height:340px;border-radius:30px;overflow:hidden;color:#fff}
+.revs .thero{margin:12px 0 0}
+.thero video,.thero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.thero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,30,32,.1) 15%,rgba(10,30,32,.88) 100%)}
+.thero .in{position:absolute;left:18px;right:18px;bottom:18px;z-index:2}
+.thero .k{font:600 12px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-l)}
+.thero h2{font:italic 400 32px/1.04 R,serif;margin:8px 0 6px}
+.thero p{font:400 15px/1.4 var(--sans);opacity:.88}
+.thero .bt{display:flex;gap:8px;margin-top:14px}
+.cta{flex:1;height:50px;border-radius:16px;display:flex;align-items:center;justify-content:center;gap:8px;font:600 16px var(--sans);text-align:center}
+.cta.gold{background:linear-gradient(180deg,#C99A48,#9C702E);color:#fff;box-shadow:0 8px 22px rgba(156,112,46,.4)}
+.cta.ghost{flex:none;padding:0 16px;color:#fff}
+.cta .i{width:18px;height:18px}
+
+/* меню курсов как в «Кабинете» */
+.list{margin:0 14px;overflow:hidden}
+.mi{display:flex;gap:14px;align-items:center;padding:13px 16px;width:100%;position:relative}
+.mi+.mi:before{content:"";position:absolute;left:68px;right:0;top:0;height:1px;background:var(--line)}
+.mi .ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex:none;color:#fff}
+.mi .ic .i{width:21px;height:21px}
+.mi .tt{font:500 16px/1.25 var(--sans)}
+.mi .ss{font:400 14.5px var(--sans);color:var(--muted);margin-top:1px}
+.mi .ar{margin-left:auto;color:#C2B7A2}
+.mi .ar .i{width:16px;height:16px}
+.g-gold{background:linear-gradient(145deg,#D2A453,#9A6E2C)}
+.g-ink{background:linear-gradient(145deg,#2A4140,#132B2A)}
+
+/* поиск и фильтры как в «Библиотеке» */
+.search{margin:18px 14px 0;height:48px;border-radius:16px;display:flex;align-items:center;gap:10px;padding:0 14px;background:#fff;box-shadow:0 0 0 1px var(--line) inset}
+.search input{flex:1;border:0;outline:0;background:none;font:400 17px var(--sans);color:var(--ink);min-width:0}
+.search .i{color:var(--muted)}
+.topics{display:flex;gap:8px;overflow-x:auto;padding:14px 14px 4px;scrollbar-width:none}
+.tp{flex:none;height:40px;padding:0 16px;border-radius:20px;background:#fff;box-shadow:0 0 0 1px var(--line) inset;font:500 15px var(--sans);color:var(--ink2);transition:.25s}
+.tp.on{background:var(--ink);color:#fff;box-shadow:none}
+.tp em{font-style:normal;color:var(--muted);margin-left:4px}
+.tp.on em{color:var(--gold-l)}
+
+/* карточка отзыва */
+.revs{padding:0 14px}
+.rc{padding:18px 18px 14px;margin-top:12px}
+.rc .hd{display:flex;align-items:center;gap:12px}
+.av{width:40px;height:40px;border-radius:50%;flex:none;display:grid;place-items:center;overflow:hidden;background:linear-gradient(145deg,#C99A48,#8A6326);color:#fff;font:italic 400 20px R,serif;box-shadow:0 0 0 2px #fff,0 4px 12px rgba(60,45,15,.18)}
+.av img{width:100%;height:100%;object-fit:cover}
+.av.dk{background:linear-gradient(145deg,#2A4140,#132B2A)}
+.av .i{width:19px;height:19px}
+.rc .nm{font:600 16px/1.25 var(--sans)}
+.rc .dt{font:400 14px var(--sans);color:var(--muted);margin-top:1px}
+.rc .hl{margin-top:14px;font:italic 400 23px/1.22 R,serif;color:var(--ink);quotes:"«" "»"}
+.rc .tx{margin-top:10px;font:400 16px/1.48 var(--sans);color:var(--ink2);white-space:pre-line;word-wrap:break-word}
+.rc .tx.cl{display:-webkit-box;-webkit-line-clamp:var(--cl,8);-webkit-box-orient:vertical;overflow:hidden}
+.rc .more{margin-top:6px;font:600 15px var(--sans);color:var(--gold)}
+.ph{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px}
+.ph img{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:top;border-radius:12px;background:#e9e1d1}
+.ph.one{grid-template-columns:1fr}
+.ph.one img{aspect-ratio:auto;max-height:460px;object-fit:contain;background:none;border-radius:14px;box-shadow:0 0 0 1px var(--line)}
+.vplay{margin-top:12px;border-radius:18px;overflow:hidden;background:#0B1716}
+.vplay video{width:100%;max-height:520px;background:#0B1716}
+.vplay+.vplay{margin-top:8px}
+.aud{display:flex;align-items:center;gap:12px;margin-top:12px;padding:10px 14px 10px 10px;border-radius:20px;background:var(--gold-bg);width:100%}
+.aud .pl{width:42px;height:42px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;flex:none}
+.aud .pl .i{width:17px;height:17px}
+.aud .bar{flex:1;height:4px;border-radius:2px;background:rgba(138,99,38,.2);position:relative;overflow:hidden}
+.aud .bar i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--gold)}
+.aud .tm{font:500 13px var(--sans);color:var(--gold-d);font-variant-numeric:tabular-nums;min-width:38px;text-align:right}
+.media{display:flex;align-items:center;gap:12px;margin-top:12px;padding:12px;border-radius:16px;background:var(--gold-bg);width:100%}
+.media .pl{width:40px;height:40px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;flex:none}
+.media .pl .i{width:17px;height:17px}
+.media b{font:600 15px var(--sans)}
+.media span{display:block;font:400 14px var(--sans);color:var(--muted)}
+.rc .ft{display:flex;align-items:center;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.tag{font:500 13px var(--sans);color:var(--gold-d);background:var(--gold-bg);border-radius:99px;padding:4px 10px;white-space:nowrap}
+.rc .og{margin-left:auto;display:flex;align-items:center;gap:2px;font:500 14px var(--sans);color:var(--muted);white-space:nowrap}
+.rc .og .i{width:14px;height:14px}
+.empty{padding:28px 18px;text-align:center;color:var(--muted)}
+
+/* нижняя стеклянная панель: прячется при прокрутке вниз, как меню «Миров Рая» */
+.dock{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));width:calc(100% - 28px);max-width:452px;height:66px;border-radius:33px;display:flex;align-items:center;padding:0 7px;z-index:40;transition:transform .4s var(--ease)}
+.dock.hide{transform:translate(-50%,140%)}
+.enter{width:100%;height:52px;border-radius:26px;display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(180deg,#C99A48,#9C702E);color:#fff;font:600 17px var(--sans);box-shadow:0 8px 22px rgba(156,112,46,.35)}
+.enter .i{width:20px;height:20px}
+
+/* шторка с одним отзывом */
+.pop{position:fixed;inset:0;z-index:60;display:none}
+.pop.on{display:block}
+.pop .ov{position:absolute;inset:0;background:rgba(10,20,20,.45);animation:fade .3s}
+.pop .sh{position:absolute;left:0;right:0;bottom:0;max-width:480px;margin:0 auto;max-height:88vh;overflow-y:auto;background:var(--bg);border-radius:28px 28px 0 0;padding:10px 14px calc(24px + env(safe-area-inset-bottom,0px));animation:upp .4s var(--ease)}
+.pop .grab{width:40px;height:5px;border-radius:3px;background:#D9CFBE;margin:0 auto 4px}
+.pop .rc{margin-top:8px;box-shadow:none}
+
+/* просмотр фото */
+.viewer{position:fixed;inset:0;z-index:70;background:#0B1716;display:none;align-items:center;justify-content:center}
+.viewer.on{display:flex;animation:fade .25s}
+.viewer img{max-width:100%;max-height:100%;object-fit:contain}
+.viewer .x{position:fixed;left:14px;top:calc(12px + var(--safe));height:38px;padding:0 14px 0 8px;border-radius:19px;display:flex;align-items:center;gap:4px;color:#fff;font:600 15px var(--sans);background:rgba(11,23,22,.55);box-shadow:0 0 0 1px rgba(255,255,255,.2) inset}
+.viewer .x .i{width:18px;height:18px;transform:rotate(180deg)}
+.viewer .n{position:fixed;left:0;right:0;bottom:calc(22px + env(safe-area-inset-bottom,0px));text-align:center;color:rgba(255,255,255,.75);font:500 14px var(--sans)}
+</style>
+</head>
+<body>
+<div id="sprite"></div>
+<svg width="0" height="0" style="position:absolute"><symbol id="p-pause" viewBox="0 0 256 256"><path d="M200,32H160a16,16,0,0,0-16,16V208a16,16,0,0,0,16,16h40a16,16,0,0,0,16-16V48A16,16,0,0,0,200,32ZM96,32H56A16,16,0,0,0,40,48V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V48A16,16,0,0,0,96,32Z"/></symbol></svg>
+
+<!-- ГЛАВНАЯ -->
+<section class="screen on" id="home">
+ <div class="hero">
+  <img src="../bot/img/otzyvy.jpg" alt="">
+  <div class="top"><a class="brand" href="../bot/" style="text-decoration:none">Миры Рая</a></div>
+  <div class="gr"><div class="d">Отзывы</div><h1>Женщины пишут</h1><p>Больше 2000 отзывов во всех соцсетях</p></div>
+ </div>
+ <div class="wish glass rise" id="wish"></div>
+ <div class="rise" style="--d:2"><div class="h2"><b>О чём пишут</b></div><div class="needs" id="needs"></div></div>
+ <div class="rise" style="--d:3"><div class="h2"><b>Результаты</b><a data-open="all">Все</a></div><div class="car" id="results"></div></div>
+ <div id="vidwrap"><div class="h2"><b>Видео и голос</b><a data-open="kind:video">Все</a></div><div class="car" id="vids"></div></div>
+ <div class="h2"><b>Скриншоты</b><a data-open="kind:photo">Все</a></div>
+ <div class="car" id="shots"></div>
+ <div id="bridge1"></div>
+ <div class="h2"><b>Новые отзывы</b><a data-open="all">Все</a></div>
+ <div class="revs" id="latest"></div>
+ <div class="h2"><b>По курсам</b></div>
+ <div class="list card" id="courses"></div>
+</section>
+
+<!-- СПИСОК -->
+<section class="screen" id="listscr">
+ <button class="backbtn" data-back><svg class="i"><use href="#p-caret-right"/></svg>Отзывы</button>
+ <div class="h1" id="ltitle"></div>
+ <div class="lead" id="llead"></div>
+ <label class="search"><svg class="i"><use href="#p-magnifying-glass"/></svg><input id="q" type="search" placeholder="Найти по словам или имени" autocomplete="off"></label>
+ <div class="topics" id="kinds"></div>
+ <div class="revs" id="list"></div>
+ <div id="sentinel"></div>
+</section>
+
+<nav class="dock glass" id="dock"><button class="enter" id="leave"><svg class="i"><use href="#p-chat-circle"/></svg>Хочу оставить отзыв</button></nav>
+
+<div class="pop" id="pop"><div class="ov" data-close></div><div class="sh"><div class="grab"></div><div id="popbody"></div></div></div>
+<div class="viewer" id="viewer"><button class="x" id="vx"><svg class="i"><use href="#p-caret-right"/></svg>Назад</button><img id="vimg" alt=""><div class="n" id="vn"></div></div>
+
+<script>
+// Ссылка «оставить отзыв»: личный чат Саши с готовым первым сообщением (прислал Саша 26.10.2026)
+var LEAVE_URL='https://t.me/m/8sqqjBtoMmFi';
+var GROUP='https://t.me/Kaemma144_otzyvy/';
+// Таинства: та же страница оплаты, что в «Мирах Рая», со своей меткой, чтобы видеть продажи из отзывов
+var TAINSTVA='https://kaemma144.getcourse.ru/tainstva?utm_source=otzyvy_app&utm_medium=telegram_app&utm_campaign=tri_tainstva';
+// Плитки тем: картинки те же, что в «Что тебе сейчас нужно?» на главной «Миров Рая»
+var TILES=[
+ {f:'topic:muzh',t:'Мужчина и семья',img:'../bot/v/n-love.jpg'},
+ {f:'topic:telo',t:'Тело и молодость',img:'../bot/v/n-telo.jpg'},
+ {f:'topic:dengi',t:'Деньги и желания',img:'../bot/v/n-money.jpg'},
+ {f:'topic:pokoy',t:'Спокойствие и опора',img:'../bot/v/n-calm.jpg'},
+ {f:'topic:sebya',t:'Любовь к себе',img:'../bot/img/sila.jpg'},
+ {f:'course:gim',t:'Утро и гимнастика',img:'../bot/v/n-utro.jpg'}
+];
+var COURSE_ICON={sp:'sparkle',alh:'person-simple-tai-chi',gim:'sun-horizon',int:'star-four',dnk:'key',zol:'books',den:'coins'};
+// Цитата в стекле сверху: короткие и сильные, листаются свайпом и сами
+var WISH=[941,939,908,859,829,916];
+// «Результаты»: конкретные изменения её словами
+var RESULTS=[374,915,916,928,381,205,428,900,908,727,891,930,828,922];
+var KINDS=[['','Все'],['text','Тексты'],['photo','Скриншоты'],['video','Видео и голос'],['yt','С YouTube']];
+var MONTHS=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+var PAGE=15;
+
+var tg=window.Telegram&&Telegram.WebApp,inTg=!!(tg&&tg.initData);
+if(tg){try{tg.ready();tg.expand();tg.setHeaderColor('#F6F1E8');tg.setBackgroundColor('#F6F1E8');if(tg.setBottomBarColor)tg.setBottomBarColor('#F6F1E8');if(tg.disableVerticalSwipes)tg.disableVerticalSwipes()}catch(e){}}
+function hap(t){try{if(!tg||!tg.HapticFeedback)return;if(t==='sel')tg.HapticFeedback.selectionChanged();else tg.HapticFeedback.impactOccurred('light')}catch(e){}}
+function openTg(u){if(inTg&&tg.openTelegramLink)tg.openTelegramLink(u);else window.open(u,'_blank')}
+function openUrl(u){if(inTg&&tg.openLink)tg.openLink(u);else window.open(u,'_blank')}
+function $(id){return document.getElementById(id)}
+function I(n){return '<svg class="i"><use href="#p-'+n+'"/></svg>'}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function dt(d,y){var p=d.split('-');return y?p[0]+' год':+p[2]+' '+MONTHS[+p[1]-1]+' '+p[0]}
+function plural(n,a,b,c){var m=n%10,h=n%100;return n+' '+(m===1&&h!==11?a:m>=2&&m<=4&&(h<12||h>14)?b:c)}
+function otz(n){return plural(n,'отзыв','отзыва','отзывов')}
+function clean(s){return s.replace(/[\u{1F300}-\u{1FAFF}☀-➿️‍]/gu,'').replace(/\s+/g,' ').replace(/\s+([.,!?])/g,'$1').trim()}
+function mmss(s){s=Math.round(s||0);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
+
+var D,NAMES={},BYID={};
+function has(c,f){if(f==='all')return true;var p=f.split(':');
+ if(p[0]==='topic')return c.topics.indexOf(p[1])>=0;
+ if(p[0]==='course')return c.courses.indexOf(p[1])>=0;
+ if(p[0]==='kind')return p[1]==='yt'?c.src==='yt':p[1]==='video'?(c.kind==='video'||c.kind==='voice'):c.kind===p[1];return false}
+function avatar(c,size){
+ var st=size?' style="width:'+size+'px;height:'+size+'px;font-size:'+Math.round(size*.5)+'px"':'';
+ if(c.av)return '<div class="av"'+st+'><img src="'+c.av+'" alt="" loading="lazy"></div>';
+ if(c.name==='Скриншот отзыва'||c.name==='Отзыв с YouTube')return '<div class="av dk"'+st+'>'+I(c.name==='Отзыв с YouTube'?'youtube-logo':'chats-circle')+'</div>';
+ if(c.name==='Видеоотзыв')return '<div class="av dk"'+st+'>'+I('video-camera')+'</div>';
+ return '<div class="av"'+st+'>'+esc(c.name.charAt(0))+'</div>';
+}
+
+// Мост к Таинствам: видео-шапка как на экране Таинств «Миров Рая»
+function bridge(){
+ var el=document.createElement('div');el.className='thero';
+ el.innerHTML='<video src="../bot/v/home-v.mp4" poster="../bot/v/home-v.jpg" muted loop playsinline autoplay preload="none"></video>'+
+  '<div class="in"><div class="k">Три Таинства · в записи</div><h2>Три двери из мира иллюзий в Миры Рая</h2><p>Три двери, через которые когда-то провели меня.</p>'+
+  '<div class="bt"><button class="cta gold" data-pay>'+I('sparkle')+'Войти в Три Таинства</button><button class="cta ghost dglass" data-more>Подробнее</button></div></div>';
+ el.querySelector('[data-pay]').onclick=function(){hap();openUrl(TAINSTVA+'&utm_content=pay#s10')};
+ el.querySelector('[data-more]').onclick=function(){hap();openUrl(TAINSTVA+'&utm_content=more')};
+ return el;
+}
+
+function card(c,full){
+ var el=document.createElement('article');el.className='rc card';
+ var h='<div class="hd">'+avatar(c)+'<div><div class="nm">'+esc(c.name)+'</div><div class="dt">'+dt(c.date,c.dy)+(c.src==='yt'?' · YouTube':'')+'</div></div></div>';
+ var tx=(c.text||'').replace(/[ \t]+([.,!?;:])/g,'$1');
+ // короткий отзыв целиком крупно, длинный: заголовок её словами и текст ниже
+ if(tx&&tx.length<=200&&c.kind==='text')h+='<q class="hl">'+esc(clean(tx))+'</q>';
+ else{if(c.h)h+='<q class="hl">'+esc(c.h)+'</q>';if(tx)h+='<div class="tx" style="--cl:'+(c.h?5:8)+'">'+esc(tx)+'</div>'}
+ if(c.photos.length)h+='<div class="ph'+(c.photos.length===1?' one':'')+'">'+c.photos.map(function(p,i){return '<img loading="lazy" src="img/'+p+'.jpg" data-i="'+i+'" alt="">'}).join('')+'</div>';
+ if(c.kind==='video'&&c.media)h+=c.media.map(function(m){return '<div class="vplay"><video controls playsinline preload="none" poster="media/'+m+'.jpg" src="media/'+m+'.mp4"></video></div>'}).join('');
+ else if(c.kind==='voice'&&c.media)h+='<button class="aud" data-aud="media/'+c.media[0]+'.m4a"><span class="pl">'+I('play')+'</span><span class="bar"><i></i></span><span class="tm">'+mmss(c.dur)+'</span></button>';
+ else if(c.kind==='video'||c.kind==='voice')h+='<button class="media" data-g><span class="pl">'+I('play')+'</span><div><b>'+(c.kind==='video'?'Видеоотзыв':'Голосовой отзыв')+'</b><span>Открыть в группе отзывов</span></div></button>';
+ h+='<div class="ft">'+(c.courses[0]?'<span class="tag">'+esc(NAMES[c.courses[0]])+'</span>':'')+(c.u?'<button class="og" data-u>На YouTube'+I('caret-right')+'</button>':'<button class="og" data-g>В группе'+I('caret-right')+'</button>')+'</div>';
+ el.innerHTML=h;
+ el.querySelectorAll('[data-g]').forEach(function(b){b.onclick=function(){hap();openTg(GROUP+c.id)}});
+ el.querySelectorAll('[data-u]').forEach(function(b){b.onclick=function(){hap();openUrl(c.u)}});
+ el.querySelectorAll('.ph img').forEach(function(im){im.onclick=function(){openViewer(c.photos,+im.dataset.i)}});
+ var a=el.querySelector('[data-aud]');if(a)audio(a);
+ var t=el.querySelector('.tx');
+ if(t&&!full)requestAnimationFrame(function(){t.classList.add('cl');if(t.scrollHeight>t.clientHeight+4){var b=document.createElement('button');b.className='more';b.textContent='Читать полностью';b.onclick=function(){hap('sel');t.classList.remove('cl');b.remove()};t.after(b)}else t.classList.remove('cl')});
+ return el;
+}
+
+// Голосовой: свой плеер в стиле приложения
+var curAud=null;
+function audio(btn){
+ var au=new Audio(),bar=btn.querySelector('.bar i'),tm=btn.querySelector('.tm'),pl=btn.querySelector('.pl');
+ au.preload='none';au.src=btn.dataset.aud;
+ au.ontimeupdate=function(){bar.style.width=(au.currentTime/(au.duration||1)*100)+'%';tm.textContent=mmss(au.currentTime)};
+ au.onended=au.onpause=function(){pl.innerHTML=I('play')};au.onplay=function(){pl.innerHTML=I('pause')};
+ btn.onclick=function(){hap();if(au.paused){if(curAud&&curAud!==au)curAud.pause();curAud=au;au.play()}else au.pause()};
+}
+
+// Главная
+var wi=0,wt;
+function renderWish(dir){
+ var c=BYID[WISH[wi]];if(!c)return;var w=$('wish');
+ var q=c.text&&c.text.length<170?clean(c.text):c.h;
+ w.innerHTML='<div class="k">Из отзывов</div><div class="q"><q>'+esc(q)+'</q></div><div class="who">'+avatar(c,30)+'<span>'+esc(c.name)+'</span><div class="dots">'+WISH.map(function(_,i){return '<i'+(i===wi?' class="on"':'')+'></i>'}).join('')+'</div></div>';
+}
+function stepWish(d){var q=$('wish').querySelector('.q');q.classList.add('out');setTimeout(function(){wi=(wi+d+WISH.length)%WISH.length;renderWish()},250);clearInterval(wt);wt=setInterval(function(){stepWish(1)},7000)}
+function renderHome(){
+ WISH=WISH.filter(function(id){return BYID[id]});wi=new Date().getDate()%WISH.length;renderWish();
+ var w=$('wish'),sx=null;
+ w.onclick=function(){hap('sel');stepWish(1)};
+ w.addEventListener('touchstart',function(e){sx=e.touches[0].clientX},{passive:true});
+ w.addEventListener('touchend',function(e){if(sx===null)return;var dx=e.changedTouches[0].clientX-sx;sx=null;if(Math.abs(dx)>40){e.preventDefault();hap('sel');stepWish(dx<0?1:-1)}});
+ wt=setInterval(function(){stepWish(1)},7000);
+ $('needs').innerHTML=TILES.map(function(t){var n=D.cards.filter(function(c){return has(c,t.f)}).length;
+  return '<button class="nd" data-open="'+t.f+'" data-title="'+t.t+'"><img src="'+t.img+'" alt="" loading="lazy"><b>'+t.t+'</b><span>'+otz(n)+'</span></button>'}).join('');
+ $('results').innerHTML=RESULTS.filter(function(id){return BYID[id]&&BYID[id].h}).map(function(id){var c=BYID[id];
+  return '<button class="res card" data-one="'+id+'"><q>'+esc(c.h)+'</q><div class="by"><b>'+esc(c.name)+'</b></div></button>'}).join('');
+ var vids=D.cards.filter(function(c){return c.media});
+ if(!vids.length)$('vidwrap').style.display='none';
+ $('vids').innerHTML=vids.map(function(c){var poster=c.kind==='video'?'media/'+c.media[0]+'.jpg':'../bot/img/kaemma.jpg';
+  return '<button class="vid" data-one="'+c.id+'"><div class="im"><img src="'+poster+'" alt="" loading="lazy"><span class="pl dglass">'+I('play')+'</span><span class="du">'+(c.kind==='voice'?'Голос · ':'')+mmss(c.dur)+'</span></div><div class="tt">'+esc(c.name)+'</div><div class="ss">'+dt(c.date)+'</div></button>'}).join('');
+ var ph=D.cards.filter(function(c){return c.kind==='photo'&&c.h&&c.rank===0});
+ $('shots').innerHTML=ph.slice(0,12).map(function(c){return '<button class="shot" data-ph="'+c.id+'"><img loading="lazy" src="img/'+c.photos[0]+'.jpg" alt=""><span><b>'+esc(c.h)+'</b><em>'+esc(c.name)+'</em></span></button>'}).join('');
+ $('shots').querySelectorAll('[data-ph]').forEach(function(b){b.onclick=function(){openViewer(BYID[b.dataset.ph].photos,0)}});
+ $('bridge1').appendChild(bridge());
+ var l=$('latest');l.innerHTML='';D.cards.filter(function(c){return c.kind==='text'&&c.h&&c.rank===0}).sort(function(a,b){return a.date<b.date?1:-1}).slice(0,3).forEach(function(c){l.appendChild(card(c))});
+ var cn=function(k){return D.cards.filter(function(c){return c.courses.indexOf(k)>=0}).length};
+ $('courses').innerHTML=D.meta.courses.slice().sort(function(a,b){return cn(b[0])-cn(a[0])}).map(function(k){var n=cn(k[0]);
+  return n?'<button class="mi" data-open="course:'+k[0]+'" data-title="'+k[1]+'"><span class="ic '+(k[0]==='sp'||k[0]==='int'?'g-gold':'g-ink')+'">'+I(COURSE_ICON[k[0]]||'sparkle')+'</span><div><div class="tt">'+esc(k[1])+'</div><div class="ss">'+otz(n)+'</div></div><span class="ar">'+I('caret-right')+'</span></button>':''}).join('');
+}
+
+// Список
+var L={f:'all',kind:'',q:''},items=[],shown=0;
+function openList(f,title){
+ L={f:f,kind:'',q:''};$('q').value='';
+ if(f.indexOf('kind:')===0){L.kind=f.slice(5);L.f='all'}
+ $('ltitle').textContent=title||(f==='all'?'Все отзывы':f==='kind:photo'?'Скриншоты':f==='kind:video'?'Видео и голос':'Отзывы');
+ show('listscr');renderList();
+}
+function renderList(){
+ var base=D.cards.filter(function(c){return has(c,L.f)&&(!L.q||(c.text+' '+c.name+' '+(c.h||'')+' '+(c.s||'')).toLowerCase().indexOf(L.q)>=0)});
+ $('kinds').innerHTML=KINDS.map(function(k){var n=k[0]?base.filter(function(c){return has(c,'kind:'+k[0])}).length:base.length;
+  return n||L.kind===k[0]?'<button class="tp'+(L.kind===k[0]?' on':'')+'" data-k="'+k[0]+'">'+k[1]+'<em>'+n+'</em></button>':''}).join('');
+ $('kinds').querySelectorAll('[data-k]').forEach(function(b){b.onclick=function(){hap('sel');L.kind=b.dataset.k;renderList()}});
+ items=L.kind?base.filter(function(c){return has(c,'kind:'+L.kind)}):base;
+ $('llead').textContent=items.length?otz(items.length):'';
+ $('list').innerHTML=items.length?'':'<div class="empty">Ничего не нашлось</div>';shown=0;more();
+}
+function more(){
+ items.slice(shown,shown+PAGE).forEach(function(c,i){$('list').appendChild(card(c));if(shown+i===5)$('list').appendChild(bridge())});
+ shown=Math.min(shown+PAGE,items.length);
+ if(shown>=items.length&&items.length>6)$('list').appendChild(bridge());
+}
+
+// Шторка с одним отзывом
+function openOne(id){var c=BYID[id];if(!c)return;hap();$('popbody').innerHTML='';$('popbody').appendChild(card(c,true));$('pop').classList.add('on');document.body.classList.add('lock');backState()}
+function closePop(){$('pop').classList.remove('on');document.body.classList.remove('lock');$('popbody').querySelectorAll('video,audio').forEach(function(v){v.pause()});if(curAud)curAud.pause();backState()}
+
+// Экраны и кнопка «Назад» Telegram
+var cur='home',homeY=0;
+function backState(){if(tg&&tg.BackButton){(cur!=='home'||$('pop').classList.contains('on')||$('viewer').classList.contains('on'))?tg.BackButton.show():tg.BackButton.hide()}}
+function show(id){
+ if(cur==='home')homeY=scrollY;
+ document.querySelectorAll('.screen').forEach(function(s){s.classList.toggle('on',s.id===id)});cur=id;
+ scrollTo(0,id==='home'?homeY:0);$('dock').classList.remove('hide');backState();
+}
+function back(){if($('viewer').classList.contains('on'))return closeViewer();if($('pop').classList.contains('on'))return closePop();if(cur!=='home'){hap();show('home')}}
+if(tg&&tg.BackButton)tg.BackButton.onClick(back);
+document.addEventListener('click',function(e){
+ var o=e.target.closest('[data-open]');if(o){hap('sel');openList(o.dataset.open,o.dataset.title);return}
+ var one=e.target.closest('[data-one]');if(one){openOne(one.dataset.one);return}
+ if(e.target.closest('[data-back]'))back();
+ if(e.target.closest('[data-close]'))closePop();
+});
+$('leave').onclick=function(){hap();openTg(LEAVE_URL)};
+var qt;$('q').addEventListener('input',function(e){clearTimeout(qt);qt=setTimeout(function(){L.q=e.target.value.trim().toLowerCase();renderList()},200)});
+new IntersectionObserver(function(es){if(es[0].isIntersecting&&cur==='listscr'&&shown<items.length)more()},{rootMargin:'800px'}).observe($('sentinel'));
+var ly=0;addEventListener('scroll',function(){var y=scrollY;if(y>ly+8&&y>240)$('dock').classList.add('hide');else if(y<ly-8||y<240)$('dock').classList.remove('hide');ly=y},{passive:true});
+
+// Просмотр фото
+var vl=[],vi=0;
+function vshow(){$('vimg').src='img/'+vl[vi]+'.jpg';$('vn').textContent=vl.length>1?(vi+1)+' из '+vl.length:''}
+function openViewer(l,i){hap();vl=l;vi=i;vshow();$('viewer').classList.add('on');backState()}
+function closeViewer(){$('viewer').classList.remove('on');backState()}
+$('vx').onclick=closeViewer;
+$('vimg').onclick=function(){if(vl.length>1){hap('sel');vi=(vi+1)%vl.length;vshow()}};
+var vsx=null;$('viewer').addEventListener('touchstart',function(e){vsx=e.touches[0].clientX},{passive:true});
+$('viewer').addEventListener('touchend',function(e){if(vsx===null)return;var dx=e.changedTouches[0].clientX-vsx;vsx=null;if(Math.abs(dx)>50&&vl.length>1){hap('sel');vi=(vi+(dx<0?1:-1)+vl.length)%vl.length;vshow()}});
+
+fetch('../bot/sprite.txt').then(function(r){return r.text()}).then(function(t){$('sprite').innerHTML=t});
+fetch('data.json',{cache:'no-cache'}).then(function(r){return r.json()}).then(function(d){
+ D=d;d.meta.courses.concat(d.meta.topics).forEach(function(k){NAMES[k[0]]=k[1]});d.cards.forEach(function(c){BYID[c.id]=c});
+ renderHome();
+ // Ссылки прямо на тему или отзыв: #open=topic:telo, #open=course:sp, #open=kind:video, #one=374
+ var hp=new URLSearchParams(location.hash.slice(1));
+ if(hp.get('open'))openList(hp.get('open'),(TILES.filter(function(t){return t.f===hp.get('open')})[0]||{}).t||NAMES[hp.get('open').split(':')[1]]);
+ if(hp.get('one'))openOne(hp.get('one'));
+ if(hp.get('y'))setTimeout(function(){scrollTo(0,+hp.get('y'))},300);
+});
+</script>
+</body>
+</html>

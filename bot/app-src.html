@@ -535,7 +535,7 @@ body.sheet-open .fb{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
  <div class="h2"><b>На связи</b></div>
  <div class="mlist card">
   <button class="mi" data-act="ask"><span class="ic g-gold"><svg class="i"><use href="#p-chat-circle"/></svg></span><div><div class="tt">Написать в поддержку</div><div class="ss">Ответим в Telegram</div></div><span class="ar"><svg class="i"><use href="#p-caret-right"/></svg></span></button>
-  <button class="mi" data-act="reviews"><span class="ic g-ink"><svg class="i"><use href="#p-chats-circle"/></svg></span><div><div class="tt">Отзывы женщин</div><div class="ss">Канал с отзывами</div></div><span class="ar"><svg class="i"><use href="#p-caret-right"/></svg></span></button>
+  <button class="mi" data-act="reviews"><span class="ic g-ink"><svg class="i"><use href="#p-chats-circle"/></svg></span><div><div class="tt">Отзывы женщин</div><div class="ss">Истории участниц по темам</div></div><span class="ar"><svg class="i"><use href="#p-caret-right"/></svg></span></button>
  </div>
  <div class="h2"><b>Каэмма в соцсетях</b></div>
  <div class="socs card">
@@ -649,6 +649,8 @@ var backFn=null;function back(fn){if(!inTg||!tg.BackButton)return;if(backFn)tg.B
 /* ---------- данные ---------- */
 var sp=(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.start_param)||new URLSearchParams(location.search).get('startapp')||'';
 var parts=sp.split('__'),sp0=parts[0]||'';
+/* ссылка из закрепа группы отзывов: t.me/KaemmaBot/mir?startapp=otzyvy открывает приложение отзывов (../otzyvy/) внутри Mini App */
+if(sp0==='otzyvy'){location.replace('../otzyvy/'+location.search+location.hash)}
 /* в ссылке только число bh_user_id (Telegram не пропускает точку), номер BotHelp = 9usu.<число>. Метки: g подарок прослушан, k купила */
 var cuid=/^\d+$/.test(sp0)?'9usu.'+sp0:(/^9usu\./.test(sp0)?sp0:'');
 var flags=parts.slice(1);
@@ -935,7 +937,7 @@ document.addEventListener('click',function(e){
  if(a==='buy'){closePop();if(document.body.classList.contains('sheet-open'))closeSheet();pay();return}
  if(a==='popmore'){closePop();if(document.body.classList.contains('sheet-open'))closeSheet();show('tainstva');return}
  if(a==='ask')return openTg('https://t.me/Kaemma_support');
- if(a==='reviews')return openTg('https://t.me/Kaemma144_otzyvy');
+ if(a==='reviews'){location.href='../otzyvy/';return}
  if(a==='cabinet')return openUrl(CABINET);
  if(a==='close')return closeSheet();
  if(a==='subs'){hap();save('subs',subsOn()?0:1);subsUI();return}
