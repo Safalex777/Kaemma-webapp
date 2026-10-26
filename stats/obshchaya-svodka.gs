@@ -234,7 +234,7 @@ function obshItogi() {
     return days.length > 1 ? hist[days[days.length - 1]].tg - hist[days[0]].tg : null;
   };
   var tc = tgM(cur);
-  var tgp = obshTelegram().posts;
+  var tgp = obshTelegram(62).posts;
   var reachM = function (s) {
     var v = tgp.filter(function (p) { return p.day.slice(0, 7) === s; }).map(function (p) { return p.views; });
     return v.length ? obshMed(v) : 0;
@@ -288,17 +288,27 @@ function obshBot() {
   };
 }
 
-/** Посты канала за ~60 дней со страниц t.me/s: день, просмотры, реакции, начало текста. */
-function obshTelegram() {
+/** Посты канала за days дней (по умолчанию 16) со страниц t.me/s: день, просмотры, реакции, начало текста.
+ * Страницы запоминаются на 30 минут, чтобы не дёргать Telegram лишний раз. */
+function obshTelegram(days) {
+  days = days || 16;
   var r = { subs: 0, posts: [] };
   var opt = { muteHttpExceptions: true, headers: { 'Accept-Language': 'ru' } };
+  var cache = CacheService.getScriptCache();
+  var get = function (url) {
+    var c = cache.get(url);
+    if (c) return c;
+    var t = UrlFetchApp.fetch(url, opt).getContentText();
+    if (t.length < 95000) cache.put(url, t, 1800);
+    return t;
+  };
   try {
-    var page = UrlFetchApp.fetch('https://t.me/' + OBSH_TG, opt).getContentText();
+    var page = get('https://t.me/' + OBSH_TG);
     var m = page.match(/tgme_page_extra">([\d\s ]+)\s*(subscribers|подписчик)/);
     if (m) r.subs = Number(m[1].replace(/\D/g, ''));
     var before = '', oldest = Date.now();
-    for (var i = 0; i < 10 && Date.now() - oldest < 62 * 864e5; i++) {
-      var s = UrlFetchApp.fetch('https://t.me/s/' + OBSH_TG + (before ? '?before=' + before : ''), opt).getContentText();
+    for (var i = 0; i < 10 && Date.now() - oldest < days * 864e5; i++) {
+      var s = get('https://t.me/s/' + OBSH_TG + (before ? '?before=' + before : ''));
       var blocks = s.split('tgme_widget_message_wrap').slice(1);
       if (!blocks.length) break;
       blocks.forEach(function (bl) {
