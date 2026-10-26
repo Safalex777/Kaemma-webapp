@@ -1,0 +1,39 @@
+# Сводка по подписчикам бота @KaemmaBot (BotHelp) в рабочую Telegram-группу.
+# Каждый час тихий снимок (по нему считаются отписки), в 09:00, 15:00 и 21:00 по Москве сообщение в группу.
+# Скрипт и описание: stats/bothelp-svodka.py. Снимок хранится в кэше Actions, в репозиторий ничего не пишется.
+name: Сводка подписчиков бота
+on:
+  schedule:
+    - cron: '20 * * * *'     # каждый час, тихий снимок
+    - cron: '0 6,12,18 * * *' # 09:00, 15:00, 21:00 по Москве, сводка в группу
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'send - отправить в группу, dry - только показать в логе, snapshot - тихий снимок'
+        default: dry
+concurrency:
+  group: bothelp-svodka
+  cancel-in-progress: false
+jobs:
+  svodka:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache/restore@v4
+        with:
+          path: stats/state
+          key: bothelp-state-${{ github.run_id }}
+          restore-keys: bothelp-state-
+      - name: Снимок и сводка
+        env:
+          BOTHELP_CLIENT_ID: ${{ secrets.BOTHELP_CLIENT_ID }}
+          BOTHELP_CLIENT_SECRET: ${{ secrets.BOTHELP_CLIENT_SECRET }}
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+          MODE: ${{ github.event_name == 'workflow_dispatch' && inputs.mode || (github.event.schedule == '0 6,12,18 * * *' && 'send' || 'snapshot') }}
+        run: python3 stats/bothelp-svodka.py "$MODE"
+      - uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: stats/state
+          key: bothelp-state-${{ github.run_id }}
