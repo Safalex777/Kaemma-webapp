@@ -14,13 +14,17 @@ import datetime, hashlib, json, os, pathlib, sys, time, urllib.error, urllib.par
 
 STATE = pathlib.Path(os.environ.get('STATE_FILE', pathlib.Path(__file__).resolve().parent / 'state' / 'bothelp-state.json'))
 MSK = datetime.timezone(datetime.timedelta(hours=3))
+# BotHelp отвечает 403 на запросы с подписью Python-urllib, поэтому своя подпись
+UA = 'Mozilla/5.0 (kaemma-svodka)'
+# тема «Бот» в рабочей группе «Владычица НС» (Саша, 26.10); TG_THREAD_ID в секретах может её заменить
+THREAD = os.environ.get('TG_THREAD_ID') or '216'
 MONTHS = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
 
 
 def http(url, data=None, headers=None, tries=5):
     for i in range(tries):
         try:
-            req = urllib.request.Request(url, data=data, headers=headers or {})
+            req = urllib.request.Request(url, data=data, headers={'User-Agent': UA, **(headers or {})})
             with urllib.request.urlopen(req, timeout=60) as r:
                 return json.loads(r.read())
         except urllib.error.HTTPError as e:
@@ -152,7 +156,7 @@ def tg_chat(state):
 
 
 def send(state, msg):
-    body = json.dumps({'chat_id': tg_chat(state), 'text': msg, 'disable_notification': False}).encode()
+    body = json.dumps({'chat_id': tg_chat(state), 'message_thread_id': int(THREAD), 'text': msg}).encode()
     r = http('https://api.telegram.org/bot%s/sendMessage' % os.environ['TG_BOT_TOKEN'], body,
              {'Content-Type': 'application/json'})
     if not r.get('ok'):
