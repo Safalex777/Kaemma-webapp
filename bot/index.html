@@ -656,7 +656,8 @@ if(sp0==='otzyvy'){location.replace('../otzyvy/'+location.search+location.hash)}
 var cuid=/^\d+$/.test(sp0)?'9usu.'+Number(sp0).toString(36):(/^9usu\./.test(sp0)?sp0:'');
 var flags=parts.slice(1);
 /* номер подписчицы запоминаем в хранилище Telegram: кнопка «Миры Рая» слева его не передаёт */
-function payUrl(c){return 'https://kaemma144.getcourse.ru/tainstva?utm_source=bot_app&utm_medium=telegram_app&utm_campaign=tri_tainstva'+(c?'&utm_content='+encodeURIComponent(c):'')+'#s10'}
+/* оплата: сайт сразу открывает корзину (#pay, 29.10) и получает день окна бота tt=dN, чтобы показать тот же конец цены, что бот и приложение */
+function payUrl(c){return 'https://kaemma144.getcourse.ru/tainstva?utm_source=bot_app&utm_medium=telegram_app&utm_campaign=tri_tainstva'+(c?'&utm_content='+encodeURIComponent(c):'')+ttParam()+'#pay'}
 var CABINET='https://kaemma144.getcourse.ru/teach/control/stream/view/id/935923232';
 /* уроки Таинств в GetCourse: заполнить ссылками, когда Саша загрузит */
 var LESSONS=['https://kaemma144.getcourse.ru/teach/control/lesson/view/id/350441712','https://kaemma144.getcourse.ru/teach/control/lesson/view/id/350441713','https://kaemma144.getcourse.ru/teach/control/lesson/view/id/350441714'];
@@ -734,7 +735,13 @@ function plural(n,a,b,c){n=Math.abs(n)%100;var m=n%10;return n>10&&n<20?c:m>1&&m
 var TT=72*3600*1000;
 /* срок цены: 72 часа с первого показа предложения (экран Таинств, карточка Таинств или кнопка из предложения в боте) */
 function offerSeen(){if(!ST.tt_start)save('tt_start',Date.now())}
-function left(){return (+ST.tt_start||Date.now())+TT-Date.now()}
+/* окно бота (29.10): кнопка из предложения бота передаёт день окна (__d0..__d3, __dx), конец как у бота и сайта - 10:00 МСК на 4-й день от начала.
+   Храним самый ранний конец (tt_bot), он главнее своих 72 часов. Зашла не из бота - живём по своим 72 часам, как раньше */
+var DW=/^d[0-3x]$/;
+function botEnd(dw){var n=Date.now();if(dw==='dx')return n-1;var k=new Date(n+108e5);return Date.UTC(k.getUTCFullYear(),k.getUTCMonth(),k.getUTCDate()+4-(+dw[1]),7,0,0)}
+function left(){var e=+ST.tt_bot;return e?e-Date.now():(+ST.tt_start||Date.now())+TT-Date.now()}
+/* день окна для сайта: сколько дней до конца по датам МСК; d4 - последнее утро до 10:00 */
+function ttParam(){var e=+ST.tt_bot,n=Date.now();if(!e)return '';if(e<=n)return '&tt=dx';var k=Math.round((Date.parse(new Date(e+108e5).toISOString().slice(0,10))-Date.parse(new Date(n+108e5).toISOString().slice(0,10)))/864e5);return '&tt=d'+Math.max(0,Math.min(4,4-k))}
 function priceTxt(){return left()>0?'3 000':'5 000'}
 function rub(){return priceTxt()+'<span class="rub">₽</span>'}
 function leftTxt(l){var d=Math.floor(l/864e5),h=Math.floor(l%864e5/36e5),m=Math.floor(l%36e5/6e4),s=Math.floor(l%6e4/1e3);return (d?d+' д ':'')+String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')}
@@ -951,17 +958,18 @@ document.addEventListener('click',function(e){
 /* ---------- старт ---------- */
 function boot(){loadDay();
 if(cuid&&ST.cuid36!==cuid)save('cuid36',cuid);
+ var dw=flags.filter(function(f){return DW.test(f)})[0];if(dw){var be=botEnd(dw);if(!+ST.tt_bot||be<+ST.tt_bot)save('tt_bot',be)}
  if(flags.indexOf('k')>=0&&ST.bought!=='1')save('bought',1);
  if(flags.indexOf('g')>=0&&ST.gift!=='1')save('gift',1);
  /* проверочные аккаунты Саши: Kaemma_Support видит «купила», mrsafalex всегда «ещё не купила» */
  var tu=(user().username||'').toLowerCase();if(tu==='kaemma_support'&&ST.bought!=='1')save('bought',1);if(tu==='mrsafalex'&&ST.bought==='1')save('bought',0);
  if(!ST.first)save('first',Date.now());
- var scr=flags.filter(function(f){return f!=='k'&&f!=='g'})[0]||(location.hash||'').slice(1);
+ var scr=flags.filter(function(f){return f!=='k'&&f!=='g'&&!DW.test(f)})[0]||(location.hash||'').slice(1);
  if(!ST.intro&&!scr)$('intro').classList.add('on');
  if(scr==='gift'||scr==='gift-more'){show('home');openGift();if(scr==='gift-more')setTimeout(function(){$('player').scrollTop=9999},300)}
  else if(scr==='lib'||scr==='praktiki')show('lib');else if(scr==='tainstva')show('tainstva');else if(scr==='me'||scr==='kabinet')show('me');else if(scr==='sched'){show('home');renderSched();openSheet('sched')}else if(scr==='intro'){$('intro').classList.add('on');show('home')}else show('home');
 }
-var KEYS=['subs','cuid36','gift','gift_pos','efir','promo','bought','tt_start','intro','fav','opened','first','remind','hall','peek','krugs'];
+var KEYS=['subs','cuid36','gift','gift_pos','efir','promo','bought','tt_start','tt_bot','intro','fav','opened','first','remind','hall','peek','krugs'];
 KEYS.forEach(function(k){var v=lsG(k);if(v!=null)ST[k]=v});
 if(cloud){try{tg.CloudStorage.getItems(KEYS,function(err,res){if(!err&&res)KEYS.forEach(function(k){if(res[k])ST[k]=res[k]});boot()})}catch(e){boot()}}else boot();
 </script>
